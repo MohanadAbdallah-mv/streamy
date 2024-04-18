@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "417074762744",
+    "project_id": "streamy-c5eb9",
+    "storage_bucket": "streamy-c5eb9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417074762744:android:63358d54c454b84f8d7c0d",
+        "android_client_info": {
+          "package_name": "com.example.streamy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkZgdLpiPVXpIZ6FKm6OSkfsmMSk2j8lE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

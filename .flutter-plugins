@@ -1,0 +1,25 @@
+# This is a generated file; do not edit or check into version control.
+cloud_firestore=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/cloud_firestore-4.10.0/
+cloud_firestore_web=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.8.2/
+firebase_auth=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/firebase_auth-4.12.0/
+firebase_auth_web=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/firebase_auth_web-5.8.5/
+firebase_core=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/firebase_core-2.20.0/
+firebase_core_web=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/firebase_core_web-2.10.0/
+firebase_messaging=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/firebase_messaging-14.7.1/
+firebase_messaging_web=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/firebase_messaging_web-3.5.11/
+firebase_storage=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/firebase_storage-11.3.1/
+firebase_storage_web=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/firebase_storage_web-3.6.10/
+flutter_local_notifications=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/flutter_local_notifications-16.3.2/
+fluttertoast=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/fluttertoast-8.2.4/
+path_provider=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/path_provider-2.1.2/
+path_provider_android=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/path_provider_android-2.2.2/
+path_provider_foundation=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/path_provider_foundation-2.3.2/
+path_provider_linux=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
+path_provider_windows=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/path_provider_windows-2.2.1/
+shared_preferences=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/shared_preferences-2.2.0/
+shared_preferences_android=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/shared_preferences_android-2.2.1/
+shared_preferences_foundation=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.3.5/
+shared_preferences_linux=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.3.2/
+shared_preferences_web=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/shared_preferences_web-2.2.1/
+shared_preferences_windows=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.3.2/
+toast=/Users/mohamedabdelrazek/.pub-cache/hosted/pub.dev/toast-0.3.0/

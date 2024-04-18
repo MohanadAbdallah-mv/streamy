@@ -1,0 +1,8 @@
+<svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Cart">
+<path id="Vector 155" d="M1.5 0.75L2.54936 0.959872C3.41136 1.13227 4.05973 1.84732 4.1472 2.72203L4.3 4.25M4.3 4.25L5.2886 12.4883C5.40922 13.4935 6.26195 14.25 7.27435 14.25H16.2673C17.8733 14.25 19.2733 13.157 19.6628 11.5989L20.7855 7.10783C21.1485 5.65619 20.0505 4.25 18.5542 4.25H4.3Z" stroke="#6066FC" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Line" d="M12.5 11.25H8.5" stroke="#6066FC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle id="Ellipse 39" cx="8" cy="17.75" r="1.5" fill="#6066FC"/>
+<circle id="Ellipse 40" cx="17" cy="17.75" r="1.5" fill="#6066FC"/>
+</g>
+</svg>
