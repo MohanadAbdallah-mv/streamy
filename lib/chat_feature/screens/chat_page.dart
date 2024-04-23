@@ -30,15 +30,14 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   String chatRoomID = "";
   final messagesScrollController = ScrollController();
+
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
-      log("sending message");
       await Provider.of<ChatController>(context, listen: false).sendMessage(
         widget.user,
         widget.receiverId,
         _messageController.text,
       );
-      log("message sent");
       _messageController.clear();
     }
   }
@@ -46,7 +45,12 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    log("this is chat room id+${widget.chatRoomId}");
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
   }
 
   @override

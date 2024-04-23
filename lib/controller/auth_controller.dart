@@ -9,10 +9,9 @@ import '../models/userform.dart';
 import '../repo/auth_logic.dart';
 
 class AuthController extends ChangeNotifier {
-
   final AuthHandlerImplement repo;
 
-  AuthController({ required this.repo});
+  AuthController({required this.repo});
 
   Future<Either<String, dynamic>> login(String? email, String? password) async {
     try {
@@ -21,7 +20,6 @@ class AuthController extends ChangeNotifier {
       Either<String, dynamic> res = await repo.login(userForm);
 
       if (res.isRight) {
-       // log("finally,logged in");
         notifyListeners();
         return Right(res.right);
       } else {
@@ -36,7 +34,8 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<Either<String, dynamic>> register(String? name, String? phone, String? email, String? password) async {
+  Future<Either<String, dynamic>> register(
+      String? name, String? phone, String? email, String? password) async {
     FormUser userForm = FormUser(
         name: name!, phonenumber: phone, email: email!, password: password!);
     //log(userForm.toString());
@@ -57,8 +56,7 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<String> resetPassword(String email) async {
-
-    String response=await repo.requestPasswordReset(email).then((value) {
+    String response = await repo.requestPasswordReset(email).then((value) {
       if (value.isRight) {
         log(value.right);
         return value.right;

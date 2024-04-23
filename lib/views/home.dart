@@ -71,14 +71,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    //dynamic user=Provider.of<AuthController>(context).getCurrentUser();
-    // print(user);
-    //widget.bestseller=MyFutureBestSeller();
-    print("device width ${ScreenUtil.defaultSize.width}");
-    print("device height ${ScreenUtil.defaultSize.height}");
-    print("device width ${MediaQuery.of(context).size.width}");
-    print("device height ${MediaQuery.of(context).size.height}");
-    print(widget.user);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -95,20 +87,10 @@ class _HomePageState extends State<HomePage> {
         elevation: 0.0,
         backgroundColor: Colors.white,
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //     currentIndex: index,
-      //     type: BottomNavigationBarType.fixed,
-      //     items: MenuItemList.map((MenuItem menuItem) =>
-      //         BottomNavigationBarItem(
-      //             icon: Icon(menuItem.iconData),
-      //             label: menuItem.label,
-      //             backgroundColor: primaryColor)).toList()),
       body: _builduserList(),
     );
   }
 
-  @override
-  // TODO: implement widget
   Widget _builduserList() {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection("users").snapshots(),

@@ -28,8 +28,8 @@ class _AdminCheckPageState extends State<AdminCheckPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2),(){
-      if(mounted){
+    Future.delayed(Duration(seconds: 2), () {
+      if (mounted) {
         log("${widget.user.role}");
         //todo initmessage here
         //requestPermission();
@@ -40,7 +40,7 @@ class _AdminCheckPageState extends State<AdminCheckPage> {
               context,
               MaterialPageRoute<dynamic>(
                   builder: (context) => AdminPage(user: widget.user)),
-                  (route) => false);
+              (route) => false);
         } else {
           log("user");
           NotificationHandler.instance.getToken(widget.user.id);
@@ -49,13 +49,13 @@ class _AdminCheckPageState extends State<AdminCheckPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => MainHome(user: widget.user)),
-                  (route) => false);
-          log("shouldn't print");
+              (route) => false);
         }
       }
     });
   }
-@override
+
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
@@ -155,6 +155,7 @@ class _AdminCheckPageState extends State<AdminCheckPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(), body: Center(child: CircularProgressIndicator()));
+    return Scaffold(
+        appBar: AppBar(), body: Center(child: CircularProgressIndicator()));
   }
 }

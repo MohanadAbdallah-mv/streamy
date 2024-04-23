@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,14 +51,17 @@ class _LoginState extends State<Login> {
     return Consumer<AuthController>(
       builder: (context, auth, child) {
         return Scaffold(
-            appBar: AppBar(automaticallyImplyLeading: false,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
               title: Padding(
                 padding: const EdgeInsets.only(left: 80),
                 child: Text(
                   "Shoppie",
                   style: GoogleFonts.sarina(
                       textStyle: TextStyle(
-                          color: AppTitleColor, fontWeight: FontWeight.w400,fontSize: 34.sp)),
+                          color: AppTitleColor,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 34.sp)),
                 ),
               ),
               elevation: 0.0,
@@ -93,8 +95,13 @@ class _LoginState extends State<Login> {
                               onEditComplete: () {
                                 setState(() {
                                   isEmailError = false;
-                                  FocusScope.of(context).requestFocus(
-                                      _passwordnode);
+                                  FocusScope.of(context)
+                                      .requestFocus(_passwordnode);
+                                });
+                              },
+                              onTap: () {
+                                setState(() {
+                                  isEmailError = false;
                                 });
                               },
                             ),
@@ -116,23 +123,37 @@ class _LoginState extends State<Login> {
                                 FocusScope.of(context).unfocus();
                               });
                             },
+                            onTap: () {
+                              setState(() {
+                                isPasswordError = false;
+                              });
+                            },
                           ),
                           SizedBox(
                             height: 12.h,
                           ),
                         ]),
-                  ), Padding(padding: EdgeInsets.only(top: 52.h),
-                    child: GestureDetector(onTap: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>Forgot_Password()));
-                    },
-                      child: CustomText(text: "forgot password?",
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 52.h),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Forgot_Password()));
+                      },
+                      child: CustomText(
+                          text: "forgot password?",
                           underline: true,
                           color: ErrorMesseageText,
                           align: Alignment.center),
-                    ),),
-                  Padding( //todo: add forget password with it functions/edit error for password field
-                    padding: EdgeInsets.only(
-                        top: 24.h, left: 13.w, right: 13.w),
+                    ),
+                  ),
+                  Padding(
+                    //todo: add forget password with it functions/edit error for password field
+                    padding:
+                        EdgeInsets.only(top: 24.h, left: 13.w, right: 13.w),
                     child: CustomButton(
                       width: double.maxFinite,
                       child: CustomText(
@@ -145,12 +166,16 @@ class _LoginState extends State<Login> {
                         String email = _email.text;
                         String password = _password.text;
                         Either<String, dynamic> user =
-                        await auth.login(email, password);
+                            await auth.login(email, password);
                         if (user.isLeft) {
                           log(user.left);
-                          showDialog(context: context, builder: (context) {
-                            return AlertDialog(content: Text(user.left),);
-                          });
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content: Text(user.left),
+                                );
+                              });
                           if (user.left == "invalid-email") {
                             log("triggered");
                             isEmailError = true;
@@ -160,23 +185,27 @@ class _LoginState extends State<Login> {
                         } else {
                           // todo:need to handle if it didn't return user on right but will leave it for now
                           log("entering get user");
-                          Either<String,MyUser>res=await Provider.of<FireStoreController>(context,listen: false).getUser(user.right);
+                          Either<String, MyUser> res =
+                              await Provider.of<FireStoreController>(context,
+                                      listen: false)
+                                  .getUser(user.right);
                           log("exiting get user");
-                          if(res.isRight){
+                          if (res.isRight) {
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute<dynamic>(
                                     builder: (context) =>
-                                        AdminCheckPage(user: res.right)),(route) =>false);
-                          }else{
-                            log("entering here because get user didn't work as expected");//todo : shouldn't return user.right here cuz that's mean we didn't get the user from firestore
+                                        AdminCheckPage(user: res.right)),
+                                (route) => false);
+                          } else {
+                            log("entering here because get user didn't work as expected"); //todo : shouldn't return user.right here cuz that's mean we didn't get the user from firestore
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute<dynamic>(
                                     builder: (context) =>
-                                        AdminCheckPage(user: user.right)),(route) =>false);
+                                        AdminCheckPage(user: user.right)),
+                                (route) => false);
                           }
-
                         }
                       },
                       borderColor: Colors.white,

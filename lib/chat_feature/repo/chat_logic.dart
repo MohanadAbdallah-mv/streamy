@@ -1,26 +1,18 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:either_dart/either.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:streamy/chat_feature/data_source/chat_data_source.dart';
 import '../../models/user_model.dart';
 import '../../services/Cache_Helper.dart';
 import '../model/Message.dart';
 
-// I do the business logic here
-// Represented in storing data locally when there is no internet connection
-// I store data remotely when there is internet connection
-// I need a interface to define my responsibilities
 abstract class ChatHandler {
-  bool isLoggedin;
+  bool isLoggedIn;
   ChatImplement chatImplement;
   CacheData cacheData;
 
   ChatHandler(
       {required this.chatImplement,
       required this.cacheData,
-      this.isLoggedin = false});
+      this.isLoggedIn = false});
 
   Future<void> sendMessage(MyUser user, String receiverID, String message);
 
@@ -72,7 +64,6 @@ class ChatHandlerImplement extends ChatHandler {
   @override
   Future<List<DocumentSnapshot>> getOlderMessages(String chatRoomID,
       bool getOld, int limit, DocumentSnapshot? snapshot) async {
-    // TODO: implement getOlderMessages
     List<DocumentSnapshot> messagesSnapshots = await chatImplement
         .getOlderMessages(chatRoomID, getOld, limit, snapshot);
     return messagesSnapshots;

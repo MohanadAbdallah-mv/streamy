@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -38,11 +37,10 @@ class _MessagesListState extends State<MessagesList> {
 
     return messagesStreamQuerySnapshots.map((snapshots) {
       return snapshots.docChanges.where((element) {
-        log(element.doc.data().toString(), name: "V._chatStream");
         if (element.type == DocumentChangeType.added &&
             element.doc !=
                 Provider.of<ChatController>(context, listen: false)
-                    .loadafterSnapShot) {
+                    .loadAfterSnapShot) {
           Provider.of<ChatController>(context, listen: false)
               .setLoadAfterSnapShot = snapshots.docs.last;
           return true;
@@ -69,7 +67,6 @@ class _MessagesListState extends State<MessagesList> {
       ).listen((event) {
         event.forEach((element) {
           chatController.messages.insert(0, element);
-          log(element.message, name: "v.Stream");
         });
       });
     });

@@ -1,21 +1,3 @@
-// abstract class Auth{
-//
-//   register(){}
-//   login(){}
-// }
-//
-// class FireCall extends Auth{
-//   @override
-//   login(String email, String password) async {
-//     // I Interact directly with the data layer
-//     // Firebase - Local Storage
-//     // I need a interface to define my responsibilities
-//     return true;
-//   }
-// }
-// class LocalCall extends Auth{
-//
-// }
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:streamy/chat_feature/model/Message.dart';
@@ -63,13 +45,10 @@ class ChatImplement extends Chat {
         return messageRef.snapshots();
       }
     } catch (e) {
-      log(e.toString());
-      log("error at stream");
       throw "error";
     }
   }
 
-  // Get the initial 15 latest messages
   @override
   Future<List<DocumentSnapshot>> getLatestMessages(String chatRoomID) async {
     try {

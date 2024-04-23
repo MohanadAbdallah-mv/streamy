@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,12 +10,10 @@ class ChatController extends ChangeNotifier {
   final ChatHandlerImplement chatRepo;
   Map<String, List<MyMessage>> chatRooms = {};
   List<MyMessage> messages = [];
-  DocumentSnapshot? lastvisibleSnapShot; // to get older messages
+  DocumentSnapshot? lastVisibleSnapShot; // to get older messages
   bool getOld = false;
   int paginationCounter = 1;
-  DocumentSnapshot? loadafterSnapShot; //last sent message in chat
-
-  // TODO: Create Stream Variable
+  DocumentSnapshot? loadAfterSnapShot;
 
   ScrollController? chatRoomScrollController;
 
@@ -38,14 +35,13 @@ class ChatController extends ChangeNotifier {
     String chatRoomID,
   ) {
     Stream<QuerySnapshot<Object?>> stream =
-        chatRepo.getNewMessages(chatRoomID, loadafterSnapShot);
+        chatRepo.getNewMessages(chatRoomID, loadAfterSnapShot);
 
     return stream;
   }
 
   set setLoadAfterSnapShot(DocumentSnapshot snapshot) {
-    loadafterSnapShot = snapshot;
-    log(snapshot.data().toString(), name: 'C.SetLoadAfterSnapShot');
+    loadAfterSnapShot = snapshot;
     notifyListeners();
   }
 
@@ -60,11 +56,11 @@ class ChatController extends ChangeNotifier {
       chatRoomID,
       getOld,
       limit,
-      lastvisibleSnapShot,
+      lastVisibleSnapShot,
     );
-    lastvisibleSnapShot =
+    lastVisibleSnapShot =
         olderMessagesSnapshots[olderMessagesSnapshots.length - 1];
-    loadafterSnapShot = olderMessagesSnapshots[0];
+    loadAfterSnapShot = olderMessagesSnapshots[0];
 
     List<MyMessage> olderMessages = olderMessagesSnapshots
         .map((e) => MyMessage.fromJson(e.data() as Map<String, dynamic>))
@@ -89,9 +85,9 @@ class ChatController extends ChangeNotifier {
       chatRoomID,
     );
     if (latestMessagesSnapshots.isEmpty) return;
-    lastvisibleSnapShot =
+    lastVisibleSnapShot =
         latestMessagesSnapshots[latestMessagesSnapshots.length - 1];
-    loadafterSnapShot = latestMessagesSnapshots[0];
+    loadAfterSnapShot = latestMessagesSnapshots[0];
 
     List<MyMessage> latestMessages = latestMessagesSnapshots
         .map((e) => MyMessage.fromJson(e.data() as Map<String, dynamic>))
