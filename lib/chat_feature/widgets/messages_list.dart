@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streamy/chat_feature/widgets/chat_bubble.dart';
@@ -27,107 +28,104 @@ class MessagesList extends StatefulWidget {
 
 class _MessagesListState extends State<MessagesList> {
   late ScrollController _myController;
-  bool _initialMessagesLoaded = false;
-  Stream<MyMessage> _chatStream(MyUser user, String receiverID) {
-    Stream messagesStream = Provider.of<ChatController>(context, listen: false)
-        .getNewMessages(widget.chatroomID);
+  final bool _initMessagesLoaded = false;
+  late final StreamSubscription<List<MyMessage>> _myStream;
 
-    return messagesStream as Stream<MyMessage>;
+  Stream<List<MyMessage>> _chatStream(MyUser user, String receiverID) {
+    Stream<QuerySnapshot<Object?>> messagesStreamQuerySnapshots =
+        Provider.of<ChatController>(context, listen: false)
+            .getNewMessages(widget.chatroomID);
+
+    return messagesStreamQuerySnapshots.map((snapshots) {
+      return snapshots.docChanges.where((element) {
+        log(element.doc.data().toString(), name: "V._chatStream");
+        if (element.type == DocumentChangeType.added &&
+            element.doc !=
+                Provider.of<ChatController>(context, listen: false)
+                    .loadafterSnapShot) {
+          Provider.of<ChatController>(context, listen: false)
+              .setLoadAfterSnapShot = snapshots.docs.last;
+          return true;
+        } else {
+          return false;
+        }
+      }).map((e) {
+        return MyMessage.fromJson(e.doc.data()! as Map<String, dynamic>);
+      }).toList();
+    });
   }
 
   late final Future<void> _myFuture;
 
   @override
   void initState() {
-    _myFuture = Provider.of<ChatController>(context, listen: false)
-        .getLatestMessages(widget.chatroomID);
-    // .then((value) => setState(() {
-    //       _initialMessagesLoaded = true;
-    //     }));
+    ChatController chatController =
+        Provider.of<ChatController>(context, listen: false);
+    _myFuture =
+        chatController.getLatestMessages(widget.chatroomID).then((value) {
+      _myStream = _chatStream(
+        widget.user,
+        widget.receiverID,
+      ).listen((event) {
+        event.forEach((element) {
+          chatController.messages.insert(0, element);
+          log(element.message, name: "v.Stream");
+        });
+      });
+    });
 
-    _myController = Provider.of<ChatController>(context, listen: false)
-        .chatRoomScrollController;
-    // TODO: implement initState
+    // Scroll Trigger
+
+    chatController.chatRoomScrollController = ScrollController();
+    _myController = chatController.chatRoomScrollController!;
+    _myController.addListener(() {
+      if (_myController.offset >= _myController.position.maxScrollExtent &&
+          !_myController.position.outOfRange) {
+        chatController.getOlderMessages(widget.chatroomID, 5);
+      }
+    });
     super.initState();
-    _myController.addListener(
-      () {
-        if (_myController.offset >= _myController.position.maxScrollExtent &&
-            !_myController.position.outOfRange) {
-          Provider.of<ChatController>(context, listen: false)
-              .getOlderMessages(widget.chatroomID, true, 5);
-          log("List end");
-        }
-        if (_myController.offset <= _myController.position.minScrollExtent &&
-            !_myController.position.outOfRange) {
-          log("List top");
-        }
-      },
-    );
   }
 
   @override
   void dispose() {
     super.dispose();
+    _myController.dispose();
+    _myStream.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
+    ChatController chatController = Provider.of<ChatController>(context);
     return PopScope(
       onPopInvoked: (b) {
-        Provider.of<ChatController>(context, listen: false).messages.clear();
+        chatController.messages.clear();
       },
       child: FutureBuilder(
           future: _myFuture,
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            return StreamBuilder<MyMessage>(
-              stream: _chatStream(
-                widget.user,
-                widget.receiverID,
-              ),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  log(snapshot.error.toString());
-                  return const Text("error");
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return !_initialMessagesLoaded
-                      ? const CircularProgressIndicator()
-                      : const Text('Waiting for new messages...');
-                }
-                List<MyMessage> messages =
-                    Provider.of<ChatController>(context, listen: false)
-                        .messages;
-                if (Provider.of<ChatController>(context, listen: false)
-                    .messages
-                    .contains(snapshot.data!)) {
-                } else {
-                  Provider.of<ChatController>(context, listen: false)
-                      .messages
-                      .insert(0, snapshot.data as MyMessage);
-                }
-                return ListView.builder(
-                  itemCount: messages.length,
-                  controller: _myController,
-                  reverse: true,
-                  itemBuilder: (context, index) {
-                    if (index < messages.length) {
-                      final item = messages[index];
-                      return ChatBubble(user: widget.user, message: item);
-                    } else {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                  },
-                );
-              },
-            );
+            if (snapshot.connectionState == ConnectionState.done) {
+              return ListView.builder(
+                itemCount: chatController.messages.length,
+                controller: _myController,
+                reverse: true,
+                itemBuilder: (context, index) {
+                  if (index < chatController.messages.length) {
+                    final item = chatController.messages[index];
+                    return ChatBubble(user: widget.user, message: item);
+                  } else {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                },
+              );
+            } else {
+              return const CircularProgressIndicator();
+            }
           }),
     );
   }

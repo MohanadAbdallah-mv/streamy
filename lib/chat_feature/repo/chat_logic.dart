@@ -24,10 +24,19 @@ abstract class ChatHandler {
 
   Future<void> sendMessage(MyUser user, String receiverID, String message);
 
-  Stream<MyMessage> getNewMessages(String chatRoomID);
-  Future<List<MyMessage>> getOlderMessages(
-      String chatRoomID, bool getOld, int limit);
-  Future<List<MyMessage>> getLatestMessages(String chatRoomID);
+  Stream<QuerySnapshot<Object?>> getNewMessages(
+    String chatRoomID,
+    DocumentSnapshot? documentSnapshot,
+  );
+  Future<List<DocumentSnapshot>> getOlderMessages(
+    String chatRoomID,
+    bool getOld,
+    int limit,
+    DocumentSnapshot? snapshot,
+  );
+  Future<List<DocumentSnapshot>> getLatestMessages(
+    String chatRoomID,
+  );
 }
 
 class ChatHandlerImplement extends ChatHandler {
@@ -55,22 +64,23 @@ class ChatHandlerImplement extends ChatHandler {
   }
 
   @override
-  Stream<MyMessage> getNewMessages(String chatRoomID) {
-    return chatImplement.getNewMessages(chatRoomID);
+  Stream<QuerySnapshot<Object?>> getNewMessages(
+      String chatRoomID, DocumentSnapshot? documentSnapshot) {
+    return chatImplement.getNewMessages(chatRoomID, documentSnapshot);
   }
 
   @override
-  Future<List<MyMessage>> getOlderMessages(
-      String chatRoomID, bool getOld, int limit) async {
+  Future<List<DocumentSnapshot>> getOlderMessages(String chatRoomID,
+      bool getOld, int limit, DocumentSnapshot? snapshot) async {
     // TODO: implement getOlderMessages
-    List<MyMessage> messages =
-        await chatImplement.getOlderMessages(chatRoomID, getOld, limit);
-    return messages;
+    List<DocumentSnapshot> messagesSnapshots = await chatImplement
+        .getOlderMessages(chatRoomID, getOld, limit, snapshot);
+    return messagesSnapshots;
   }
 
   @override
-  Future<List<MyMessage>> getLatestMessages(String chatRoomID) async {
-    List<MyMessage> messages =
+  Future<List<DocumentSnapshot>> getLatestMessages(String chatRoomID) async {
+    List<DocumentSnapshot> messages =
         await chatImplement.getLatestMessages(chatRoomID);
     return messages;
   }
