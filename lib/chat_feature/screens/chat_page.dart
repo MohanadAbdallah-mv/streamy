@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:streamy/chat_feature/controller/chat_controller.dart';
+import 'package:streamy/chat_feature/screens/call_page.dart';
 import 'package:streamy/chat_feature/widgets/messages_list.dart';
 import 'package:streamy/widgets/CustomTextField.dart';
 
@@ -58,6 +59,20 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.call),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CallPage(chatRoomID: widget.chatRoomId)));
+              // Handle button press action (e.g., navigate to settings)
+              print('Settings button pressed');
+            },
+          ),
+        ],
         title: Center(
           child: Text(
             widget.receiverEmail,
