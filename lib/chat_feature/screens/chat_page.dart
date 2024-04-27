@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:streamy/widgets/CustomTextField.dart';
 
 import '../../constants.dart';
 import '../../models/user_model.dart';
+import '../../services/NotificationHandler/notification_handler.dart';
 
 class ChatPage extends StatefulWidget {
   final MyUser user;
@@ -72,6 +74,36 @@ class _ChatPageState extends State<ChatPage> {
               print('Settings button pressed');
             },
           ),
+          IconButton(
+            icon: Icon(Icons.notification_add),
+            onPressed: () async {
+              String token = await FirebaseFirestore.instance
+                  .collection("UserToken")
+                  .doc(widget.receiverId)
+                  .get()
+                  .then((value) => value.data()!["token"]);
+              NotificationHandler.instance.sendPushMessage(
+                  token,
+                  "user ${widget.user.name} is calling you",
+                  "Audio call",
+                  "audioCall");
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.video_call),
+            onPressed: () async {
+              String token = await FirebaseFirestore.instance
+                  .collection("UserToken")
+                  .doc(widget.receiverId)
+                  .get()
+                  .then((value) => value.data()!["token"]);
+              NotificationHandler.instance.sendPushMessage(
+                  token,
+                  "user ${widget.user.name} is videocalling you",
+                  "Video call",
+                  "videoCall");
+            },
+          )
         ],
         title: Center(
           child: Text(

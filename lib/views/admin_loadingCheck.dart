@@ -42,9 +42,7 @@ class _AdminCheckPageState extends State<AdminCheckPage> {
                   builder: (context) => AdminPage(user: widget.user)),
               (route) => false);
         } else {
-          log("user");
           NotificationHandler.instance.getToken(widget.user.id);
-          log("done with token now navigating to mainhome");
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

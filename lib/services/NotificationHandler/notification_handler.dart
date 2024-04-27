@@ -1,46 +1,36 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ffi';
 import 'dart:io' as io;
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../access_token_firebase.dart';
+import '../../firebase_options.dart';
 
 String? notificationDirection;
 dynamic notificationData;
 
 class NotificationHandler {
   static final NotificationHandler _instance = NotificationHandler._private();
-
   static NotificationHandler get instance {
     return _instance;
   }
 
   NotificationHandler._private();
-  final _androidChannel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // name or "title"
-    description:
-        'This channel is used for important notifications.', // description
-    importance: Importance.max,
-  );
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  static final AwesomeNotifications awesomeNotifications =
+      AwesomeNotifications();
   Future<void> init() async {
-    await Firebase.initializeApp();
-
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    await awesomeNotifications.requestPermissionToSendNotifications();
     initFirebaseNotifications();
     initLocalNotifications();
-
-    // FirebaseMessaging.instance.onTokenRefresh.listen((String? token) async {
-    //   if (UserCache.instance.isLoggedIn() && token != null) {
-    //     _notificationRepo.updateToken(token);
-    //   }
-    // });
   }
 
   void getToken(String role) async {
@@ -48,10 +38,61 @@ class NotificationHandler {
     await FirebaseMessaging.instance.getToken().then((token) {
       if (token != null) {
         mtoken = token;
-        print("my token is $mtoken");
+        log("my token is $mtoken", name: "User Token");
         saveToken(mtoken!, role);
       }
     });
+  }
+
+  void saveToken(String token, String role) async {
+    print(token);
+    print(role);
+    if (role == "admin") {
+      await FirebaseFirestore.instance
+          .collection("UserToken")
+          .doc(role)
+          .set({"token": token});
+      print("finished saving token");
+    } else {
+      print("token in notification handker $token");
+      await FirebaseFirestore.instance
+          .collection("UserToken")
+          .doc(role) //role in this case is the normal user id
+          .set({"token": token});
+      print("finished saving token");
+    }
+  }
+
+  void sendPushMessage(
+      String token, String bodymsg, String title, String channelkey) async {
+    Dio dio = Dio();
+    AccessTokenFirebase tokengenerator = AccessTokenFirebase();
+    String Accesstoken = await tokengenerator.getAccessToken();
+    String projectID = tokengenerator.projectID;
+    try {
+      final url =
+          'https://fcm.googleapis.com/v1/projects/$projectID/messages:send';
+
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $Accesstoken',
+      };
+
+      final body = jsonEncode({
+        "message": {
+          "token": token,
+          "data": {"channel": "1", "channelkey": channelkey},
+          "notification": {"title": title, "body": bodymsg}
+        },
+      });
+
+      final response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      log(response.statusCode.toString());
+      log(response.body);
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   Future<void> requestPermission() async {
@@ -74,241 +115,130 @@ class NotificationHandler {
     }
   }
 
-  void saveToken(String token, String role) async {
-    print(token);
-    print(role);
-    if (role == "admin") {
-      await FirebaseFirestore.instance
-          .collection("UserToken")
-          .doc(role)
-          .set({"token": token});
-      print("finished saving token");
-    } else {
-      print("token in notification handker $token");
-      await FirebaseFirestore.instance
-          .collection("UserToken")
-          .doc(role) //role in this case is the normal user id
-          .set({"token": token});
-      print("finished saving token");
-    }
-  }
-
-  void sendPushMessage(String token, String bodymsg, String title) async {
-    Dio dio = Dio();
-    AccessTokenFirebase tokengenerator = AccessTokenFirebase();
-    String Accesstoken = await tokengenerator.getAccessToken();
-    print("accesstoken is before msg $Accesstoken");
-    try {
-      // Response response= await dio.post(
-      //    'https://www.googleapis.com/auth/firebase.messaging',// //https://fcm.googleapis.com/v1/projects/ecommerece-c1601/messages:send
-      //    options: Options(
-      //      headers: {
-      //        "Authorization": "Bearer $Accesstoken",
-      //        "Content-Type": "application/json"
-      //      },
-      //    ),
-      //    data: jsonEncode({
-      //        "message": {
-      //          "token": token,
-      //          "notification": {
-      //            "title": title,
-      //            "body": body,
-      //            // "android_channel_id": "Shoppie"
-      //          }
-      //        },
-      //        // "data":{"story_id":"story_12345"},
-      //        "android": {
-      //          "notification": {
-      //            "click_action": "TOP_STORY_ACTIVITY"
-      //          }
-      //        },
-      //        "apns": {
-      //          "payload": {
-      //            "aps": {
-      //              "category": "NEW_MESSAGE_CATEGORY"
-      //            }
-      //          }
-      //        }
-      //      }),
-      //
-      //  );
-      final url =
-          'https://fcm.googleapis.com/v1/projects/ecommerece-c1601/messages:send';
-
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $Accesstoken',
-      };
-
-      final body = jsonEncode({
-        "message": {
-          "token": token,
-          "notification": {
-            "title": title,
-            "body": bodymsg,
-            //"android_channel_id": "Shoppie"
-          }
-        },
-      });
-
-      final response =
-          await http.post(Uri.parse(url), headers: headers, body: body);
-      print(response.statusCode);
-      print(response.body);
-    } catch (e) {
-      log(e.toString());
-    }
+  Future initLocalNotifications() async {
+    await awesomeNotifications.initialize(
+        null,
+        [
+          NotificationChannel(
+              channelKey: 'audioCall',
+              channelName: 'AudioCall',
+              channelDescription: 'AudioCallTest',
+              playSound: true,
+              onlyAlertOnce: true,
+              groupAlertBehavior: GroupAlertBehavior.Children,
+              importance: NotificationImportance.High,
+              defaultPrivacy: NotificationPrivacy.Private,
+              defaultColor: Colors.deepPurple,
+              ledColor: Colors.deepPurple),
+          NotificationChannel(
+              channelKey: 'videoCall',
+              channelName: 'VideoCall',
+              channelDescription: 'videoCallTest',
+              playSound: true,
+              onlyAlertOnce: true,
+              groupAlertBehavior: GroupAlertBehavior.Children,
+              importance: NotificationImportance.High,
+              defaultPrivacy: NotificationPrivacy.Private,
+              defaultColor: Colors.deepPurple,
+              ledColor: Colors.deepPurple),
+          NotificationChannel(
+              channelKey: 'message',
+              channelName: 'message',
+              channelDescription: 'chatMessage',
+              playSound: true,
+              onlyAlertOnce: true,
+              groupAlertBehavior: GroupAlertBehavior.Children,
+              importance: NotificationImportance.High,
+              defaultPrivacy: NotificationPrivacy.Private,
+              defaultColor: Colors.deepPurple,
+              ledColor: Colors.deepPurple)
+        ],
+        debug: true);
   }
 
   void initFirebaseNotifications() async {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-        RemoteNotification notification = message.notification!;
-        if (io.Platform.isAndroid) {
-//Creating a new AndroidNotificationChannel instance:
-
-          print(_androidChannel.id);
-          print(_androidChannel.name);
-          print(_androidChannel.description);
-
-//Creating the channel on the device (if a channel with an id already exists, it will be updated)
-
-          // await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-          //     ?.createNotificationChannel(_androidChannel);
-//showing notification locally
-          AndroidNotification android = message.notification!.android!;
-          flutterLocalNotificationsPlugin.show(
-              notification.hashCode,
-              notification.title,
-              notification.body,
-              NotificationDetails(
-                android: AndroidNotificationDetails(
-                  _androidChannel.id,
-                  _androidChannel.name,
-                  channelDescription: _androidChannel.description,
-                  icon: '@drawable/ic_launcher',
-                  // other properties...
-                ),
-              ),
-              payload: jsonEncode(message.toMap()));
-        } else if (io.Platform.isIOS) {
-//todo show for ios
-        }
-      }
-    });
-
-    FirebaseMessaging.onBackgroundMessage(backgroundMessageHandler);
+    await requestPermission();
+    FirebaseMessaging.onMessage.listen(_fcmForegroundHandler);
+    FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print("in onMessageOpendApp:${message.contentAvailable}");
     });
-
-    await requestPermission();
-
-    // getToken().then((String? token) {
-    //   assert(token != null);
-    //   // ChatManager().fcmToken = token;
-    //   print("Push Messaging token: $token");
-    // });
   }
 
-  static Future<void> backgroundMessageHandler(RemoteMessage message) async {
-    if (message.notification == null) {
-      _showNotification(message);
-      //direct(message: message);
+  static Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
+    print("onBackgroundMessage: ${message.data}");
+    handleNotifications(
+        title: message.notification!.title!,
+        body: message.notification!.body!,
+        payload: message.data);
+  }
+  // staticFuture<void> backgroundMessageHandler(RemoteMessage message) async {
+  //   //   if (message.notification != null) {
+  //   //     _showNotification(message);
+  //   //     //direct(message: message);
+  //   //   }
+
+  static Future<void> _fcmForegroundHandler(RemoteMessage message) async {
+    print("onMessage: ${message.data}");
+    message.notification!.title;
+    handleNotifications(
+        title: message.notification!.title!,
+        body: message.notification!.body!,
+        payload: message.data);
+  }
+
+  //
+//todo handle channels in handle notification later
+  static handleNotifications(
+      {required String title,
+      required String body,
+      required Map<String, dynamic> payload}) {
+    _showNotification(
+      title,
+      body,
+      Map<String, String>.from(payload),
+    );
+  }
+
+  static void _showNotification(
+      String title, String body, Map<String, String> payload) {
+    log("should show notification now",
+        name: "Show Notification at notification handler");
+    log(payload.toString());
+    switch (payload["channelkey"]) {
+      case "message":
+        awesomeNotifications.createNotification(
+            content: NotificationContent(
+                id: -1,
+                channelKey: payload["channelkey"]!,
+                duration: Duration(seconds: 45),
+                title: title,
+                body: body));
+        break;
+      case "videoCall":
+        awesomeNotifications.createNotification(
+            content: NotificationContent(
+                id: 0,
+                channelKey: payload["channelkey"]!,
+                duration: Duration(seconds: 45),
+                title: title,
+                body: body,
+                wakeUpScreen: true));
+        break;
+      case "audioCall":
+        awesomeNotifications.createNotification(
+            content: NotificationContent(
+                id: 1,
+                channelKey: payload["channelkey"]!,
+                duration: Duration(seconds: 45),
+                title: title,
+                body: body,
+                wakeUpScreen: true));
+        break;
     }
   }
 
-  static void _showNotification(RemoteMessage message) {
-    print("implement flutter local notification");
-    print(message.data);
-  }
-
-  Future initLocalNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@drawable/ic_launcher');
-    const DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings();
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsIOS);
-
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (payload) {
-      final message = RemoteMessage.fromMap(jsonDecode(payload.payload!));
-      print("handle message now");
-    });
-    final platform =
-        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-    await platform?.createNotificationChannel(_androidChannel);
+  Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+    Map<String, String?>? payload = receivedAction.payload;
   }
 }
-//   static Future _showNotification(RemoteMessage message) async {
-//     var pushTitle;
-//     var pushText;
-//     var nodeData;
-//
-//     String? language = message.data["lang"].toString();
-//
-//     // if (isChatMessageNotification(message)) {
-//     //   if (language == "en") {
-//     //     pushTitle = nodeData['title_en'];
-//     //     pushText = nodeData['body_en'];
-//     //   } else {
-//     //     pushTitle = nodeData['title_ar'];
-//     //     pushText = nodeData['body_ar'];
-//     //   }
-//     // } else {
-//     //   if (Platform.isAndroid) {
-//     //     nodeData = message.data;
-//     //     if (language == "en") {
-//     //       pushTitle = nodeData['title_en'];
-//     //       pushText = nodeData['body_en'];
-//     //     } else {
-//     //       pushTitle = nodeData['title_ar'];
-//     //       pushText = nodeData['body_ar'];
-//     //     }
-//     //   } else {
-//     //     nodeData = message.data;
-//     //     if (language == "en") {
-//     //       pushTitle = nodeData['title_en'];
-//     //       pushText = nodeData['body_en'];
-//     //     } else {
-//     //       pushTitle = nodeData['title_ar'];
-//     //       pushText = nodeData['body_ar'];
-//     //     }
-//     //   }
-//     // }
-//
-//   //   var platformChannelSpecificsAndroid = new AndroidNotificationDetails(
-//   //       '1', 'AerBag',
-//   //       channelDescription: 'AerBag New Notifications',
-//   //       playSound: true,
-//   //       enableVibration: false,
-//   //       importance: Importance.max,
-//   //       priority: Priority.max,
-//   //       icon: "icon");
-//   //
-//   //   var platformChannelSpecificsIos =
-//   //   new DarwinNotificationDetails(presentSound: true);
-//   //
-//   //   var platformChannelSpecifics = new NotificationDetails(
-//   //       android: platformChannelSpecificsAndroid,
-//   //       iOS: platformChannelSpecificsIos);
-//   //
-//   //   new Future.delayed(Duration.zero, () {
-//   //     _flutterLocalNotificationsPlugin.show(
-//   //       0,
-//   //       pushTitle,
-//   //       pushText,
-//   //       platformChannelSpecifics,
-//   //       payload: JsonEncoder().convert(message.data),
-//   //     );
-//   //   });
-//   // }
-// }
