@@ -115,6 +115,7 @@ class NotificationHandler {
     }
   }
 
+//,
   Future initLocalNotifications() async {
     await awesomeNotifications.initialize(
         null,
