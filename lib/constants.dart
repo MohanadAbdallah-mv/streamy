@@ -11,7 +11,12 @@ const Color AuthorColor = Color(0xff8A000000);
 const Color TypingColor = Color(0x8A000000);
 const Color ErrorMesseageText = Color(0xB0000000);
 const Color CartItemCounterColor = Color(0xff313144);
-
+const String messageChannel = "11";
+const String messageChannelKey = "message";
+const String audioCallChannel = "12";
+const String audioCallChannelKey = "videoCall";
+const String videoCallChannel = "13";
+const String videoCallChannelKey = "audioCall";
 // const Color titleColor= Color(0xfffcfcfc);
 // const Color textFieldColor= Color(0xff181818);
 // const Color smallTextColor= Color(0xff5d5d5d);

@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
-import 'dart:io' as io;
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -9,15 +7,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:streamy/services/Navigation_Service.dart';
 
 import '../../access_token_firebase.dart';
 import '../../firebase_options.dart';
+import '../../main.dart';
+import '../../models/user_model.dart';
 
 String? notificationDirection;
 dynamic notificationData;
 
 class NotificationHandler {
   static final NotificationHandler _instance = NotificationHandler._private();
+  static late final NavigationService _navigationService;
   static NotificationHandler get instance {
     return _instance;
   }
@@ -25,7 +27,8 @@ class NotificationHandler {
   NotificationHandler._private();
   static final AwesomeNotifications awesomeNotifications =
       AwesomeNotifications();
-  Future<void> init() async {
+  Future<void> init(NavigationService navigationService) async {
+    _navigationService = navigationService;
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
     await awesomeNotifications.requestPermissionToSendNotifications();
@@ -64,25 +67,41 @@ class NotificationHandler {
   }
 
   void sendPushMessage(
-      String token, String bodymsg, String title, String channelkey) async {
+      String token,
+      String bodyMessage,
+      String title,
+      String channel,
+      String channelKey,
+      String chatRoomId,
+      MyUser user,
+      String receiverId,
+      String receiverEmail) async {
     Dio dio = Dio();
-    AccessTokenFirebase tokengenerator = AccessTokenFirebase();
-    String Accesstoken = await tokengenerator.getAccessToken();
-    String projectID = tokengenerator.projectID;
+    AccessTokenFirebase tokenGenerator = AccessTokenFirebase();
+    String accessToken = await tokenGenerator.getAccessToken();
+    String projectID = tokenGenerator.projectID;
     try {
       final url =
           'https://fcm.googleapis.com/v1/projects/$projectID/messages:send';
 
       final headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $Accesstoken',
+        'Authorization': 'Bearer $accessToken',
       };
-
+      final userpayload = user.toJson();
       final body = jsonEncode({
         "message": {
           "token": token,
-          "data": {"channel": "1", "channelkey": channelkey},
-          "notification": {"title": title, "body": bodymsg}
+          "data": {
+            "channel": channel,
+            "channelkey": channelKey,
+            "chatRoomId": chatRoomId,
+            "userId": user.id,
+            "userEmail": user.email,
+            "receiverId": receiverId,
+            "receiverEmail": receiverEmail,
+          },
+          "notification": {"title": title, "body": bodyMessage}
         },
       });
 
@@ -126,7 +145,9 @@ class NotificationHandler {
               playSound: true,
               onlyAlertOnce: true,
               groupAlertBehavior: GroupAlertBehavior.Children,
-              importance: NotificationImportance.High,
+              importance: NotificationImportance.Max,
+              defaultRingtoneType: DefaultRingtoneType.Ringtone,
+              channelShowBadge: true, //todo disable and try later
               defaultPrivacy: NotificationPrivacy.Private,
               defaultColor: Colors.deepPurple,
               ledColor: Colors.deepPurple),
@@ -137,7 +158,8 @@ class NotificationHandler {
               playSound: true,
               onlyAlertOnce: true,
               groupAlertBehavior: GroupAlertBehavior.Children,
-              importance: NotificationImportance.High,
+              importance: NotificationImportance.Max,
+              defaultRingtoneType: DefaultRingtoneType.Ringtone,
               defaultPrivacy: NotificationPrivacy.Private,
               defaultColor: Colors.deepPurple,
               ledColor: Colors.deepPurple),
@@ -154,6 +176,8 @@ class NotificationHandler {
               ledColor: Colors.deepPurple)
         ],
         debug: true);
+    awesomeNotifications.setListeners(
+        onActionReceivedMethod: onActionReceivedMethod);
   }
 
   void initFirebaseNotifications() async {
@@ -209,36 +233,88 @@ class NotificationHandler {
       case "message":
         awesomeNotifications.createNotification(
             content: NotificationContent(
-                id: -1,
-                channelKey: payload["channelkey"]!,
-                duration: Duration(seconds: 45),
-                title: title,
-                body: body));
+          id: int.parse(payload["channel"]!),
+          channelKey: payload["channelkey"]!,
+          title: title,
+          body: body,
+          payload: payload,
+        ));
         break;
       case "videoCall":
         awesomeNotifications.createNotification(
             content: NotificationContent(
-                id: 0,
-                channelKey: payload["channelkey"]!,
-                duration: Duration(seconds: 45),
-                title: title,
-                body: body,
-                wakeUpScreen: true));
+              id: int.parse(payload["channel"]!),
+              channelKey: payload["channelkey"]!,
+              duration: Duration(seconds: 15),
+              title: title,
+              body: body,
+              payload: payload,
+              wakeUpScreen: true,
+              category: NotificationCategory.Call,
+              fullScreenIntent: true,
+              autoDismissible: false,
+            ),
+            actionButtons: [
+              NotificationActionButton(
+                  key: "Accept",
+                  label: "Accept Call",
+                  color: Colors.green,
+                  autoDismissible: true),
+              NotificationActionButton(
+                  key: "Reject",
+                  label: "Reject Call",
+                  color: Colors.red,
+                  autoDismissible: true)
+            ]);
         break;
       case "audioCall":
         awesomeNotifications.createNotification(
             content: NotificationContent(
-                id: 1,
+                id: int.parse(payload["channel"]!),
                 channelKey: payload["channelkey"]!,
-                duration: Duration(seconds: 45),
+                duration: Duration(seconds: 15),
                 title: title,
                 body: body,
-                wakeUpScreen: true));
+                payload: payload,
+                wakeUpScreen: true,
+                category: NotificationCategory.Call,
+                fullScreenIntent: true,
+                autoDismissible: false),
+            actionButtons: [
+              NotificationActionButton(
+                  key: "Accept",
+                  label: "Accept Call",
+                  color: Colors.green,
+                  autoDismissible: true),
+              NotificationActionButton(
+                  key: "Reject",
+                  label: "Reject Call",
+                  color: Colors.red,
+                  autoDismissible: true)
+            ]);
         break;
     }
   }
 
-  Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
-    Map<String, String?>? payload = receivedAction.payload;
+  static Future<void> onActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    try {
+      log(receivedAction.toString(), name: "onActionReceivedMethod");
+      Map<String, dynamic>? payload = receivedAction.payload;
+      log(receivedAction.payload!["chatRoomId"]!);
+      log(receivedAction.payload!["channelkey"]!);
+      //final payload = receivedAction.payload;
+      final chatRoomId = payload!['chatRoomId'];
+      final userID = payload['userId'];
+      final userEmail = payload['userEmail'];
+      final receiverId = payload['receiverId'];
+      final receiverEmail = payload['receiverEmail'];
+      log("should push call page", name: "hello");
+      final navigator = navigatorKey.currentState;
+      log("should push call page", name: "onActionReceivedMethodpush");
+      _navigationService.pushChat({"chatRoomId": chatRoomId});
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }

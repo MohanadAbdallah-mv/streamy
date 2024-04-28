@@ -85,8 +85,13 @@ class _ChatPageState extends State<ChatPage> {
               NotificationHandler.instance.sendPushMessage(
                   token,
                   "user ${widget.user.name} is calling you",
-                  "Audio call",
-                  "audioCall");
+                  "${widget.user.name}",
+                  audioCallChannel,
+                  audioCallChannelKey,
+                  widget.chatRoomId,
+                  widget.user,
+                  widget.receiverId,
+                  widget.receiverEmail);
             },
           ),
           IconButton(
@@ -99,9 +104,14 @@ class _ChatPageState extends State<ChatPage> {
                   .then((value) => value.data()!["token"]);
               NotificationHandler.instance.sendPushMessage(
                   token,
-                  "user ${widget.user.name} is videocalling you",
-                  "Video call",
-                  "videoCall");
+                  "user ${widget.user.name} is video calling you",
+                  "body",
+                  videoCallChannel,
+                  videoCallChannelKey,
+                  widget.chatRoomId,
+                  widget.user,
+                  widget.receiverId,
+                  widget.receiverEmail);
             },
           )
         ],

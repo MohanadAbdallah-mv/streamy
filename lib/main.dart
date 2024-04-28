@@ -5,13 +5,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:provider/provider.dart';
 import 'package:streamy/chat_feature/controller/chat_controller.dart';
 import 'package:streamy/chat_feature/data_source/chat_data_source.dart';
 import 'package:streamy/chat_feature/repo/chat_logic.dart';
+import 'package:streamy/chat_feature/screens/chat_page.dart';
 import 'package:streamy/repo/auth_logic.dart';
 import 'package:streamy/repo/firestore_logic.dart';
 import 'package:streamy/services/Cache_Helper.dart';
+import 'package:streamy/services/Navigation_Service.dart';
 import 'package:streamy/services/NotificationHandler/notification_handler.dart';
 import 'package:streamy/views/admin_loadingCheck.dart';
 import 'package:streamy/views/onBoarding.dart';
@@ -23,33 +26,41 @@ import 'datasource/firestore_data.dart';
 import 'firebase_options.dart';
 import 'models/user_model.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final navigator = NavigationService();
   await CacheData.cacheInitialization();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  NotificationHandler.instance.init().then((_) {
-    runApp(MultiProvider(providers: [
-      ChangeNotifierProvider(
-          create: (context) => FireStoreController(
-              firestorehandlerImplement: FirestorehandlerImplement(
-                  cacheData: CacheData(),
-                  firestoreImplement: FirestoreImplement(
-                      firebaseFirestore: FirebaseFirestore.instance)))),
-      ChangeNotifierProvider(
-          create: (context) => AuthController(
-              repo: AuthHandlerImplement(
-                  authImplement:
-                      AuthImplement(firebaseauth: FirebaseAuth.instance),
-                  cacheData: CacheData()))),
-      ChangeNotifierProvider(
-          create: (context) => ChatController(
-              chatRepo: ChatHandlerImplement(
-                  chatImplement: ChatImplement(
-                      firebaseFirestore: FirebaseFirestore.instance),
-                  cacheData: CacheData()))),
-    ], child: MyApp()));
+  NotificationHandler.instance.init(navigator).then((_) {
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+              create: (context) => FireStoreController(
+                  firestorehandlerImplement: FirestorehandlerImplement(
+                      cacheData: CacheData(),
+                      firestoreImplement: FirestoreImplement(
+                          firebaseFirestore: FirebaseFirestore.instance)))),
+          ChangeNotifierProvider(
+              create: (context) => AuthController(
+                  repo: AuthHandlerImplement(
+                      authImplement:
+                          AuthImplement(firebaseauth: FirebaseAuth.instance),
+                      cacheData: CacheData()))),
+          ChangeNotifierProvider(
+              create: (context) => ChatController(
+                  chatRepo: ChatHandlerImplement(
+                      chatImplement: ChatImplement(
+                          firebaseFirestore: FirebaseFirestore.instance),
+                      cacheData: CacheData()))),
+        ],
+        child: MyApp(),
+      ),
+    );
   });
 }
 
@@ -74,6 +85,7 @@ class MyApp extends StatelessWidget {
         designSize: const Size(360, 690),
         builder: (context, child) {
           return MaterialApp(
+              navigatorKey: navigatorKey,
               debugShowCheckedModeBanner: false,
               home: user.isRight ? AdminCheckPage(user: user.right) : Intro());
         });
