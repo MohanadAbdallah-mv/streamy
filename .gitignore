@@ -15,7 +15,7 @@ migrate_working_dir/
 *.ipr
 *.iws
 .idea/
-/lib/access_token_firebase.dart
+/lib/.access_token_firebase.dart
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
@@ -32,7 +32,7 @@ migrate_working_dir/
 .pub/
 /build/
 firebase_options.dart
-access_token_firebase.dart
+.access_token_firebase.dart
 # Web related
 lib/generated_plugin_registrant.dart
 

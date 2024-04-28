@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:streamy/services/Navigation_Service.dart';
 
-import '../../access_token_firebase.dart';
+import '../../.access_token_firebase.dart';
 import '../../firebase_options.dart';
 import '../../main.dart';
 import '../../models/user_model.dart';
