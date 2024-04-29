@@ -129,9 +129,9 @@ class Signaling {
         .collection('chat_rooms')
         .doc(chatRoomID)
         .collection("Rtc_Room")
-        .where("call_ID", isNull: false)
+        .orderBy("time", descending: true)
         .get();
-    String callID = callIdDocument.docs.first.data()["call_ID"];
+    String callID = (callIdDocument.docs.first.data())["call_ID"];
     log(call_ID, name: "call_id id - Signaling Controller -");
     DocumentReference roomRef = db
         .collection('chat_rooms')
@@ -313,22 +313,30 @@ class Signaling {
   }
 
   void registerPeerConnectionListeners({bool shutdown = false}) {
-    peerConnection?.onIceGatheringState = (RTCIceGatheringState state) {
-      log('ICE gathering state changed: $state');
-    };
+    RTCIceGatheringState? lastIceGatheringState;
+    RTCPeerConnectionState? lastPeerConnectionState;
+    RTCSignalingState? lastSignalingState;
 
     peerConnection?.onConnectionState = (RTCPeerConnectionState state) {
-      log('Connection state change: $state');
+      if (lastPeerConnectionState != state) {
+        log('Connection state change: $state');
+        lastPeerConnectionState = state;
+      }
       log(state.name);
     };
 
     peerConnection?.onSignalingState = (RTCSignalingState state) {
-      log('Signaling state change: $state');
-      log(state.name);
+      if (lastSignalingState != state) {
+        log('on signaling state changed: $state');
+        lastSignalingState = state;
+      }
     };
 
     peerConnection?.onIceGatheringState = (RTCIceGatheringState state) {
-      log('ICE connection state change: $state');
+      if (lastIceGatheringState != state) {
+        log('ICE gathering state changed: $state');
+        lastIceGatheringState = state;
+      }
     };
 
     peerConnection?.onAddStream = (MediaStream stream) {
