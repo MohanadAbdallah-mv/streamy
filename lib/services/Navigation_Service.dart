@@ -19,6 +19,7 @@ class NavigationService {
     //         receiverEmail: arguments["receiverEmail"],
     //         chatRoomId: arguments["chatRoomId"])));
     await navigator.push(MaterialPageRoute(
-        builder: (context) => CallPage(chatRoomID: arguments["chatRoomId"])));
+        builder: (context) => CallPage(
+            chatRoomID: arguments["chatRoomId"], answer: arguments["answer"])));
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
@@ -5,7 +6,8 @@ import '../controller/signaling.dart';
 
 class CallPage extends StatefulWidget {
   String chatRoomID;
-  CallPage({super.key, required this.chatRoomID});
+  bool? answer;
+  CallPage({super.key, required this.chatRoomID, this.answer});
 
   @override
   State<CallPage> createState() => _CallPageState();
@@ -25,14 +27,32 @@ class _CallPageState extends State<CallPage> {
     roomId = widget.chatRoomID;
     signaling.onAddRemoteStream = ((stream) {
       _remoteRenderer.srcObject = stream;
-      setState(() {}); //todo remove and try without setstate
+      //setState(() {}); //todo remove and try without setstate
     });
-
+    call();
     super.initState();
+  }
+
+  Future<void> call() async {
+    signaling.openUserMedia(_localRenderer, _remoteRenderer).then((value) {
+      if (widget.answer != null && widget.answer == true) {
+        log("answering call", name: "answer");
+        signaling.joinRoom(
+            widget.chatRoomID, widget.chatRoomID, _remoteRenderer);
+        setState(() {});
+      } else {
+        log("making call", name: "calling");
+        signaling.createRoom(_remoteRenderer, widget.chatRoomID);
+        setState(() {});
+      }
+    });
   }
 
   @override
   void dispose() {
+    if (_localRenderer.srcObject != null) {
+      signaling.hangUp(_localRenderer, widget.chatRoomID);
+    }
     _localRenderer.dispose();
     _remoteRenderer.dispose();
     super.dispose();
@@ -119,11 +139,13 @@ class _CallPageState extends State<CallPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("Join the following Room: "),
-                Flexible(
-                  child: TextFormField(
-                    controller: textEditingController,
-                  ),
+                const Text("press to mute"),
+                IconButton(
+                  onPressed: () {
+                    signaling.muteAudio();
+                  },
+                  icon: const Icon(Icons.volume_mute_outlined),
+                  color: Colors.red,
                 )
               ],
             ),

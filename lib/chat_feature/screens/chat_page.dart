@@ -64,18 +64,6 @@ class _ChatPageState extends State<ChatPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.call),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CallPage(chatRoomID: widget.chatRoomId)));
-              // Handle button press action (e.g., navigate to settings)
-              print('Settings button pressed');
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.notification_add),
             onPressed: () async {
               String token = await FirebaseFirestore.instance
                   .collection("UserToken")
@@ -92,7 +80,17 @@ class _ChatPageState extends State<ChatPage> {
                   widget.user,
                   widget.receiverId,
                   widget.receiverEmail);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CallPage(chatRoomID: widget.chatRoomId)));
+              // Handle button press action (e.g., navigate to settings)
             },
+          ),
+          IconButton(
+            icon: Icon(Icons.notification_add),
+            onPressed: () async {},
           ),
           IconButton(
             icon: Icon(Icons.video_call),

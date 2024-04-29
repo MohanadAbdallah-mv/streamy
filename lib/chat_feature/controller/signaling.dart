@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-typedef void StreamStateCallback(MediaStream stream);
+typedef StreamStateCallback = void Function(MediaStream stream);
 
 class Signaling {
   Map<String, dynamic> configuration = {
@@ -27,7 +27,7 @@ class Signaling {
   String? roomId;
   String? currentRoomText;
   StreamStateCallback? onAddRemoteStream;
-
+  MediaStream? stream;
   Future<String> createRoom(
       RTCVideoRenderer remoteRenderer, String chatRoomID) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -44,6 +44,10 @@ class Signaling {
     registerPeerConnectionListeners();
 
     localStream?.getTracks().forEach((track) {
+      log(track.kind ?? "null", name: "track kind");
+      log(track.label ?? "null", name: "track label");
+      print("${(localStream?.getAudioTracks())} audio track");
+      print("${(localStream?.getVideoTracks())} video track");
       peerConnection?.addTrack(track, localStream!);
     });
 
@@ -62,7 +66,8 @@ class Signaling {
     log('Created offer: $offer');
 
     var roomId = roomRef.id;
-    await roomRef.set({"call_ID": roomId, "offer": offer.toMap()});
+    await roomRef.set(
+        {"call_ID": roomId, "offer": offer.toMap(), "time": DateTime.now()});
 
     log('New room created with SDK offer. Room ID: $roomId');
     currentRoomText = 'Current room is $roomId - You are the caller!';
@@ -224,61 +229,102 @@ class Signaling {
     RTCVideoRenderer remoteVideo,
   ) async {
     await requestCameraPermission();
-    var stream = await navigator.mediaDevices
+    stream = await navigator.mediaDevices
         .getUserMedia({'video': true, 'audio': true});
 
     localVideo.srcObject = stream;
     localStream = stream;
-
     remoteVideo.srcObject = await createLocalMediaStream('key');
+  }
+
+  void muteAudio() {
+    if (localStream != null && localStream!.getAudioTracks().isNotEmpty) {
+      localStream!.getAudioTracks().forEach((element) {
+        element.enabled = !element.enabled; // Toggle mute state
+      });
+    } else {
+      // Handle no audio track scenario (e.g., permission not granted)
+      log("No audio track found in local stream", name: "MuteAudio");
+    }
+    // Update UI (mute button icon) based on muted state
+  }
+
+  void enableVideo() {
+    if (localStream != null && localStream!.getVideoTracks().isNotEmpty) {
+      localStream!.getVideoTracks().forEach((element) {
+        element.enabled = !element.enabled; // Toggle mute state
+      });
+    } else {
+      // Handle no audio track scenario (e.g., permission not granted)
+      log("No audio track found in local stream", name: "MuteAudio");
+    }
+    // Update UI (mute button icon) based on muted state
   }
 
   Future<void> hangUp(
     RTCVideoRenderer localVideo,
     String chatRoomID,
   ) async {
-    List<MediaStreamTrack> tracks = localVideo.srcObject!.getTracks();
-    tracks.forEach((track) {
-      track.stop();
-    });
+    try {
+      if (stream != null) {
+        stream!.dispose();
+      }
+      if (localStream != null) {
+        localStream!.getTracks().forEach((track) {
+          track.stop();
+        });
+      }
+      List<MediaStreamTrack> tracks = localVideo.srcObject!.getTracks();
+      tracks.forEach((track) {
+        track.stop();
+      });
 
-    if (remoteStream != null) {
-      remoteStream!.getTracks().forEach((track) => track.stop());
+      if (remoteStream != null) {
+        remoteStream!.getTracks().forEach((track) => track.stop());
+      }
+      if (peerConnection != null) peerConnection!.close();
+
+      if (roomId != null) {
+        var db = FirebaseFirestore.instance;
+        //todo update the ref and get callid
+        var roomRef = db
+            .collection('chat_rooms')
+            .doc(chatRoomID)
+            .collection("Rtc_Room")
+            .doc();
+        var calleeCandidates =
+            await roomRef.collection('calleeCandidates').get();
+        calleeCandidates.docs
+            .forEach((document) => document.reference.delete());
+
+        var callerCandidates =
+            await roomRef.collection('callerCandidates').get();
+        callerCandidates.docs
+            .forEach((document) => document.reference.delete());
+
+        await roomRef.delete();
+      }
+
+      localStream!.dispose();
+      remoteStream?.dispose();
+    } catch (e) {
+      log(e.toString(), name: "found error");
     }
-    if (peerConnection != null) peerConnection!.close();
-
-    if (roomId != null) {
-      var db = FirebaseFirestore.instance;
-      //todo update the ref and get callid
-      var roomRef = db
-          .collection('chat_rooms')
-          .doc(chatRoomID)
-          .collection("Rtc_Room")
-          .doc();
-      var calleeCandidates = await roomRef.collection('calleeCandidates').get();
-      calleeCandidates.docs.forEach((document) => document.reference.delete());
-
-      var callerCandidates = await roomRef.collection('callerCandidates').get();
-      callerCandidates.docs.forEach((document) => document.reference.delete());
-
-      await roomRef.delete();
-    }
-
-    localStream!.dispose();
-    remoteStream?.dispose();
   }
 
-  void registerPeerConnectionListeners() {
+  void registerPeerConnectionListeners({bool shutdown = false}) {
     peerConnection?.onIceGatheringState = (RTCIceGatheringState state) {
       log('ICE gathering state changed: $state');
     };
 
     peerConnection?.onConnectionState = (RTCPeerConnectionState state) {
       log('Connection state change: $state');
+      log(state.name);
     };
 
     peerConnection?.onSignalingState = (RTCSignalingState state) {
       log('Signaling state change: $state');
+      log(state.name);
     };
 
     peerConnection?.onIceGatheringState = (RTCIceGatheringState state) {

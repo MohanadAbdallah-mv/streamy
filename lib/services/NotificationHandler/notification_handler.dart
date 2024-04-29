@@ -312,7 +312,7 @@ class NotificationHandler {
       log("should push call page", name: "hello");
       final navigator = navigatorKey.currentState;
       log("should push call page", name: "onActionReceivedMethodpush");
-      _navigationService.pushChat({"chatRoomId": chatRoomId});
+      _navigationService.pushChat({"chatRoomId": chatRoomId, "answer": true});
     } catch (e) {
       log(e.toString());
     }
