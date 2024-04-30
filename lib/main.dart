@@ -5,12 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:provider/provider.dart';
 import 'package:streamy/chat_feature/controller/chat_controller.dart';
 import 'package:streamy/chat_feature/data_source/chat_data_source.dart';
 import 'package:streamy/chat_feature/repo/chat_logic.dart';
-import 'package:streamy/chat_feature/screens/chat_page.dart';
 import 'package:streamy/repo/auth_logic.dart';
 import 'package:streamy/repo/firestore_logic.dart';
 import 'package:streamy/services/Cache_Helper.dart';
@@ -49,7 +47,7 @@ Future<void> main() async {
               create: (context) => AuthController(
                   repo: AuthHandlerImplement(
                       authImplement:
-                          AuthImplement(firebaseauth: FirebaseAuth.instance),
+                          AuthImplement(firebaseAuth: FirebaseAuth.instance),
                       cacheData: CacheData()))),
           ChangeNotifierProvider(
               create: (context) => ChatController(
@@ -72,15 +70,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //MyUser? user=Provider.of<AuthController>(context).getCurrentUser();
-    //print(user);
     Either<String, MyUser> user =
         Provider.of<AuthController>(context).getCurrentUser();
-    // user.isRight
-    //     ? Provider.of<FireStoreController>(context, listen: false)
-    //         .updateItemsList(user.right)
-    //     : null;
-    //print("//////////////////////////////////////////////////"+user.right.role);
     return ScreenUtilInit(
         designSize: const Size(360, 690),
         builder: (context, child) {
