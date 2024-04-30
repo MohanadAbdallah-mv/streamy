@@ -20,22 +20,19 @@ abstract class Firestore {
 class FirestoreImplement extends Firestore {
   FirestoreImplement({required super.firebaseFirestore});
 
-
-
   @override
   Future<String> addUser(MyUser user) async {
     try {
       CollectionReference<Map<String, dynamic>> usersref =
-      firebaseFirestore.collection('users');
+          firebaseFirestore.collection('users');
       await usersref.doc(user.id).set({
         "id": user.id,
         "name": user.name,
         "email": user.email,
         "phonenumber": user.phonenumber,
         "isLogged": user.isLogged,
-        "role":user.role
+        "role": user.role
       }); //.add(user.toJson());
-      //await userdoc.set(data)
       return "success";
     } on FirebaseException catch (e) {
       return e.message.toString();
@@ -49,11 +46,15 @@ class FirestoreImplement extends Firestore {
       final usersRef = firebaseFirestore
           .collection('users')
           .withConverter<MyUser>(
-          fromFirestore: (snapshot, _) => MyUser.fromJson(snapshot.data()!),
-          toFirestore: (myuser, _) => myuser.toJson());
+              fromFirestore: (snapshot, _) => MyUser.fromJson(snapshot.data()!),
+              toFirestore: (myuser, _) => myuser.toJson());
       log("${user.id}");
       //log("${usersRef.doc(user.id).get().}");
-      MyUser userUpdates = await usersRef.doc(user.id).get().then((value) => value.data()!).catchError((error)=>log("failed to get user${error}"));
+      MyUser userUpdates = await usersRef
+          .doc(user.id)
+          .get()
+          .then((value) => value.data()!)
+          .catchError((error) => log("failed to get user${error}"));
       //log("user updates is back from data source at getuser  ${userUpdates.name} +${userUpdates.role}+${userUpdates.cart.items} +${userUpdates.cart.totalPrice} + ${userUpdates.wishList}}");
       return Right(userUpdates);
     } on FirebaseException catch (e) {
@@ -66,10 +67,11 @@ class FirestoreImplement extends Firestore {
   Future<String> updateUser(MyUser user) async {
     try {
       log("entering");
-      final usersref = firebaseFirestore.collection('users').withConverter<
-          MyUser>(
-          fromFirestore: (snapshot, _) => MyUser.fromJson(snapshot.data()!),
-          toFirestore: (myuser, _) => myuser.toJson());
+      final usersref = firebaseFirestore
+          .collection('users')
+          .withConverter<MyUser>(
+              fromFirestore: (snapshot, _) => MyUser.fromJson(snapshot.data()!),
+              toFirestore: (myuser, _) => myuser.toJson());
       //final docref=firebaseFirestore.doc(documentPath).
       log("entering");
       await usersref.doc(user.id).update(user.toJson());
@@ -80,5 +82,4 @@ class FirestoreImplement extends Firestore {
       return e.message.toString();
     }
   }
-
 }

@@ -9,9 +9,10 @@ import '../main.dart';
 import '../models/user_model.dart';
 import '../widgets/CustomButton.dart';
 import '../widgets/CustomText.dart';
+
 class Profile extends StatefulWidget {
   MyUser user;
-  Profile({super.key,required this.user});
+  Profile({super.key, required this.user});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -27,7 +28,9 @@ class _ProfileState extends State<Profile> {
               "Shoppie",
               style: GoogleFonts.sarina(
                   textStyle: TextStyle(
-                      color: AppTitleColor, fontWeight: FontWeight.w400,fontSize: 34.sp)),
+                      color: AppTitleColor,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 34.sp)),
             ),
           ),
           elevation: 0.0,
@@ -36,45 +39,33 @@ class _ProfileState extends State<Profile> {
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(10),
-            child: Column(mainAxisSize: MainAxisSize.min,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: CustomButton(
-                    child:CustomText(text: "Sign Out",color: primaryColor,fontWeight: FontWeight.w700,align: Alignment.center,
-                      size: 20,),
-                    color: Colors.white,borderColor: primaryColor,
-                    onpress: (){
+                    child: CustomText(
+                      text: "Sign Out",
+                      color: primaryColor,
+                      fontWeight: FontWeight.w700,
+                      align: Alignment.center,
+                      size: 20,
+                    ),
+                    color: Colors.white,
+                    borderColor: primaryColor,
+                    onpress: () {
                       Provider.of<AuthController>(context, listen: false)
                           .logout(widget.user);
-                      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                      Navigator.of(context, rootNavigator: true)
+                          .pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => new MyApp()),
-                            (route) => false,);
-                    },width: 150,
+                        (route) => false,
+                      );
+                    },
+                    width: 150,
                   ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(top: 12),
-                //   child: FutureBuilder(
-                //       future:products ,
-                //       builder: (context, snapshot) {
-                //         if (snapshot.hasData ) {
-                //           return ListView.builder(
-                //               shrinkWrap: true,
-                //               itemCount: snapshot.data!.length,
-                //               scrollDirection: Axis.vertical,
-                //               itemBuilder: (context, index) =>
-                //                   ProductCardHorizontal(
-                //                       index: index,
-                //                       product: snapshot.data![index],
-                //                       user: widget.user));
-                //         } else {
-                //
-                //           return CircularProgressIndicator();
-                //         }
-                //       }),
-                // ),
-
               ],
             ),
           ),

@@ -68,8 +68,8 @@ class AuthController extends ChangeNotifier {
     return response;
   }
 
-  String logout(user) {
-    Either<String, String> res = repo.signout(user);
+  Future<String> logout(user) async {
+    Either<String, String> res = await repo.signout(user);
     if (res.isRight) {
       notifyListeners();
       return "done";

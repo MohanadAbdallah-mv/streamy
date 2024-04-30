@@ -25,7 +25,7 @@ abstract class AuthHandler {
 
   Future<Either<String, MyUser>> register(FormUser userForm);
 
-  Either<String, String> signout(MyUser user);
+  Future<Either<String, String>> signout(MyUser user);
 
   Future<Either<String, String>> requestPasswordReset(String email);
 }
@@ -41,13 +41,13 @@ class AuthHandlerImplement extends AuthHandler {
           await authImplement.login(userForm);
       if (potentialuser.isRight) {
         MyUser user = MyUser(
-            id: potentialuser.right.user!.uid,
-            name: potentialuser.right.user!.displayName,
-            email: potentialuser.right.user!.email!,
-            role: "user",
-            phonenumber: potentialuser.right.user!.phoneNumber,
-            isLogged: true,
-            );
+          id: potentialuser.right.user!.uid,
+          name: potentialuser.right.user!.displayName,
+          email: potentialuser.right.user!.email!,
+          role: "user",
+          phonenumber: potentialuser.right.user!.phoneNumber,
+          isLogged: true,
+        );
         //Map<String,dynamic>json=user.toJson();
         CacheData.setData(key: "user", value: jsonEncode(user.toJson()));
 
@@ -80,8 +80,7 @@ class AuthHandlerImplement extends AuthHandler {
             email: potentialuser.right.email!,
             phonenumber: potentialuser.right.phoneNumber,
             role: "user",
-            isLogged: true
-            );
+            isLogged: true);
         log("we got user");
         log(user.name.toString());
         log(user.id.toString());
@@ -98,10 +97,11 @@ class AuthHandlerImplement extends AuthHandler {
   }
 
   @override
-  Either<String, String> signout(MyUser user) {
+  Future<Either<String, String>> signout(MyUser user) async {
     try {
       CacheData.deleteItem(key: "user");
-      return Right("done");
+      return await authImplement.signOut(user).then(
+          (value) => value.isRight ? const Right("done") : Left(value.left));
     } catch (e) {
       return Left(e.toString());
     }
@@ -121,7 +121,7 @@ class AuthHandlerImplement extends AuthHandler {
   @override
   Future<Either<String, String>> requestPasswordReset(String email) async {
     try {
-      await authImplement.requestpassword(email);
+      await authImplement.requestPassword(email);
       return Right("Success");
     } catch (e) {
       return Left(e.toString());
