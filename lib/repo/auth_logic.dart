@@ -7,25 +7,21 @@ import '../datasource/auth_data.dart';
 import '../models/user_model.dart';
 import '../models/userform.dart';
 
-// I do the business logic here
-// Represented in storing data locally when there is no internet connection
-// I store data remotely when there is internet connection
-// I need a interface to define my responsibilities
 abstract class AuthHandler {
-  bool isLoggedin;
+  bool isLoggedIn;
   AuthImplement authImplement;
   CacheData cacheData;
 
   AuthHandler(
       {required this.authImplement,
       required this.cacheData,
-      this.isLoggedin = false});
+      this.isLoggedIn = false});
 
   Future<Either<String, MyUser>> login(FormUser userForm);
 
   Future<Either<String, MyUser>> register(FormUser userForm);
 
-  Future<Either<String, String>> signout(MyUser user);
+  Future<Either<String, String>> signOut(MyUser user);
 
   Future<Either<String, String>> requestPasswordReset(String email);
 }
@@ -37,27 +33,24 @@ class AuthHandlerImplement extends AuthHandler {
   @override
   Future<Either<String, MyUser>> login(FormUser userForm) async {
     try {
-      Either<String, UserCredential> potentialuser =
+      Either<String, UserCredential> potentialUser =
           await authImplement.login(userForm);
-      if (potentialuser.isRight) {
+      if (potentialUser.isRight) {
         MyUser user = MyUser(
-          id: potentialuser.right.user!.uid,
-          name: potentialuser.right.user!.displayName,
-          email: potentialuser.right.user!.email!,
+          id: potentialUser.right.user!.uid,
+          name: potentialUser.right.user!.displayName,
+          email: potentialUser.right.user!.email!,
           role: "user",
-          phonenumber: potentialuser.right.user!.phoneNumber,
+          phonenumber: potentialUser.right.user!.phoneNumber,
           isLogged: true,
         );
-        //Map<String,dynamic>json=user.toJson();
         CacheData.setData(key: "user", value: jsonEncode(user.toJson()));
 
-        //CacheData.setData(key: "checker", value: "fuck....");
-
-        log("'we got user and saved in cashe' auth_repo ");
+        log("'we got user and saved in cache' auth_repo ");
         return Right(user);
       } else {
         log("'we don't have user' auth_repo");
-        return Left(potentialuser.left);
+        return Left(potentialUser.left);
       }
     } catch (e) {
       log("we fucked up -auth_repo");
@@ -68,17 +61,17 @@ class AuthHandlerImplement extends AuthHandler {
   @override
   Future<Either<String, MyUser>> register(FormUser userForm) async {
     try {
-      Either<String, User> potentialuser =
+      Either<String, User> potentialUser =
           await authImplement.register(userForm);
-      if (potentialuser.isRight) {
+      if (potentialUser.isRight) {
         log("hi");
         MyUser user;
-        log(potentialuser.right.displayName.toString());
+        log(potentialUser.right.displayName.toString());
         user = MyUser(
-            id: potentialuser.right.uid,
-            name: potentialuser.right.displayName,
-            email: potentialuser.right.email!,
-            phonenumber: potentialuser.right.phoneNumber,
+            id: potentialUser.right.uid,
+            name: potentialUser.right.displayName,
+            email: potentialUser.right.email!,
+            phonenumber: potentialUser.right.phoneNumber,
             role: "user",
             isLogged: true);
         log("we got user");
@@ -88,16 +81,16 @@ class AuthHandlerImplement extends AuthHandler {
         return Right(user);
       } else {
         log("we don't have user");
-        return Left(potentialuser.left);
+        return Left(potentialUser.left);
       }
     } catch (e) {
       log(e.toString());
-      return Left("we fucked up");
+      return const Left("we fucked up");
     }
   }
 
   @override
-  Future<Either<String, String>> signout(MyUser user) async {
+  Future<Either<String, String>> signOut(MyUser user) async {
     try {
       CacheData.deleteItem(key: "user");
       return await authImplement.signOut(user).then(
@@ -109,9 +102,9 @@ class AuthHandlerImplement extends AuthHandler {
 
   Either<String, MyUser> getCurrentUser() {
     try {
-      Map<String, dynamic> cashedjsonuser =
+      Map<String, dynamic> cashedJsonUser =
           jsonDecode(CacheData.getData(key: "user"));
-      MyUser user = MyUser.fromJson(cashedjsonuser);
+      MyUser user = MyUser.fromJson(cashedJsonUser);
       return Right(user);
     } catch (e) {
       return Left(e.toString());
@@ -122,11 +115,9 @@ class AuthHandlerImplement extends AuthHandler {
   Future<Either<String, String>> requestPasswordReset(String email) async {
     try {
       await authImplement.requestPassword(email);
-      return Right("Success");
+      return const Right("Success");
     } catch (e) {
       return Left(e.toString());
     }
   }
 }
-
-// i send

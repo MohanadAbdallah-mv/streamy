@@ -38,9 +38,7 @@ class AuthController extends ChangeNotifier {
       String? name, String? phone, String? email, String? password) async {
     FormUser userForm = FormUser(
         name: name!, phonenumber: phone, email: email!, password: password!);
-    //log(userForm.toString());
     Either<String, dynamic> res = await repo.register(userForm);
-    //print(MyUser);
     if (res.isRight) {
       log("finally,registered");
       notifyListeners();
@@ -69,7 +67,7 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<String> logout(user) async {
-    Either<String, String> res = await repo.signout(user);
+    Either<String, String> res = await repo.signOut(user);
     if (res.isRight) {
       notifyListeners();
       return "done";

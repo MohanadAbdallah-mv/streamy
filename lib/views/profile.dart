@@ -45,13 +45,6 @@ class _ProfileState extends State<Profile> {
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: CustomButton(
-                    child: CustomText(
-                      text: "Sign Out",
-                      color: primaryColor,
-                      fontWeight: FontWeight.w700,
-                      align: Alignment.center,
-                      size: 20,
-                    ),
                     color: Colors.white,
                     borderColor: primaryColor,
                     onpress: () {
@@ -64,6 +57,13 @@ class _ProfileState extends State<Profile> {
                       );
                     },
                     width: 150,
+                    child: const CustomText(
+                      text: "Sign Out",
+                      color: primaryColor,
+                      fontWeight: FontWeight.w700,
+                      align: Alignment.center,
+                      size: 20,
+                    ),
                   ),
                 ),
               ],

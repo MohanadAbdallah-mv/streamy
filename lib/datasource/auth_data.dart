@@ -25,9 +25,9 @@ import 'package:streamy/models/user_model.dart';
 import '../models/userform.dart';
 
 abstract class Auth {
-  FirebaseAuth firebaseauth;
+  FirebaseAuth firebaseAuth;
 
-  Auth({required this.firebaseauth});
+  Auth({required this.firebaseAuth});
 
   Future<Either<String, UserCredential>> login(FormUser userForm);
 
@@ -37,17 +37,15 @@ abstract class Auth {
 }
 
 class AuthImplement extends Auth {
-  AuthImplement({required super.firebaseauth});
+  AuthImplement({required super.firebaseAuth});
 
   @override
   Future<Either<String, UserCredential>> login(FormUser userForm) async {
     try {
-      final credential = await firebaseauth.signInWithEmailAndPassword(
+      final credential = await firebaseAuth.signInWithEmailAndPassword(
           email: userForm.email, password: userForm.password);
-      // log("'user is back again' auth_source");
       return Right(credential);
     } on FirebaseAuthException catch (e) {
-      //  log("'log in failure' auth_source");
       log(e.code);
       log(e.message.toString());
       return Left(e.code);
@@ -58,30 +56,20 @@ class AuthImplement extends Auth {
   Future<Either<String, User>> register(FormUser userForm) async {
     UserCredential credential;
     try {
-      credential = await firebaseauth.createUserWithEmailAndPassword(
+      credential = await firebaseAuth.createUserWithEmailAndPassword(
           email: userForm.email, password: userForm.password);
-      //log("auth_data returned successfully");
 
       print(credential);
-
-      //return Right(credential);
     } on FirebaseAuthException catch (e) {
       log("auth_data error");
       return Left(e.code);
     }
-    //if user is returned from auth we will update his name and phone number
     try {
-      //credential.user!.updatePhoneNumber(userForm.phonenumber!);
-
-      // log(userForm.name.toString());
-      await firebaseauth.currentUser!
+      await firebaseAuth.currentUser!
           .updateDisplayName(userForm.name.toString());
-      //log(firebaseauth.currentUser.toString());
-      await firebaseauth.currentUser!
+      await firebaseAuth.currentUser!
           .reload(); //TODO user set display name not working at the moment
-      //log(credential.user.displayName.toString());
-      User user = firebaseauth.currentUser!;
-      // log("'user have name and phone number now' auth_source");
+      User user = firebaseAuth.currentUser!;
       return Right(user);
     } on FirebaseException catch (e) {
       return Left(e.code);
@@ -91,10 +79,8 @@ class AuthImplement extends Auth {
   @override
   Future<Either<String, String>> requestPassword(String email) async {
     try {
-      // log(email);
-      await firebaseauth.sendPasswordResetEmail(email: email.trim());
-      //firebaseauth.sendPasswordResetEmail(email: email);
-      return Right("Success");
+      await firebaseAuth.sendPasswordResetEmail(email: email.trim());
+      return const Right("Success");
     } on FirebaseAuthException catch (e) {
       log(e.code);
       log(e.message.toString());
