@@ -33,7 +33,7 @@ class GlobalBottomNavigationBar extends StatefulWidget {
 }
 
 class _GlobalBottomNavigationBarState extends State<GlobalBottomNavigationBar> {
-  int _currentIndex = 2;
+  int _currentIndex = 1;
 
   @override
   void initState() {
@@ -59,8 +59,9 @@ class _GlobalBottomNavigationBarState extends State<GlobalBottomNavigationBar> {
                 (BottomNavigationItem navigationView) => navigationView.item)
             .toList(),
         showUnselectedLabels: true,
-        unselectedItemColor: primaryColor,
-        selectedItemColor: primaryColor,
+        unselectedItemColor: const Color(0xFF4D5B60),
+        selectedItemColor: const Color(0xFF0171D9),
+        backgroundColor: const Color(0xFF060F12),
         onTap: (index) {
           changeIndex(index);
           widget.onSelectTab(

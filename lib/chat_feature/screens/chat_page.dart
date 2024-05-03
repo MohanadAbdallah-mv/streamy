@@ -83,8 +83,10 @@ class _ChatPageState extends State<ChatPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          CallPage(chatRoomID: widget.chatRoomId)));
+                      builder: (context) => CallPage(
+                            chatRoomID: widget.chatRoomId,
+                            channelKey: videoCallChannelKey,
+                          )));
               // Handle button press action (e.g., navigate to settings)
             },
           ),
@@ -117,13 +119,12 @@ class _ChatPageState extends State<ChatPage> {
           child: Text(
             widget.receiverEmail,
             style: TextStyle(
-                color: AppTitleColor,
+                color: Colors.white,
                 fontWeight: FontWeight.w400,
                 fontSize: 22.sp),
           ),
         ),
         elevation: 0.0,
-        backgroundColor: Colors.white,
       ),
       body: Column(
         children: [
@@ -146,7 +147,7 @@ class _ChatPageState extends State<ChatPage> {
         Expanded(
             child: CustomTextField(
           headerText: "",
-          hint: "Enter Message",
+          hint: "Type something...",
           textEditingController: _messageController,
         )),
         IconButton(

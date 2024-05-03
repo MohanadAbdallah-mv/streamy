@@ -51,6 +51,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           cursorColor: TextFieldColor,
           obscureText: widget.isPassword ? !widget.showPassword : false,
           obscuringCharacter: "*",
+          minLines: 1,
+          maxLines: 6,
           // keyboardAppearance: ,
           autocorrect: !widget.isPassword,
           keyboardType: widget.isPassword
