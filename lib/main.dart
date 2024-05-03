@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:streamy/chat_feature/controller/chat_controller.dart';
 import 'package:streamy/chat_feature/data_source/chat_data_source.dart';
 import 'package:streamy/chat_feature/repo/chat_logic.dart';
+import 'package:streamy/constants.dart';
 import 'package:streamy/repo/auth_logic.dart';
 import 'package:streamy/repo/firestore_logic.dart';
 import 'package:streamy/services/Cache_Helper.dart';
@@ -24,7 +27,7 @@ import 'datasource/firestore_data.dart';
 import 'firebase_options.dart';
 import 'models/user_model.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,25 +41,35 @@ Future<void> main() async {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(
-              create: (context) => FireStoreController(
-                  firestorehandlerImplement: FirestorehandlerImplement(
-                      cacheData: CacheData(),
-                      firestoreImplement: FirestoreImplement(
-                          firebaseFirestore: FirebaseFirestore.instance)))),
+            create: (context) => FireStoreController(
+              firestorehandlerImplement: FirestorehandlerImplement(
+                cacheData: CacheData(),
+                firestoreImplement: FirestoreImplement(
+                  firebaseFirestore: FirebaseFirestore.instance,
+                ),
+              ),
+            ),
+          ),
           ChangeNotifierProvider(
-              create: (context) => AuthController(
-                  repo: AuthHandlerImplement(
-                      authImplement:
-                          AuthImplement(firebaseAuth: FirebaseAuth.instance),
-                      cacheData: CacheData()))),
+            create: (context) => AuthController(
+              repo: AuthHandlerImplement(
+                authImplement:
+                    AuthImplement(firebaseAuth: FirebaseAuth.instance),
+                cacheData: CacheData(),
+              ),
+            ),
+          ),
           ChangeNotifierProvider(
-              create: (context) => ChatController(
-                  chatRepo: ChatHandlerImplement(
-                      chatImplement: ChatImplement(
-                          firebaseFirestore: FirebaseFirestore.instance),
-                      cacheData: CacheData()))),
+            create: (context) => ChatController(
+              chatRepo: ChatHandlerImplement(
+                chatImplement: ChatImplement(
+                    firebaseFirestore: FirebaseFirestore.instance),
+                cacheData: CacheData(),
+              ),
+            ),
+          ),
         ],
-        child: MyApp(),
+        child: const MyApp(),
       ),
     );
   });
@@ -71,14 +84,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Either<String, MyUser> user =
-        Provider.of<AuthController>(context).getCurrentUser();
+        Provider.of<AuthController>(context, listen: false).getCurrentUser();
+    //todo step 1 check if app is opened by a notification using a bool read from a provider
     return ScreenUtilInit(
         designSize: const Size(360, 690),
         builder: (context, child) {
+          log("running material app", name: "materialApp");
           return MaterialApp(
-              navigatorKey: navigatorKey,
-              debugShowCheckedModeBanner: false,
-              home: user.isRight ? AdminCheckPage(user: user.right) : Intro());
+            navigatorKey: navigatorKey,
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              brightness: Brightness.dark,
+              scaffoldBackgroundColor: appBackGroundColor,
+            ),
+            home:
+                user.isRight ? AdminCheckPage(user: user.right) : const Intro(),
+          );
         });
   }
 }
