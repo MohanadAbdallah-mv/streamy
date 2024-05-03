@@ -10,6 +10,8 @@ class CustomTextField extends StatefulWidget {
   final String headerText;
   final Widget? customheader;
   final String hint;
+  Color textColor;
+  Color borderFocusColor;
   TextEditingController? textEditingController;
   VoidCallback? onEditComplete;
   VoidCallback? onTap;
@@ -27,6 +29,8 @@ class CustomTextField extends StatefulWidget {
       this.customheader,
       this.textEditingController,
       this.isError = false,
+      this.textColor = TextFieldColor,
+      this.borderFocusColor = TextFieldColorFocus,
       this.showPassword = false,
       this.onTap});
 
@@ -47,8 +51,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 color: TextFieldColor,
               ),
         TextFormField(
-          style: TextStyle(color: widget.isError ? Colors.red : TextFieldColor),
-          cursorColor: TextFieldColor,
+          style:
+              TextStyle(color: widget.isError ? Colors.red : widget.textColor),
+          cursorColor: Colors.white,
           obscureText: widget.isPassword ? !widget.showPassword : false,
           obscuringCharacter: "*",
           minLines: 1,
@@ -62,7 +67,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             enabledBorder: UnderlineInputBorder(
               // borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
-                  color: widget.isError ? Colors.red : TextFieldColor),
+                  color: widget.isError ? Colors.red : widget.textColor),
             ),
             suffixIcon: widget.isPassword
                 ? GestureDetector(
@@ -82,19 +87,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     : null,
             hintText: widget.hint,
             hintStyle: TextStyle(
-              color: widget.isError ? Colors.red : TextFieldColor,
+              color: widget.isError ? Colors.red : widget.textColor,
             ),
             focusedBorder: UnderlineInputBorder(
               // borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: TextFieldColorFocus),
+              borderSide: BorderSide(color: widget.borderFocusColor),
             ),
           ),
           onEditingComplete: widget.onEditComplete,
           focusNode: widget.focusNode,
           controller: widget.textEditingController,
-          onTapOutside: ((event) {
-            //FocusScope.of(context).unfocus();
-          }),
+          onTapOutside: ((event) {}),
           onTap: widget.onTap,
         ),
         Padding(

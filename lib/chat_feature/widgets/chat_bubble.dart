@@ -29,7 +29,7 @@ class _ChatBubbleState extends State<ChatBubble> {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
-            child: Text(message.senderEmail),
+            child: Text(message.name ?? message.senderEmail),
           ),
           Container(
             margin: widget.isSender

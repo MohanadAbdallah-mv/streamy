@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MyMessage {
   late String senderID;
   late String senderEmail;
+  late String? name;
   late String recieverID;
   late String message;
   late Timestamp timeStamp;
@@ -12,7 +13,8 @@ class MyMessage {
       required this.senderID,
       required this.senderEmail,
       required this.message,
-      required this.timeStamp});
+      required this.timeStamp,
+      this.name});
 
   Map<String, dynamic> toJson() {
     return {
@@ -21,6 +23,7 @@ class MyMessage {
       "recieverID": recieverID,
       "message": message,
       "timeStamp": timeStamp,
+      "name": name,
     };
   }
 
@@ -30,6 +33,7 @@ class MyMessage {
         senderID: json["senderID"],
         senderEmail: json["senderEmail"],
         message: json["message"],
-        timeStamp: json["timeStamp"]);
+        timeStamp: json["timeStamp"],
+        name: json["name"]);
   }
 }
