@@ -61,8 +61,8 @@ class _ChatBubbleState extends State<ChatBubble> {
             padding: widget.isSender
                 ? EdgeInsets.only(right: 4.w)
                 : EdgeInsets.only(left: 4.w),
-            child: Text(DateFormat('yyyy-MM-dd – hh:mm-aa')
-                .format(message.timeStamp.toDate())),
+            child: Text(
+                DateFormat(' hh:mm-aa').format(message.timeStamp.toDate())),
           )
         ],
       ),
