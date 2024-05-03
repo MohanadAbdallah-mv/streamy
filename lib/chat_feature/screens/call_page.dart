@@ -1,13 +1,19 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:streamy/constants.dart';
 
 import '../controller/signaling.dart';
 
 class CallPage extends StatefulWidget {
   String chatRoomID;
   bool? answer;
-  CallPage({super.key, required this.chatRoomID, this.answer});
+  String channelKey;
+  CallPage(
+      {super.key,
+      required this.chatRoomID,
+      this.answer,
+      required this.channelKey});
 
   @override
   State<CallPage> createState() => _CallPageState();
@@ -34,7 +40,11 @@ class _CallPageState extends State<CallPage> {
   }
 
   Future<void> call() async {
-    signaling.openUserMedia(_localRenderer, _remoteRenderer).then((value) {
+    bool video = false;
+    video = widget.channelKey == videoCallChannelKey ? true : false;
+    signaling
+        .openUserMedia(_localRenderer, _remoteRenderer, video)
+        .then((value) {
       if (widget.answer != null && widget.answer == true) {
         log("answering call", name: "answer");
         signaling.joinRoom(
@@ -72,12 +82,12 @@ class _CallPageState extends State<CallPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      signaling.openUserMedia(_localRenderer, _remoteRenderer);
-                    },
-                    child: const Text("Open camera & microphone"),
-                  ),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     signaling.openUserMedia(_localRenderer, _remoteRenderer);
+                  //   },
+                  //   child: const Text("Open camera & microphone"),
+                  // ),
                   const SizedBox(
                     width: 8,
                   ),

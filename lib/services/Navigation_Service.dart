@@ -12,14 +12,16 @@ class NavigationService {
 
   Future<void> pushChat(Map<String, dynamic> arguments) async {
     final navigator = Navigator.of(navigatorKey.currentContext!);
-    // await navigator.push(MaterialPageRoute(
-    //     builder: (context) => ChatPage(
-    //         user: arguments["user"],
-    //         receiverId: arguments["receiverId"],
-    //         receiverEmail: arguments["receiverEmail"],
-    //         chatRoomId: arguments["chatRoomId"])));
-    await navigator.push(MaterialPageRoute(
-        builder: (context) => CallPage(
-            chatRoomID: arguments["chatRoomId"], answer: arguments["answer"])));
+    if (arguments["answer"] = true) {
+      navigator.push(
+        MaterialPageRoute(
+          builder: (context) => CallPage(
+            chatRoomID: arguments["chatRoomId"],
+            answer: true,
+            channelKey: arguments["channelKey"],
+          ),
+        ),
+      );
+    }
   }
 }

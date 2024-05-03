@@ -224,17 +224,17 @@ class Signaling {
     }
   }
 
-  Future<void> openUserMedia(
-    RTCVideoRenderer localVideo,
-    RTCVideoRenderer remoteVideo,
-  ) async {
+  Future<void> openUserMedia(RTCVideoRenderer localVideo,
+      RTCVideoRenderer remoteVideo, bool video) async {
     await requestCameraPermission();
     stream = await navigator.mediaDevices
-        .getUserMedia({'video': true, 'audio': true});
+        .getUserMedia({'video': video, 'audio': true});
 
     localVideo.srcObject = stream;
     localStream = stream;
     remoteVideo.srcObject = await createLocalMediaStream('key');
+    //todo get video track name and add it here then make a function to trigger cam on or off
+    //stream!.addTrack(track);
   }
 
   void muteAudio() {

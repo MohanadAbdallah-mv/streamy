@@ -43,12 +43,12 @@ class ChatHandlerImplement extends ChatHandler {
   ) async {
     final Timestamp timeStamp = Timestamp.now();
     MyMessage newMessage = MyMessage(
-      recieverID: receiverID,
-      senderID: user.id,
-      senderEmail: user.email,
-      message: message,
-      timeStamp: timeStamp,
-    );
+        recieverID: receiverID,
+        senderID: user.id,
+        senderEmail: user.email,
+        message: message,
+        timeStamp: timeStamp,
+        name: user.name);
     List<String> ids = [user.id, receiverID];
     ids.sort();
     String chatRoomID = ids.join("_");

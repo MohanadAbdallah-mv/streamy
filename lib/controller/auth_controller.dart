@@ -12,7 +12,6 @@ class AuthController extends ChangeNotifier {
   final AuthHandlerImplement repo;
 
   AuthController({required this.repo});
-
   Future<Either<String, dynamic>> login(String? email, String? password) async {
     try {
       FormUser userForm = FormUser(email: email!, password: password!);
