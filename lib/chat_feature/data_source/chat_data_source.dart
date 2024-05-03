@@ -22,11 +22,18 @@ class ChatImplement extends Chat {
   ChatImplement({required super.firebaseFirestore});
   @override
   Future<void> sendMessage(String chatRoomID, MyMessage message) async {
-    await firebaseFirestore
-        .collection("chat_rooms")
-        .doc(chatRoomID)
-        .collection("messages")
-        .add(message.toJson());
+    DocumentReference chatRef =
+        firebaseFirestore.collection("chat_rooms").doc(chatRoomID);
+    await chatRef.collection("messages").add(message.toJson());
+    await chatRef.update({
+      "last_msg": message.message,
+      "last_time": message.timeStamp,
+      "from_user_id": message.senderID,
+      "from_msg_num": 0,
+      "to_user_id": message.recieverID, //todo
+      "to_msg_num": 0,
+    });
+    // await chatRef
   }
 
   @override
