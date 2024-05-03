@@ -109,7 +109,8 @@ class _MessagesListState extends State<MessagesList> {
                 itemBuilder: (context, index) {
                   if (index < chatController.messages.length) {
                     final item = chatController.messages[index];
-                    return ChatBubble(user: widget.user, message: item);
+                    bool isSender = widget.user.id == item.senderID;
+                    return ChatBubble(isSender: isSender, message: item);
                   } else {
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: 32),
