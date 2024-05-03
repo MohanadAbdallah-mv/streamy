@@ -14,7 +14,7 @@ import '../models/user_model.dart';
 class HomePage extends StatefulWidget {
   final MyUser user;
 
-  HomePage({
+  const HomePage({
     super.key,
     required this.user,
   });
@@ -72,21 +72,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Center(
-          child: Text(
-            "Shoppie",
-            style: GoogleFonts.sarina(
-                textStyle: TextStyle(
-                    color: AppTitleColor,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 34.sp)),
-          ),
-        ),
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-      ),
+      appBar: AppBar(),
       body: _builduserList(),
     );
   }
@@ -118,15 +104,13 @@ class _HomePageState extends State<HomePage> {
           List<String> ids = [widget.user.id, data.id];
           ids.sort();
           String chatRoomID = ids.join("_");
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChatPage(
-                        user: widget.user,
-                        receiverId: data.id,
-                        receiverEmail: data.email,
-                        chatRoomId: chatRoomID,
-                      )));
+          Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+              builder: (context) => ChatPage(
+                    user: widget.user,
+                    receiverId: data.id,
+                    receiverEmail: data.email,
+                    chatRoomId: chatRoomID,
+                  )));
         },
       );
     } else {

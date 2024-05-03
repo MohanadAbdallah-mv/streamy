@@ -142,25 +142,36 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildMessageInput() {
-    return Row(
-      children: [
-        Expanded(
-            child: CustomTextField(
-          headerText: "",
-          hint: "Type something...",
-          textEditingController: _messageController,
-        )),
-        IconButton(
-            onPressed: () {
-              sendMessage();
-              Provider.of<ChatController>(context, listen: false)
-                  .jumpToBottom();
-            },
-            icon: Icon(
-              Icons.arrow_upward,
-              size: 40.sp,
-            ))
-      ],
+    return Container(
+      //height: 120.h,
+      margin: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 20.h),
+      padding: EdgeInsets.only(left: 16.w, bottom: 4.h),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24.r), color: chatTextFieldColor),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Expanded(
+              child: CustomTextField(
+            headerText: "",
+            hint: "Type something...",
+            textColor: Colors.white,
+            borderFocusColor: Colors.white,
+            textEditingController: _messageController,
+          )),
+          IconButton(
+              onPressed: () {
+                sendMessage();
+                Provider.of<ChatController>(context, listen: false)
+                    .jumpToBottom();
+              },
+              icon: Icon(
+                Icons.arrow_upward,
+                size: 40.sp,
+              ))
+        ],
+      ),
     );
   }
 }
