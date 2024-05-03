@@ -98,13 +98,13 @@ class ScaffoldGlobalBottomNavigation extends StatefulWidget {
     this.drawerEnableOpenDragGesture = true,
     this.endDrawerEnableOpenDragGesture = true,
   })  : assert(
-                (listOfChild.length > 1 || listOfChild.length <= 6),
+            (listOfChild.length > 1 || listOfChild.length <= 6),
             'You should provide a valid list. This list must not be null and '
             'also number of widgets have to be '
             'between 2 and 6 widgets at max'),
         assert(
-                (listOfBottomNavigationItem.length > 1 ||
-                    listOfBottomNavigationItem.length <= 6),
+            (listOfBottomNavigationItem.length > 1 ||
+                listOfBottomNavigationItem.length <= 6),
             'You should provide a valid list. This list must not be null and '
             'also number of Widgets have to be '
             'between 2 and 6 bottom navigation item at max'),
@@ -123,7 +123,7 @@ class _ScaffoldGlobalBottomNavigationState
     extends State<ScaffoldGlobalBottomNavigation>
     with TickerProviderStateMixin {
   DateTime? currentBackPressTime;
-  BottomNavigationTabNumber _currentTab = BottomNavigationTabNumber.THIRD_TAB;
+  BottomNavigationTabNumber _currentTab = BottomNavigationTabNumber.FIRST_TAB;
   Map<BottomNavigationTabNumber, GlobalKey<NavigatorState>> navigatorKeys = {};
   List<Widget> _list = [];
 
@@ -174,11 +174,11 @@ class _ScaffoldGlobalBottomNavigationState
     final isFirstRouteInCurrentTab =
         !await navigatorKeys[_currentTab]!.currentState!.maybePop();
     if (isFirstRouteInCurrentTab) {
-      if (_currentTab != BottomNavigationTabNumber.THIRD_TAB) {
-        _selectTab(BottomNavigationTabNumber.THIRD_TAB);
+      if (_currentTab != BottomNavigationTabNumber.FIRST_TAB) {
+        _selectTab(BottomNavigationTabNumber.FIRST_TAB);
         return false;
       } else {
-          return isFirstRouteInCurrentTab;
+        return isFirstRouteInCurrentTab;
       }
     }
     return isFirstRouteInCurrentTab;
@@ -206,7 +206,9 @@ class _ScaffoldGlobalBottomNavigationState
   }
 
   void _selectTab(BottomNavigationTabNumber tabItem) {
-    navigatorKeys[_currentTab]!.currentState!.popUntil((route) => route.isFirst);
+    navigatorKeys[_currentTab]!
+        .currentState!
+        .popUntil((route) => route.isFirst);
     if (tabItem != _currentTab)
       setState(() {
         _currentTab = tabItem;
