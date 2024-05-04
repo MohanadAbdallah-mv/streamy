@@ -25,22 +25,23 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
   void initState() {
     super.initState();
   }
-///
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldGlobalBottomNavigation(
         floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniCenterDocked,
+            FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Container(
-            padding: EdgeInsets.only(top: 5.h),
-            width: 52.w,
-            height: 52.h,
+            padding: EdgeInsets.only(top: 8.h),
+            width: 62.w,
+            height: 62.h,
             child: FloatingActionButton(
               elevation: 0,
               onPressed: () {},
               shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 3.w, color: appBackGroundColor),
-                  borderRadius: BorderRadius.circular(50.r)),
+                  side: BorderSide(width: 5.w, color: const Color(0xFF060F12)),
+                  borderRadius: BorderRadius.circular(58.r)),
+              child: Icon(Icons.add,size: 32.h),
             )),
         primary: true,
         listOfChild: [

@@ -1,14 +1,9 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:streamy/chat_feature/screens/chat_page.dart';
-
+import 'package:streamy/widgets/Story.dart';
 import '../constants.dart';
-import '../controller/firestore_controller.dart';
 import '../models/user_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,8 +31,25 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: appBackGroundColor,
       ),
-
-      body: _builduserList(),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 8,right: 8),
+        child: Column(
+          children: [
+            Expanded(
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 8,
+                    itemBuilder: (builder,context){
+                      return const StoryCircle();
+                    })),
+            const Divider(indent: 24,endIndent: 90,),
+            Expanded(
+              flex: 10,
+              child: _builduserList(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -63,7 +75,11 @@ class _HomePageState extends State<HomePage> {
     MyUser data = MyUser.fromJson(doc.data() as Map<String, dynamic>);
     if (data.id != widget.user.id) {
       return ListTile(
+        leading: const CircleAvatar(
+          maxRadius: 28,
+        ),
         title: Text(data.email),
+        subtitle: Text("last message bla ith max length then dots"),
         onTap: () {
           List<String> ids = [widget.user.id, data.id];
           ids.sort();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const Color primaryColor = Color(0xff6066FC);
+const Color primaryColor = Color(0xff0E1B23);
 const Color secondryColor = Color(0xffD9DAFF);
 const Color buttonColor = Color(0xff181818);
 const Color AppTitleColor = Color(0xff000000);
@@ -12,7 +12,7 @@ const Color TypingColor = Color(0x8A000000);
 const Color ErrorMesseageText = Color(0xB0000000);
 const Color CartItemCounterColor = Color(0xff313144);
 const Color appBackGroundColor = Color(0xff0E1B23);
-const Color messageSenderColor = Color(0xff0370D3);
+const Color mainBlueColor = Color(0xff0370D3);
 const Color messageReceiverColor = Color(0xff3F454B);
 const Color chatTextFieldColor = Color(0xff202D35);
 const String messageChannel = "11";

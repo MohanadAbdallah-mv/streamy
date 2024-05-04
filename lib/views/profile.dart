@@ -32,8 +32,8 @@ class _ProfileState extends State<Profile> {
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: CustomButton(
-                    color: messageSenderColor,
-                    borderColor: messageSenderColor,
+                    color: mainBlueColor,
+                    borderColor: mainBlueColor,
                     onpress: () {
                       Provider.of<AuthController>(context, listen: false)
                           .logout(widget.user);

@@ -94,10 +94,12 @@ class MyApp extends StatelessWidget {
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              brightness: Brightness.dark,
-              scaffoldBackgroundColor: appBackGroundColor,
-              primaryColor: appBackGroundColor,
-            ),
+                brightness: Brightness.dark,
+                scaffoldBackgroundColor: appBackGroundColor,
+                primaryColor: appBackGroundColor,
+                floatingActionButtonTheme:const  FloatingActionButtonThemeData(
+                    backgroundColor: mainBlueColor,
+                    foregroundColor: Colors.white)),
             home:
                 user.isRight ? AdminCheckPage(user: user.right) : const Intro(),
           );

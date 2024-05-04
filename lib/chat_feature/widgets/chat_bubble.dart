@@ -47,7 +47,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                       topLeft: Radius.circular(16.r),
                       topRight: Radius.circular(16.r)),
               color:
-                  widget.isSender ? messageSenderColor : messageReceiverColor,
+                  widget.isSender ? mainBlueColor : messageReceiverColor,
             ),
             child: Text(
               message.message,
