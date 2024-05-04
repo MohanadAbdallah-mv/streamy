@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,8 @@ class _MessagesListState extends State<MessagesList> {
                     .loadAfterSnapShot) {
           Provider.of<ChatController>(context, listen: false)
               .setLoadAfterSnapShot = snapshots.docs.last;
+          //see msg function
+
           return true;
         } else {
           return false;
@@ -59,6 +62,7 @@ class _MessagesListState extends State<MessagesList> {
   void initState() {
     ChatController chatController =
         Provider.of<ChatController>(context, listen: false);
+    chatController.seeMsg(widget.receiverID, widget.chatroomID);
     _myFuture =
         chatController.getLatestMessages(widget.chatroomID).then((value) {
       _myStream = _chatStream(
@@ -67,6 +71,22 @@ class _MessagesListState extends State<MessagesList> {
       ).listen((event) {
         event.forEach((element) {
           chatController.messages.insert(0, element);
+          // if (chatController.messages.first.senderID != widget.user.id) {
+          //   Provider.of<ChatController>(context,
+          //           listen: false) //check wherererer
+          //       .seeMsg(
+          //           chatController.messages.first.senderID, widget.chatroomID)
+          //       .then((value) =>
+          //           Provider.of<ChatController>(context, listen: false)
+          //               .messages
+          //               .first
+          //               .read = true);
+          //   log("the other user recieved my message");
+          //   log(Provider.of<ChatController>(context, listen: false)
+          //       .messages
+          //       .first
+          //       .message);
+          // }
         });
       });
     });

@@ -96,4 +96,18 @@ class ChatController extends ChangeNotifier {
     chatRooms[chatRoomID] = messages;
     notifyListeners();
   }
+
+  Future<void> seeMsg(String receiverId, String chatRoomID) async {
+    final query = await FirebaseFirestore.instance
+        .collection('chat_rooms')
+        .doc(chatRoomID)
+        .collection('messages')
+        .where('senderID', isEqualTo: receiverId)
+        .where('read', isEqualTo: false)
+        .get();
+
+    query.docs.forEach((doc) {
+      doc.reference.update({'read': true});
+    });
+  }
 }

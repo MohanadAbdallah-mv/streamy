@@ -25,14 +25,40 @@ class ChatImplement extends Chat {
     DocumentReference chatRef =
         firebaseFirestore.collection("chat_rooms").doc(chatRoomID);
     await chatRef.collection("messages").add(message.toJson());
-    await chatRef.update({
-      "last_msg": message.message,
-      "last_time": message.timeStamp,
-      "from_user_id": message.senderID,
-      "from_msg_num": 0,
-      "to_user_id": message.recieverID, //todo
-      "to_msg_num": 0,
+    await firebaseFirestore.runTransaction((transaction) async {
+      final documentSnapshot = await transaction.get(chatRef);
+      var currentUnreadCount = 1;
+
+      if (documentSnapshot.data() != null) {
+        log("collection found", name: "collection found");
+        Map<String, dynamic> docRefData =
+            documentSnapshot.data() as Map<String, dynamic>;
+        if (docRefData[message.recieverID] != null) {
+          log("field found", name: "field found and will add ");
+          log(docRefData[message.recieverID].toString());
+          currentUnreadCount = docRefData[message.recieverID] + 1;
+        }
+      }
+      log("updated");
+      transaction.set(chatRef, {
+        "last_msg": message.message,
+        "last_time": message.timeStamp,
+        "from_user_id": message.senderID,
+        message.senderID: 0,
+        "to_user_id": message.recieverID, //todo
+        message.recieverID: currentUnreadCount,
+      });
+      return Future(() => null);
     });
+    // final currentUnreadCount = documentSnapshot.data()?["to_msg_num"] ?? 0;
+    // await chatRef.update({
+    //   "last_msg": message.message,
+    //   "last_time": message.timeStamp,
+    //   "from_user_id": message.senderID,
+    //   "from_msg_num": 0,
+    //   "to_user_id": message.recieverID, //todo
+    //   "to_msg_num": currentUnreadCount,
+    // });
     // await chatRef
   }
 

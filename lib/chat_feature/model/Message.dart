@@ -6,6 +6,7 @@ class MyMessage {
   late String? name;
   late String recieverID;
   late String message;
+  bool? read;
   late Timestamp timeStamp;
 
   MyMessage(
@@ -14,6 +15,7 @@ class MyMessage {
       required this.senderEmail,
       required this.message,
       required this.timeStamp,
+      this.read = false,
       this.name});
 
   Map<String, dynamic> toJson() {
@@ -24,16 +26,19 @@ class MyMessage {
       "message": message,
       "timeStamp": timeStamp,
       "name": name,
+      "read": read
     };
   }
 
   factory MyMessage.fromJson(Map<String, dynamic> json) {
     return MyMessage(
-        recieverID: json["recieverID"],
-        senderID: json["senderID"],
-        senderEmail: json["senderEmail"],
-        message: json["message"],
-        timeStamp: json["timeStamp"],
-        name: json["name"]);
+      recieverID: json["recieverID"],
+      senderID: json["senderID"],
+      senderEmail: json["senderEmail"],
+      message: json["message"],
+      timeStamp: json["timeStamp"],
+      name: json["name"],
+      read: json["read"] ?? true,
+    );
   }
 }

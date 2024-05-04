@@ -59,10 +59,22 @@ class _ChatBubbleState extends State<ChatBubble> {
           ),
           Padding(
             padding: widget.isSender
-                ? EdgeInsets.only(right: 4.w)
-                : EdgeInsets.only(left: 4.w),
-            child: Text(
-                DateFormat(' hh:mm-aa').format(message.timeStamp.toDate())),
+                ? EdgeInsets.only(right: 8.w)
+                : EdgeInsets.only(left: 8.w),
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: widget.isSender
+                  ? MainAxisAlignment.end
+                  : MainAxisAlignment.start,
+              children: [
+                Text(
+                  widget.isSender ? "read:${widget.message.read}" : "",
+                  //textAlign: TextAlign.start,
+                ),
+                Text(
+                    DateFormat(' hh:mm-aa').format(message.timeStamp.toDate())),
+              ],
+            ),
           )
         ],
       ),
