@@ -96,6 +96,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               brightness: Brightness.dark,
               scaffoldBackgroundColor: appBackGroundColor,
+              primaryColor: appBackGroundColor,
             ),
             home:
                 user.isRight ? AdminCheckPage(user: user.right) : const Intro(),
