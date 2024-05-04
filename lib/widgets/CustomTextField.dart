@@ -16,6 +16,7 @@ class CustomTextField extends StatefulWidget {
   VoidCallback? onEditComplete;
   VoidCallback? onTap;
   FocusNode? focusNode;
+  int maxlines;
   bool isError;
   bool showPassword;
 
@@ -32,6 +33,7 @@ class CustomTextField extends StatefulWidget {
       this.textColor = TextFieldColor,
       this.borderFocusColor = TextFieldColorFocus,
       this.showPassword = false,
+      this.maxlines = 1,
       this.onTap});
 
   @override
@@ -57,7 +59,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           obscureText: widget.isPassword ? !widget.showPassword : false,
           obscuringCharacter: "*",
           minLines: 1,
-          maxLines: 6,
+          maxLines: widget.maxlines,
           // keyboardAppearance: ,
           autocorrect: !widget.isPassword,
           keyboardType: widget.isPassword
