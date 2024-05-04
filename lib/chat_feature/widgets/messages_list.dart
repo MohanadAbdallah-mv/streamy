@@ -47,6 +47,14 @@ class _MessagesListState extends State<MessagesList> {
           //see msg function
 
           return true;
+        } else if (element.type == DocumentChangeType.modified) {
+          Provider.of<ChatController>(context, listen: false)
+              .seeMsg(widget.receiverID, widget.chatroomID)
+              .then((value) =>
+                  Provider.of<ChatController>(context, listen: false)
+                      .markReadLocal());
+          log(element.doc.data().toString());
+          return false;
         } else {
           return false;
         }
@@ -71,22 +79,12 @@ class _MessagesListState extends State<MessagesList> {
       ).listen((event) {
         event.forEach((element) {
           chatController.messages.insert(0, element);
-          // if (chatController.messages.first.senderID != widget.user.id) {
-          //   Provider.of<ChatController>(context,
-          //           listen: false) //check wherererer
-          //       .seeMsg(
-          //           chatController.messages.first.senderID, widget.chatroomID)
-          //       .then((value) =>
-          //           Provider.of<ChatController>(context, listen: false)
-          //               .messages
-          //               .first
-          //               .read = true);
-          //   log("the other user recieved my message");
-          //   log(Provider.of<ChatController>(context, listen: false)
-          //       .messages
-          //       .first
-          //       .message);
-          // }
+          if (element.senderID != widget.user.id) {
+            log("here");
+            chatController
+                .seeMsg(widget.receiverID, widget.chatroomID)
+                .then((value) => chatController.markReadLocal());
+          }
         });
       });
     });

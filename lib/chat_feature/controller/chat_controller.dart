@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -109,5 +110,11 @@ class ChatController extends ChangeNotifier {
     query.docs.forEach((doc) {
       doc.reference.update({'read': true});
     });
+  }
+
+  void markReadLocal() {
+    log("marking loacl message read", name: "markReadLocal");
+    messages.first.read = true;
+    notifyListeners();
   }
 }
