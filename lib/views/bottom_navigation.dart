@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,25 +33,37 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
     return ScaffoldGlobalBottomNavigation(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Container(
-            padding: EdgeInsets.only(top: 8.h),
-            width: 54.w,
-            height: 54.h,
-            child: FloatingActionButton(
-              elevation: 0,
-              onPressed: () {},
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                      width: 5.w,
-                      color: const Color(0xFF060F12),
-                      strokeAlign: 1),
-                  borderRadius: BorderRadius.circular(58.r)),
-              child: Icon(Icons.add, size: 36.h),
-            )),
+          padding: EdgeInsets.only(top: 8.h),
+          width: 54.w,
+          height: 54.h,
+          child: FloatingActionButton.extended(
+            label: Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(shape: BoxShape.rectangle),
+              child: const Icon(
+                Icons.add,
+                // size: 8.h,
+                weight: 900,
+              ),
+            ),
+            elevation: 0,
+            onPressed: () {
+              log("floating action button pressed");
+            },
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                    width: 5.w, color: const Color(0xFF060F12), strokeAlign: 1),
+                borderRadius: BorderRadius.circular(58.r)),
+            // child: Icon(Icons.add, size: 36.h),
+          ),
+        ),
         resizeToAvoidBottomInset: false,
         primary: true,
         listOfChild: [
           HomePage(user: widget.user),
           const Intro(),
+          const SizedBox(),
           const Intro(),
           Profile(user: widget.user),
         ],
@@ -68,6 +82,13 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
           activeIcon: const Icon(Icons.local_phone),
           inActiveIcon: const Icon(Icons.local_phone_outlined),
           title: 'Call',
+          color: Colors.white,
+          vSync: this,
+        ),
+        BottomNavigationItem(
+          activeIcon: const Icon(Icons.dew_point),
+          inActiveIcon: const Icon(Icons.dew_point),
+          title: '',
           color: Colors.white,
           vSync: this,
         ),

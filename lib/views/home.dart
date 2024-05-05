@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:streamy/chat_feature/screens/chat_page.dart';
+import 'package:streamy/widgets/CustomText.dart';
 import 'package:streamy/widgets/SearchBar.dart';
 import 'package:streamy/widgets/Story.dart';
 import '../constants.dart';
@@ -34,25 +37,44 @@ class _HomePageState extends State<HomePage> {
         child: Padding(
           padding: EdgeInsets.only(left: 8.w, right: 8.w),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //search bar
               SizedBox(
-                height: 8.h,
+                height: 12.h,
               ),
               const SearchBarFor(),
-              //stories list view
-              SizedBox(
-                height: 8.h,
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, top: 16.h),
+                child: Text(
+                  "RECENTS UPDATES",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w700),
+                  textAlign: TextAlign.start,
+                ),
               ),
               SizedBox(
-                height: 90.h,
+                height: 12.h,
+              ),
+
+              //stories list view
+              SizedBox(
+                height: 80.h,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 8,
-                    itemBuilder: (builder, context) {
+                    itemBuilder: (builder, index) {
+                      if (index == 0) {
+                        return StoryCircle(
+                          myStatus: true,
+                        );
+                      }
                       return StoryCircle();
                     }),
               ),
+              // SizedBox(
+              //   height: 8.h,
+              // ),
               Divider(
                 indent: 24.w,
                 endIndent: 24.w,
@@ -91,11 +113,37 @@ class _HomePageState extends State<HomePage> {
     MyUser data = MyUser.fromJson(doc.data() as Map<String, dynamic>);
     if (data.id != widget.user.id) {
       return ListTile(
-        leading: const CircleAvatar(
-          maxRadius: 28,
+        leading: CircleAvatar(
+          maxRadius: 24.r,
         ),
-        title: Text(data.email),
-        subtitle: Text("last message bla ith max length then dots"),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomText(text: data.email),
+            CustomText(
+              text: "4:25PM",
+              size: 10.sp,
+              fontWeight: FontWeight.w100,
+              color: SearchBarTextFieldColor,
+            )
+          ],
+        ),
+        subtitle: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.check,
+              size: 16.r,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 0.w),
+              child: CustomText(
+                text: "last message bla ith max length then dots",
+                size: 11.sp,
+              ),
+            ),
+          ],
+        ),
         onTap: () {
           List<String> ids = [widget.user.id, data.id];
           ids.sort();

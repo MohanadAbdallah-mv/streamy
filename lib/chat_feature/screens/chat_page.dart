@@ -61,6 +61,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        backgroundColor: appBackGroundColor,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.call),
