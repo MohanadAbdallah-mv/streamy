@@ -17,8 +17,7 @@ class BottomNavigationItem {
     required Widget activeIcon,
     required Widget inActiveIcon,
     required TickerProvider vSync,
-  })  :
-        controller = AnimationController(
+  })  : controller = AnimationController(
           vsync: vSync,
           duration: (duration != null && !duration.isNegative)
               ? duration
@@ -32,7 +31,7 @@ class BottomNavigationItem {
           backgroundColor: color ?? Colors.white70,
         ) {
     /*_animation =*/
-        controller.drive(
+    controller.drive(
       CurveTween(
         curve: const Interval(0.1, 1.0, curve: Curves.fastOutSlowIn),
       ),

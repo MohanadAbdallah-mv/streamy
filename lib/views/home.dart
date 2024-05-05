@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:streamy/chat_feature/screens/chat_page.dart';
+import 'package:streamy/widgets/SearchBar.dart';
 import 'package:streamy/widgets/Story.dart';
 import '../constants.dart';
 import '../models/user_model.dart';
@@ -28,26 +30,40 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: appBackGroundColor,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 8,right: 8),
-        child: Column(
-          children: [
-            Expanded(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(left: 8.w, right: 8.w),
+          child: Column(
+            children: [
+              //search bar
+              SizedBox(
+                height: 8.h,
+              ),
+              const SearchBarFor(),
+              //stories list view
+              SizedBox(
+                height: 8.h,
+              ),
+              SizedBox(
+                height: 90.h,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 8,
-                    itemBuilder: (builder,context){
-                      return const StoryCircle();
-                    })),
-            const Divider(indent: 24,endIndent: 90,),
-            Expanded(
-              flex: 10,
-              child: _builduserList(),
-            ),
-          ],
+                    itemBuilder: (builder, context) {
+                      return StoryCircle();
+                    }),
+              ),
+              Divider(
+                indent: 24.w,
+                endIndent: 24.w,
+              ),
+              //chats
+              Expanded(
+                flex: 10,
+                child: _builduserList(),
+              ),
+            ],
+          ),
         ),
       ),
     );
