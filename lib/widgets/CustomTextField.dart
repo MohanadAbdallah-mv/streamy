@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -16,6 +17,7 @@ class CustomTextField extends StatefulWidget {
   VoidCallback? onEditComplete;
   VoidCallback? onTap;
   FocusNode? focusNode;
+  TextInputType? textInputType;
   int maxlines;
   bool isError;
   bool showPassword;
@@ -32,6 +34,7 @@ class CustomTextField extends StatefulWidget {
       this.isError = false,
       this.textColor = TextFieldColor,
       this.borderFocusColor = TextFieldColorFocus,
+      this.textInputType,
       this.showPassword = false,
       this.maxlines = 1,
       this.onTap});
@@ -62,9 +65,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
           maxLines: widget.maxlines,
           // keyboardAppearance: ,
           autocorrect: !widget.isPassword,
-          keyboardType: widget.isPassword
-              ? TextInputType.visiblePassword
-              : TextInputType.emailAddress,
+          keyboardType: widget.textInputType ??
+              (widget.isPassword
+                  ? TextInputType.visiblePassword
+                  : TextInputType.emailAddress),
           decoration: InputDecoration(
             enabledBorder: UnderlineInputBorder(
               // borderRadius: BorderRadius.circular(10),

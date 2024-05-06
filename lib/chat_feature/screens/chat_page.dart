@@ -160,6 +160,7 @@ class _ChatPageState extends State<ChatPage> {
             textColor: Colors.white,
             borderFocusColor: Colors.white,
             textEditingController: _messageController,
+            textInputType: TextInputType.text,
             maxlines: 6,
           )),
           IconButton(
