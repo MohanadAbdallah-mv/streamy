@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:streamy/views/Signup.dart';
 
 import '../constants.dart';
 import '../controller/auth_controller.dart';
@@ -51,117 +52,136 @@ class _LoginState extends State<Login> {
     return Consumer<AuthController>(
       builder: (context, auth, child) {
         return Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Padding(
-                padding: const EdgeInsets.only(left: 80),
-                child: Text(
-                  "Shoppie",
-                  style: GoogleFonts.sarina(
-                      textStyle: TextStyle(
-                          color: AppTitleColor,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 34.sp)),
-                ),
-              ),
-              elevation: 0.0,
-              backgroundColor: Colors.white,
-            ),
-            body: SingleChildScrollView(
+          body: Padding(
+            padding: EdgeInsets.only(top: 50.h, left: 20.w, right: 20.w),
+            child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 16.w, right: 40.w),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          //Svg pic
-                          Container(
-                            decoration: BoxDecoration(),
-                            child: SvgPicture.asset(
-                              "assets/svg/st_l_app.svg",
-                              fit: BoxFit.values.last,
+                  Row(
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            height: 30.h,
+                            width: 30.w,
+                            padding: EdgeInsets.all(5.h),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: const Color(0xff5d5d5d)),
+                                borderRadius: BorderRadius.circular(5.r)),
+                            child: Icon(
+                              Icons.arrow_back_outlined,
+                              size: 20,
                             ),
-                          ),
-                          //Email Text Field
-                          Padding(
-                            padding: EdgeInsets.only(top: 45.h),
-                            child: CustomTextField(
-                              isError: isEmailError,
-                              headerText: "Email",
-                              hint: "Malikvis@gmail.com",
-                              textEditingController: _email,
-                              onEditComplete: () {
-                                setState(() {
-                                  isEmailError = false;
-                                  FocusScope.of(context)
-                                      .requestFocus(_passwordnode);
-                                });
-                              },
-                              onTap: () {
-                                setState(() {
-                                  isEmailError = false;
-                                });
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 16.h,
-                          ),
-                          //Password Text Field
-                          CustomTextField(
-                            isError: isPasswordError,
-                            headerText: "Password",
-                            hint: "************",
-                            isPassword: true,
-                            textEditingController: _password,
-                            focusNode: _passwordnode,
-                            onEditComplete: () {
-                              setState(() {
-                                isPasswordError = false;
-                                FocusScope.of(context).unfocus();
-                              });
-                            },
-                            onTap: () {
-                              setState(() {
-                                isPasswordError = false;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            height: 12.h,
-                          ),
-                        ]),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 52.h),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Forgot_Password()));
-                      },
-                      child: CustomText(
-                          text: "forgot password?",
-                          underline: true,
-                          color: ErrorMesseageText,
-                          align: Alignment.center),
-                    ),
-                  ),
-                  Padding(
-                    //todo: add forget password with it functions/edit error for password field
-                    padding:
-                        EdgeInsets.only(top: 24.h, left: 13.w, right: 13.w),
-                    child: CustomButton(
-                      width: double.maxFinite,
-                      child: CustomText(
-                        text: "Log in",
-                        color: Colors.white,
-                        align: Alignment.center,
-                        size: 15,
+                          )),
+                      SizedBox(
+                        width: 15.w,
                       ),
+                      CustomText(
+                        text: "Log In",
+                        size: 30.sp,
+                        color: const Color(0xfffcfcfc),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  CustomText(
+                    text: "Log in with one of the following.",
+                    color: const Color(0xff5d5d5d),
+                    size: 16.sp,
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Row(
+                    children: [
+                      //google sign in button
+                      Expanded(
+                        child: CustomButton(
+                            borderColor: const Color(0xff5d5d5d),
+                            height: 50.h,
+                            gradient: gradient,
+                            onpress: () {},
+                            child: Icon(
+                              Icons.g_mobiledata,
+                              size: 50.h,
+                            )),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                      //apple sign in button
+                      Expanded(
+                        child: CustomButton(
+                            child: Icon(
+                              Icons.apple,
+                              size: 40.h,
+                            ),
+                            borderColor: const Color(0xff5d5d5d),
+                            height: 50.h,
+                            gradient: gradient,
+                            onpress: () {}),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 50.h,
+                  ),
+                  CustomTextField(
+                    isError: isEmailError,
+                    hint: "example@gmail.com",
+                    headerText: "Email*",
+                    textEditingController: _email,
+                    onEditComplete: () {
+                      setState(() {
+                        isEmailError = false;
+                        FocusScope.of(context).requestFocus(_passwordnode);
+                      });
+                    },
+                    onTap: () {
+                      setState(() {
+                        isEmailError = false;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  CustomTextField(
+                    isError: isPasswordError,
+                    hint: "************",
+                    isPassword: true,
+                    headerText: "Password*",
+                    textEditingController: _password,
+                    focusNode: _passwordnode,
+                    onEditComplete: () {
+                      setState(() {
+                        isPasswordError = false;
+                        FocusScope.of(context).unfocus();
+                      });
+                    },
+                    onTap: () {
+                      setState(() {
+                        isPasswordError = false;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  CustomText(
+                    text: "Must be at least 8 characters",
+                    color: const Color(0xff5d5d5d),
+                    size: 16.sp,
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  CustomButton(
                       onpress: () async {
                         String email = _email.text;
                         String password = _password.text;
@@ -208,13 +228,41 @@ class _LoginState extends State<Login> {
                           }
                         }
                       },
-                      borderColor: Colors.white,
-                      color: primaryColor,
-                    ),
+                      gradient: gradient,
+                      height: 50.h,
+                      borderColor: const Color(0xff5d5d5d),
+                      child: const CustomText(
+                        text: "Log In",
+                        align: Alignment.center,
+                      )),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CustomText(
+                        text: "Don't have an account?",
+                        color: Color(0xff5d5d5d),
+                      ),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Signup()));
+                          },
+                          child: const CustomText(text: "Sign Up"))
+                    ],
                   )
                 ],
               ),
-            ));
+            ),
+          ),
+        );
       },
     );
   }

@@ -139,7 +139,8 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.only(left: 0.w),
               child: CustomText(
                 text: "last message bla ith max length then dots",
-                size: 11.sp,
+                trim: true,
+                size: 10.sp,
               ),
             ),
           ],

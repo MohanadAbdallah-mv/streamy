@@ -2,14 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:global_bottom_navigation_bar/global_bottom_navigation_bar.dart';
-import 'package:streamy/constants.dart';
+import 'package:streamy/views/Login.dart';
 import 'package:streamy/views/profile.dart';
-
 import '../models/user_model.dart';
+import 'Signup.dart';
 import 'home.dart';
-import 'onBoarding.dart';
 
 class MainHome extends StatefulWidget {
   const MainHome({super.key, required this.user});
@@ -62,9 +60,9 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
         primary: true,
         listOfChild: [
           HomePage(user: widget.user),
-          const Intro(),
+          const Login(),
           const SizedBox(),
-          const Intro(),
+          const Signup(),
           Profile(user: widget.user),
         ],
         listOfBottomNavigationItem: buildBottomNavigationItemList());

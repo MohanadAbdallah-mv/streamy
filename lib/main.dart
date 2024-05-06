@@ -27,7 +27,7 @@ import 'datasource/firestore_data.dart';
 import 'firebase_options.dart';
 import 'models/user_model.dart';
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -97,7 +97,10 @@ class MyApp extends StatelessWidget {
                 brightness: Brightness.dark,
                 scaffoldBackgroundColor: appBackGroundColor,
                 primaryColor: appBackGroundColor,
-                floatingActionButtonTheme:const  FloatingActionButtonThemeData(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                floatingActionButtonTheme: const FloatingActionButtonThemeData(
                     backgroundColor: mainBlueColor,
                     foregroundColor: Colors.white)),
             home:

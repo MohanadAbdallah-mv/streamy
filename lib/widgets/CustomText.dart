@@ -35,7 +35,7 @@ class CustomText extends StatelessWidget {
       height: height,
       width: width,
       child: Text(
-        trim ? text.substring(0, 20) + "..." : text,
+        trim ? text.substring(0, 38) + "..." : text,
         style: TextStyle(
           fontSize: size,
           color: color,

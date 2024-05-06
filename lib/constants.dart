@@ -16,6 +16,14 @@ const Color appBackGroundColor = Color(0xff0E1B23);
 const Color mainBlueColor = Color(0xff0370D3);
 const Color messageReceiverColor = Color(0xff3F454B);
 const Color chatTextFieldColor = Color(0xff202D35);
+const List<Color> listColors = [
+  //Color(0xff12BFC8),
+  Color(0xff0370D3),
+  Color(0xff10A3D1),
+  Color(0xff138AD2),
+  Color(0xff1489D1)
+];
+const Gradient gradient = LinearGradient(colors: listColors);
 const String messageChannel = "11";
 const String messageChannelKey = "message";
 const String audioCallChannel = "12";

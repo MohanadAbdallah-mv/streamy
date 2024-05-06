@@ -1,4 +1,3 @@
-
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +11,7 @@ import '../controller/firestore_controller.dart';
 import '../widgets/CustomButton.dart';
 import '../widgets/CustomText.dart';
 import '../widgets/CustomTextField.dart';
+import 'Login.dart';
 import 'admin_loadingCheck.dart';
 import 'bottom_navigation.dart';
 
@@ -37,7 +37,7 @@ class _SignupState extends State<Signup> {
     _email = TextEditingController();
     _password = TextEditingController();
     _name = TextEditingController();
-    _phonenumber=TextEditingController();
+    _phonenumber = TextEditingController();
 
     super.initState();
   }
@@ -54,134 +54,203 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(automaticallyImplyLeading: false,
-          title: Padding(
-            padding: const EdgeInsets.only(left: 80),
-            child: Text(
-              "Shoppie",
-              style: GoogleFonts.sarina(
-                  textStyle: TextStyle(
-                      color: AppTitleColor, fontWeight: FontWeight.w400,fontSize: 34.sp)),
-            ),
-          ),
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-        ),
-        body: Consumer<AuthController>(builder: (context, auth, child) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding:  EdgeInsets.only(left: 16.w, right: 40.w),
+      body: Padding(
+        padding: EdgeInsets.only(top: 50, left: 20, right: 20),
+        child: Consumer<AuthController>(
+          builder: (context, auth, child) {
+            return SingleChildScrollView(
               child: Column(
                 children: [
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(),
-                          child: SvgPicture.asset(
-                            "assets/svg/st_l_app.svg",
-                            fit: BoxFit.values.last,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10.h),
-                          child: CustomTextField(
-                            headerText: "Name",
-                            hint: "Malik",
-                            textEditingController: _name,
-                            onEditComplete: () {
-                              FocusScope.of(context)
-                                  .requestFocus(_phonenumbernode);
-                            },
-                          ),
-                        ),
-                        // SizedBox(
-                        //   height: 3.h,
-                        // ),
-                        //
-            CustomTextField(
-                          headerText: "Phone Number",
-                          hint: "+0256526524845",
-                          focusNode: _phonenumbernode,
-                          onEditComplete: () {
-                            FocusScope.of(context).requestFocus(_emailnode);
+                  Row(
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
                           },
-                        ),
-                        // SizedBox(
-                        //   height: 3.h,
-                        // ),
-                        CustomTextField(
-                          headerText: "Email",
-                          hint: "Malikvis@gmail.com",
-                          textEditingController: _email,
-                          focusNode: _emailnode,
-                          onEditComplete: () {
-                            FocusScope.of(context).requestFocus(_passwordnode);
-                          },
-                        ),
-                        // SizedBox(
-                        //   height: 3.h,
-                        // ),
-                        CustomTextField(
-                          headerText: "Password",
-                          hint: "************",
-                          isPassword: true,
-                          textEditingController: _password,
-                          focusNode: _passwordnode,
-                        ),
-                        // SizedBox(
-                        //   height: 3.h,
-                        // )
-                      ]),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.h),
-                    child: CustomButton(
-                      child: CustomText(
-                        text: "Sign up",
-                        color: Colors.white,
-                        align: Alignment.center,
-                        size: 15,
+                          child: Container(
+                            height: 30.h,
+                            width: 30.w,
+                            padding: EdgeInsets.all(5.h),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: const Color(0xff5d5d5d)),
+                                borderRadius: BorderRadius.circular(5.r)),
+                            child: Icon(
+                              Icons.arrow_back_outlined,
+                              size: 20.h,
+                            ),
+                          )),
+                      SizedBox(
+                        width: 15.w,
                       ),
-                      onpress: () async {
-                        String email = _email.text;
-                        String password = _password.text;
-                        String name = _name.text;
-                        String phone =_phonenumber.text;
-                        Either<String, dynamic> user =
-                            await auth.register(name, phone, email, password);
-                        if (user.isLeft) {
-
-                          showDialog(context: context, builder: (context) {
-                            return AlertDialog(content: Text(user.left),);
-                          });
-                        } else {
-
-                          await Provider.of<FireStoreController>(context,listen: false).addUser(user.right).then((value) {
-                            if (value=="success"){
-                              print("entering");
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute<dynamic>(
-                                      builder: (context) =>
-                                          AdminCheckPage(user: user.right)),(route) =>false);
-                            }else{
-                              showDialog(context: context, builder: (context) {
-                                return AlertDialog(content: Text(value),);
-                              });
-                            }//todo check this one again with error and try catches
-                          });
-
-                        }
-                      },
-                      borderColor: Colors.white,
-                      color: primaryColor,
+                      CustomText(
+                        text: "Sign up",
+                        size: 30.sp,
+                        color: const Color(0xfffcfcfc),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  CustomText(
+                    text: "Sign up with one of the following.",
+                    color: const Color(0xfffcfcfc),
+                    size: 16.sp,
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                            borderColor: const Color(0xff5d5d5d),
+                            height: 60.h,
+                            onpress: () {},
+                            gradient: gradient,
+                            child: Icon(
+                              Icons.g_mobiledata,
+                              size: 60.h,
+                            )),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                      Expanded(
+                        child: CustomButton(
+                            borderColor: const Color(0xff5d5d5d),
+                            height: 60.h,
+                            onpress: () {},
+                            gradient: gradient,
+                            child: Icon(
+                              Icons.apple,
+                              size: 40.h,
+                            )),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  CustomTextField(
+                    hint: "Jhon doe",
+                    headerText: "Name*",
+                    textEditingController: _name,
+                    onEditComplete: () {
+                      FocusScope.of(context).requestFocus(_emailnode);
+                    },
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  CustomTextField(
+                    hint: "Enter your email",
+                    headerText: "Email*",
+                    textEditingController: _email,
+                    focusNode: _emailnode,
+                    onEditComplete: () {
+                      FocusScope.of(context).requestFocus(_passwordnode);
+                    },
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  CustomTextField(
+                    hint: "Create a password",
+                    isPassword: true,
+                    headerText: "Password*",
+                    textEditingController: _password,
+                    focusNode: _passwordnode,
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  CustomText(
+                    text: "Must be at least 8 characters",
+                    color: const Color(0xff5d5d5d),
+                    size: 16.sp,
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  CustomButton(
+                    onpress: () async {
+                      String email = _email.text;
+                      String password = _password.text;
+                      String name = _name.text;
+                      Either<String, dynamic> user =
+                          await auth.register(name, "", email, password);
+                      if (user.isLeft) {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Text(user.left),
+                              );
+                            });
+                      } else {
+                        await Provider.of<FireStoreController>(context,
+                                listen: false)
+                            .addUser(user.right)
+                            .then((value) {
+                          if (value == "success") {
+                            print("entering");
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute<dynamic>(
+                                    builder: (context) =>
+                                        AdminCheckPage(user: user.right)),
+                                (route) => false);
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text(value),
+                                  );
+                                });
+                          } //todo check this one again with error and try catches
+                        });
+                      }
+                    },
+                    gradient: gradient,
+                    height: 48,
+                    borderColor: const Color(0xff5d5d5d),
+                    child: const CustomText(
+                      text: "Sign up",
+                      align: Alignment.center,
                     ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CustomText(
+                        text: "Already have an account?",
+                        color: Color(0xff5d5d5d),
+                      ),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Login()));
+                          },
+                          child: const CustomText(text: "Log in"))
+                    ],
                   )
                 ],
               ),
-            ),
-          );
-        }));
+            );
+          },
+        ),
+      ),
+    );
   }
 }
