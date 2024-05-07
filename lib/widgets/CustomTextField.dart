@@ -89,7 +89,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(
-                      // color: widget.isError ? null : buttonBorderColor,
+                       // color: widget.isError ? null : buttonBorderColor,
                       ),
                 ),
                 suffixIcon: widget.isPassword

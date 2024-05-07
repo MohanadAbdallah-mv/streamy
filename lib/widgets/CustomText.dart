@@ -13,6 +13,7 @@ class CustomText extends StatelessWidget {
   final bool underline;
   final double? height;
   final double? width;
+  final int trimTo;
   const CustomText(
       {super.key,
       this.text = '',
@@ -26,6 +27,7 @@ class CustomText extends StatelessWidget {
       this.linethrough = false,
       this.height,
       this.width,
+        this.trimTo=38,
       this.underline = false});
 
   @override
@@ -35,7 +37,7 @@ class CustomText extends StatelessWidget {
       height: height,
       width: width,
       child: Text(
-        trim ? text.substring(0, 38) + "..." : text,
+        trim ? "${text.substring(0, trimTo)}..." : text,
         style: TextStyle(
           fontSize: size,
           color: color,

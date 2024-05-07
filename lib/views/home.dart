@@ -35,17 +35,17 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(left: 8, right: 8),
+          padding: const EdgeInsets.only(left: 8, right: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //search bar
               SizedBox(
-                height: 12.h,
+                height: 12,
               ),
               const SearchBarFor(),
-              Padding(
-                padding: EdgeInsets.only(left: 20, top: 16.h),
+              const Padding(
+                padding: EdgeInsets.only(left: 20, top: 16),
                 child: Text(
                   "RECENTS UPDATES",
                   style: TextStyle(
@@ -54,12 +54,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(
-                height: 12.h,
+                height: 12,
               ),
 
               //stories list view
               SizedBox(
-                height: 80.h,
+                height: 80,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 8,
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
               // SizedBox(
               //   height: 8.h,
               // ),
-              Divider(
+              const Divider(
                 indent: 24,
                 endIndent: 24,
               ),
@@ -113,34 +113,34 @@ class _HomePageState extends State<HomePage> {
     MyUser data = MyUser.fromJson(doc.data() as Map<String, dynamic>);
     if (data.id != widget.user.id) {
       return ListTile(
-        leading: CircleAvatar(
-          maxRadius: 24.r,
+        leading: const CircleAvatar(
+          maxRadius: 24,
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomText(text: data.email),
-            CustomText(
+            const CustomText(
               text: "4:25PM",
-              size: 10.sp,
+              size: 10,
               fontWeight: FontWeight.w100,
               color: SearchBarTextFieldColor,
             )
           ],
         ),
-        subtitle: Row(
+        subtitle: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
               Icons.check,
-              size: 16.r,
+              size: 16,
             ),
             Padding(
               padding: EdgeInsets.only(left: 0),
               child: CustomText(
                 text: "last message bla ith max length then dots",
                 trim: true,
-                size: 10.sp,
+                size: 10,
               ),
             ),
           ],

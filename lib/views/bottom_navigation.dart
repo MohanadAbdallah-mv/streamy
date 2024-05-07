@@ -48,7 +48,7 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
                       width: 5,
                       color: Color(0xFF060F12),
                       strokeAlign: 1),
-                  borderRadius: BorderRadius.circular(58.r)),
+                  borderRadius: BorderRadius.circular(58)),
               child: const Icon(
                 Icons.add,
                 // size: 8.h,
