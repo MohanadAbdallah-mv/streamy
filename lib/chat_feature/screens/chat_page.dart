@@ -106,13 +106,20 @@ class _ChatPageState extends State<ChatPage> {
               NotificationHandler.instance.sendPushMessage(
                   token,
                   "user ${widget.user.name} is video calling you",
-                  "body",
+                  "${widget.user.name}",
                   videoCallChannel,
                   videoCallChannelKey,
                   widget.chatRoomId,
                   widget.user,
                   widget.receiverId,
                   widget.receiverEmail);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CallPage(
+                            chatRoomID: widget.chatRoomId,
+                            channelKey: videoCallChannelKey,
+                          )));
             },
           )
         ],

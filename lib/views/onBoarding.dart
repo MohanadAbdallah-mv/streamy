@@ -61,8 +61,7 @@ class _IntroState extends State<Intro> {
                       const Padding(
                         padding: EdgeInsets.only(top: 10, left: 12, right: 12),
                         child: CustomText(
-                          text:
-                              "Where online shopping is much easier all you need in one place",
+                          text: "Seamless chat & crystal-clear calls.",
                           size: 16,
                           color: Colors.white,
                           align: Alignment.center,
