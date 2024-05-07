@@ -1,9 +1,7 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:streamy/main.dart';
 
 import '../constants.dart';
 import '../widgets/CustomButton.dart';
@@ -22,115 +20,131 @@ class _IntroState extends State<Intro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-            child: Text(
-          "Shoppie",
-          style: GoogleFonts.sarina(
-              textStyle:
-                  TextStyle(color: AppTitleColor, fontWeight: FontWeight.w400,fontSize: 34.sp)),
-        )),
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(scrollDirection: Axis.vertical,
-        child: Container(height: 690.h,
-          child: Stack(children: [
-            Positioned(
-              top: 158.h,
-              right: 0,
-              left: 0,
-              bottom: 0,
-              child: Container(height: 354.h,
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(24.r), topRight: Radius.circular(24.r)),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                   // SizedBox(height: 76.h),
-                    Padding(
-                      padding: EdgeInsets.only(top: 138.h),
-                      child: CustomText(
-                        text: "Welcome!",
-                        color: Colors.white,
-                        size: 34.sp,
-                        align: Alignment.center,
-                        fontWeight: FontWeight.w800,
-                        fontfamily: "ReadexPro-Bold",
-                      ),
-                    ),
-                   // SizedBox(height: 5.h),
-                    Padding(
-                      padding:  EdgeInsets.only(top:10.h,left: 12, right: 12),
-                      child: CustomText(
-                        text:
-                            "Where online shopping is much easier all you need in one place",
-                        size: 16.sp,
-                        color: Colors.white,
-                        align: Alignment.center,
-                      ),
-                    ),
-                   // SizedBox(height: 46.h),
-                    Padding(
-                      padding: EdgeInsets.only(top: 82.h,left: 16, right: 16),
-                      child: CustomButton(
+      backgroundColor: primaryColor,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 64),
+          child: SizedBox(
+            height: 690,
+            child: Stack(children: [
+              Positioned(
+                top: 158,
+                right: 0,
+                left: 0,
+                bottom: 0,
+                child: Container(
+                  height: 354,
+                  decoration: const BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(24)),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // SizedBox(height: 76),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 138),
                         child: CustomText(
-                          text: "Log in",
-                          color: primaryColor,
+                          text: "Welcome!",
+                          color: Colors.white,
+                          size: 34,
                           align: Alignment.center,
-                          size: 16.sp,
+                          fontWeight: FontWeight.w800,
+                          fontfamily: "ReadexPro-Bold",
                         ),
-                        onpress: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Login()));
-                        },
-                        borderColor: Colors.white,
-                        color: Colors.white,
                       ),
-                    ),
-                   // SizedBox(height: 12.h),
-                    CustomText(
-                      text: "or",
-                      color: Colors.white,
-                      align: Alignment.center,
-                      size: 17.sp,
-                    ),
-                   // SizedBox(height: 12.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 16),
-                      child: CustomButton(
+                      // SizedBox(height: 5),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10, left: 12, right: 12),
                         child: CustomText(
-                          text: "Sign Up",
+                          text:
+                              "Where online shopping is much easier all you need in one place",
+                          size: 16,
                           color: Colors.white,
                           align: Alignment.center,
-                          fontWeight: FontWeight.bold,
-                          size: 16.sp,
                         ),
-                        onpress: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Signup()));
-                        },
-                        borderColor: Colors.white,
-                        color: primaryColor,
                       ),
-                    )
-                  ],
+                      // SizedBox(height: 46),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 82, left: 16, right: 16),
+                        child: CustomButton(
+                          onpress: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Login()));
+                          },
+                          gradient: gradientButton,
+                          borderColor: buttonBorderColor,
+                          height: 45,
+                          borderRadius: 10,
+                          child: const CustomText(
+                            text: "Login",
+                            color: Colors.white,
+                            align: Alignment.center,
+                            fontWeight: FontWeight.bold,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const CustomText(
+                        text: "or",
+                        color: Colors.white,
+                        align: Alignment.center,
+                        size: 17,
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16),
+                        child: CustomButton(
+                          onpress: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Signup()));
+                          },
+                          gradientBorder: gradientButton,
+                          buttonBackgroundColor: Colors.white,
+
+                          thickness: 1,
+                          color: Colors.white70,
+                          borderColor: buttonBorderColor,
+                          height: 45,
+                          borderRadius: 10,
+
+                          //color: primaryColor,
+
+                          child: const CustomText(
+                            text: "Sign Up",
+                            color: focusColor,
+                            align: Alignment.center,
+                            fontWeight: FontWeight.bold,
+                            size: 16,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 17.h,
-              child: Container(height:208.h ,width:265.74.w ,
-                child: SvgPicture.asset("assets/svg/st_l_app.svg"),
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 17,
+                child: SizedBox(
+                  height: 208,
+                  width: 265.74.w,
+                  child: SvgPicture.asset("assets/svg/chat-svgrepo-com.svg"),
+                ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         ),
       ),
     );

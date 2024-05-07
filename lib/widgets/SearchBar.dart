@@ -15,11 +15,11 @@ class _SearchBarForState extends State<SearchBarFor> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 45.h,
+      height: 45,
       margin: EdgeInsets.only(left: 16.w, right: 16.w),
       decoration: BoxDecoration(
           color: searchBarColor,
-          borderRadius: BorderRadius.all(Radius.circular(12.r))),
+          borderRadius: BorderRadius.all(Radius.circular(12))),
       child: TextField(
         decoration: InputDecoration(
           prefixIcon: const Icon(
@@ -30,7 +30,7 @@ class _SearchBarForState extends State<SearchBarFor> {
           hintText: "Search your chat",
           hintStyle: GoogleFonts.inter(
               textStyle: TextStyle(
-                  height: 1.h,
+                  height: 1,
                   color: SearchBarTextFieldColor,
                   fontWeight: FontWeight.w400)),
           enabledBorder: OutlineInputBorder(

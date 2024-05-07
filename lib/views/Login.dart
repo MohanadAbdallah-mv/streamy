@@ -52,8 +52,9 @@ class _LoginState extends State<Login> {
     return Consumer<AuthController>(
       builder: (context, auth, child) {
         return Scaffold(
+          backgroundColor: primaryColor,
           body: Padding(
-            padding: EdgeInsets.only(top: 50.h, left: 20.w, right: 20.w),
+            padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -64,77 +65,78 @@ class _LoginState extends State<Login> {
                             Navigator.pop(context);
                           },
                           child: Container(
-                            height: 30.h,
-                            width: 30.w,
-                            padding: EdgeInsets.all(5.h),
+                            height: 48,
+                            width: 48,
+                            padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: const Color(0xff5d5d5d)),
-                                borderRadius: BorderRadius.circular(5.r)),
-                            child: Icon(
+                                border: Border.all(color: buttonBorderColor),
+                                borderRadius: BorderRadius.circular(12)),
+                            child: const Icon(
                               Icons.arrow_back_outlined,
-                              size: 20,
+                              size: 24,
                             ),
                           )),
-                      SizedBox(
-                        width: 15.w,
+                      const SizedBox(
+                        width: 15,
                       ),
-                      CustomText(
-                        text: "Log In",
-                        size: 30.sp,
-                        color: const Color(0xfffcfcfc),
+                      const CustomText(
+                        text: "Login",
+                        size: 42,
+                        color: titleColor,
                       )
                     ],
                   ),
-                  SizedBox(
-                    height: 20.h,
+                  const SizedBox(
+                    height: 32,
                   ),
-                  CustomText(
+                  const CustomText(
                     text: "Log in with one of the following.",
-                    color: const Color(0xff5d5d5d),
-                    size: 16.sp,
+                    color: smallTextColor,
+                    size: 16,
                   ),
-                  SizedBox(
-                    height: 20.h,
+                  const SizedBox(
+                    height: 16,
                   ),
                   Row(
                     children: [
                       //google sign in button
                       Expanded(
                         child: CustomButton(
-                            borderColor: const Color(0xff5d5d5d),
-                            height: 50.h,
-                            gradient: gradient,
+                            borderColor: buttonBorderColor,
+                            height: 60,
+                            borderRadius: 16,
                             onpress: () {},
-                            child: Icon(
+                            child: const Icon(
                               Icons.g_mobiledata,
-                              size: 50.h,
+                              size: 48,
                             )),
                       ),
-                      SizedBox(
-                        width: 20.w,
+                      const SizedBox(
+                        width: 20,
                       ),
                       //apple sign in button
                       Expanded(
                         child: CustomButton(
-                            child: Icon(
+                            borderColor: buttonBorderColor,
+                            height: 60,
+                            borderRadius: 16,
+                            onpress: () {},
+                            child: const Icon(
                               Icons.apple,
-                              size: 40.h,
-                            ),
-                            borderColor: const Color(0xff5d5d5d),
-                            height: 50.h,
-                            gradient: gradient,
-                            onpress: () {}),
+                              size: 32,
+                            )),
                       )
                     ],
                   ),
-                  SizedBox(
-                    height: 50.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   CustomTextField(
                     isError: isEmailError,
                     hint: "example@gmail.com",
                     headerText: "Email*",
+                    borderFocusColor: focusColor,
+                    thickness: 1,
                     textEditingController: _email,
                     onEditComplete: () {
                       setState(() {
@@ -148,14 +150,16 @@ class _LoginState extends State<Login> {
                       });
                     },
                   ),
-                  SizedBox(
-                    height: 30.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   CustomTextField(
                     isError: isPasswordError,
                     hint: "************",
                     isPassword: true,
                     headerText: "Password*",
+                    borderFocusColor: focusColor,
+                    thickness: 1,
                     textEditingController: _password,
                     focusNode: _passwordnode,
                     onEditComplete: () {
@@ -170,16 +174,16 @@ class _LoginState extends State<Login> {
                       });
                     },
                   ),
-                  SizedBox(
-                    height: 20.h,
+                  const SizedBox(
+                    height: 8,
                   ),
-                  CustomText(
+                  const CustomText(
                     text: "Must be at least 8 characters",
-                    color: const Color(0xff5d5d5d),
-                    size: 16.sp,
+                    color: smallTextColor,
+                    size: 16,
                   ),
-                  SizedBox(
-                    height: 20.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   CustomButton(
                       onpress: () async {
@@ -228,25 +232,28 @@ class _LoginState extends State<Login> {
                           }
                         }
                       },
-                      gradient: gradient,
-                      height: 50.h,
-                      borderColor: const Color(0xff5d5d5d),
+                      height: 45,
+                      gradient: gradientButton,
+                      borderColor: buttonBorderColor,
+                      borderRadius: 10,
                       child: const CustomText(
-                        text: "Log In",
+                        text: "Login",
                         align: Alignment.center,
+                        size: 16,
                       )),
-                  SizedBox(
-                    height: 30.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const CustomText(
                         text: "Don't have an account?",
-                        color: Color(0xff5d5d5d),
+                        color: smallTextColor,
+                        size: 16,
                       ),
-                      SizedBox(
-                        width: 5.w,
+                      const SizedBox(
+                        width: 5,
                       ),
                       GestureDetector(
                           onTap: () {
@@ -255,7 +262,10 @@ class _LoginState extends State<Login> {
                                 MaterialPageRoute(
                                     builder: (context) => const Signup()));
                           },
-                          child: const CustomText(text: "Sign Up"))
+                          child: const CustomText(
+                            text: "Sign Up",
+                            size: 16,
+                          ))
                     ],
                   )
                 ],

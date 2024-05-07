@@ -25,8 +25,8 @@ class _StoryCircleState extends State<StoryCircle> {
           children: [
             Stack(children: [
               Container(
-                height: 52.h, // Twice the radius for diameter
-                width: 52.h,
+                height: 52, // Twice the radius for diameter
+                width: 52,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
@@ -48,7 +48,7 @@ class _StoryCircleState extends State<StoryCircle> {
                           heroTag: '<uniqueTag1>',
                           child: Icon(
                             Icons.add,
-                            size: 8.h,
+                            size: 8,
                           ),
                           onPressed: () {},
                         ),
@@ -58,7 +58,7 @@ class _StoryCircleState extends State<StoryCircle> {
             ]),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: SizedBox(height: 16.h, child: Text("data")),
+              child: SizedBox(height: 16, child: Text("data")),
             ),
           ],
         ),

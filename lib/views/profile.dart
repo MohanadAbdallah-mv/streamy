@@ -22,8 +22,10 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
         body: SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 100),
+        child: Center(
           child: Container(
             padding: const EdgeInsets.all(10),
             child: Column(
@@ -32,8 +34,10 @@ class _ProfileState extends State<Profile> {
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: CustomButton(
-                    color: mainBlueColor,
-                    borderColor: mainBlueColor,
+                    height: 45,
+                    gradient: gradientButton,
+                    borderColor: buttonBorderColor,
+                    borderRadius: 10,
                     onpress: () {
                       Provider.of<AuthController>(context, listen: false)
                           .logout(widget.user);
@@ -56,6 +60,8 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    ));
   }
 }

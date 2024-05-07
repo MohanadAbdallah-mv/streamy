@@ -54,8 +54,9 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: primaryColor,
       body: Padding(
-        padding: EdgeInsets.only(top: 50, left: 20, right: 20),
+        padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
         child: Consumer<AuthController>(
           builder: (context, auth, child) {
             return SingleChildScrollView(
@@ -68,111 +69,114 @@ class _SignupState extends State<Signup> {
                             Navigator.pop(context);
                           },
                           child: Container(
-                            height: 30.h,
-                            width: 30.w,
-                            padding: EdgeInsets.all(5.h),
+                            height: 48,
+                            width: 48,
+                            padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: const Color(0xff5d5d5d)),
-                                borderRadius: BorderRadius.circular(5.r)),
-                            child: Icon(
+                                border: Border.all(color: buttonBorderColor),
+                                borderRadius: BorderRadius.circular(12)),
+                            child: const Icon(
                               Icons.arrow_back_outlined,
-                              size: 20.h,
+                              size: 24,
                             ),
                           )),
-                      SizedBox(
-                        width: 15.w,
+                      const SizedBox(
+                        width: 15,
                       ),
-                      CustomText(
+                      const CustomText(
                         text: "Sign up",
-                        size: 30.sp,
-                        color: const Color(0xfffcfcfc),
+                        size: 42,
+                        color: titleColor,
                       )
                     ],
                   ),
-                  SizedBox(
-                    height: 20.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   CustomText(
                     text: "Sign up with one of the following.",
-                    color: const Color(0xfffcfcfc),
-                    size: 16.sp,
+                    color: smallTextColor,
+                    size: 16,
                   ),
-                  SizedBox(
-                    height: 20.h,
+                  const SizedBox(
+                    height: 16,
                   ),
                   Row(
                     children: [
                       Expanded(
                         child: CustomButton(
-                            borderColor: const Color(0xff5d5d5d),
-                            height: 60.h,
+                            borderColor: buttonBorderColor,
+                            height: 60,
+                            borderRadius: 16,
                             onpress: () {},
-                            gradient: gradient,
-                            child: Icon(
+                            child: const Icon(
                               Icons.g_mobiledata,
-                              size: 60.h,
+                              size: 48,
                             )),
                       ),
-                      SizedBox(
-                        width: 20.w,
+                      const SizedBox(
+                        width: 20,
                       ),
                       Expanded(
                         child: CustomButton(
-                            borderColor: const Color(0xff5d5d5d),
-                            height: 60.h,
+                            borderColor: buttonBorderColor,
+                            height: 60,
+                            borderRadius: 16,
                             onpress: () {},
-                            gradient: gradient,
-                            child: Icon(
+                            child: const Icon(
                               Icons.apple,
-                              size: 40.h,
+                              size: 32,
                             )),
                       )
                     ],
                   ),
-                  SizedBox(
-                    height: 30.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   CustomTextField(
                     hint: "Jhon doe",
                     headerText: "Name*",
+                    thickness: 1,
+                    borderFocusColor: focusColor,
                     textEditingController: _name,
                     onEditComplete: () {
                       FocusScope.of(context).requestFocus(_emailnode);
                     },
                   ),
-                  SizedBox(
-                    height: 30.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   CustomTextField(
                     hint: "Enter your email",
                     headerText: "Email*",
                     textEditingController: _email,
+                    thickness: 1,
                     focusNode: _emailnode,
                     onEditComplete: () {
                       FocusScope.of(context).requestFocus(_passwordnode);
                     },
                   ),
-                  SizedBox(
-                    height: 30.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   CustomTextField(
                     hint: "Create a password",
                     isPassword: true,
                     headerText: "Password*",
+                    thickness: 1,
                     textEditingController: _password,
                     focusNode: _passwordnode,
                   ),
-                  SizedBox(
-                    height: 20.h,
+                  const SizedBox(
+                    height: 8,
                   ),
-                  CustomText(
+                  const CustomText(
                     text: "Must be at least 8 characters",
-                    color: const Color(0xff5d5d5d),
-                    size: 16.sp,
+                    color: smallTextColor,
+                    size: 16,
                   ),
-                  SizedBox(
-                    height: 20.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   CustomButton(
                     onpress: () async {
@@ -214,26 +218,27 @@ class _SignupState extends State<Signup> {
                         });
                       }
                     },
-                    gradient: gradient,
-                    height: 48,
-                    borderColor: const Color(0xff5d5d5d),
+                    gradient: gradientButton,
+                    height: 45,
+                    borderColor: buttonBorderColor,
+                    borderRadius: 10,
                     child: const CustomText(
                       text: "Sign up",
                       align: Alignment.center,
                     ),
                   ),
-                  SizedBox(
-                    height: 30.h,
+                  const SizedBox(
+                    height: 32,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const CustomText(
                         text: "Already have an account?",
-                        color: Color(0xff5d5d5d),
+                        color: smallTextColor,
                       ),
-                      SizedBox(
-                        width: 5.w,
+                      const SizedBox(
+                        width: 5,
                       ),
                       GestureDetector(
                           onTap: () {
@@ -242,8 +247,14 @@ class _SignupState extends State<Signup> {
                                 MaterialPageRoute(
                                     builder: (context) => const Login()));
                           },
-                          child: const CustomText(text: "Log in"))
+                          child: const CustomText(
+                            text: "Log in",
+                            size: 16,
+                          ))
                     ],
+                  ),
+                  const SizedBox(
+                    height: 100,
                   )
                 ],
               ),
