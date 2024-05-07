@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:global_bottom_navigation_bar/global_bottom_navigation_bar.dart';
+import 'package:streamy/constants.dart';
 import 'package:streamy/views/Login.dart';
 import 'package:streamy/views/profile.dart';
 import '../models/user_model.dart';
@@ -28,44 +29,45 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldGlobalBottomNavigation(
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Container(
-          padding: EdgeInsets.only(top: 8.h),
-          width: 54.w,
-          height: 54.h,
-          child: FloatingActionButton.extended(
-            label: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(shape: BoxShape.rectangle),
+    return SizedBox(
+      child: ScaffoldGlobalBottomNavigation(
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Container(
+            padding: const EdgeInsets.only(top: 8),
+            width: 54.w,
+            height: 54.h,
+            child: FloatingActionButton(
+              backgroundColor: focusColor,
+              elevation: 0,
+              onPressed: () {
+                log("floating action button pressed");
+              },
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      width: 5.w,
+                      color: const Color(0xFF060F12),
+                      strokeAlign: 1),
+                  borderRadius: BorderRadius.circular(58.r)),
               child: const Icon(
                 Icons.add,
                 // size: 8.h,
                 weight: 900,
               ),
+              // child: Icon(Icons.add, size: 36.h),
             ),
-            elevation: 0,
-            onPressed: () {
-              log("floating action button pressed");
-            },
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    width: 5.w, color: const Color(0xFF060F12), strokeAlign: 1),
-                borderRadius: BorderRadius.circular(58.r)),
-            // child: Icon(Icons.add, size: 36.h),
           ),
-        ),
-        resizeToAvoidBottomInset: false,
-        primary: true,
-        listOfChild: [
-          HomePage(user: widget.user),
-          const Login(),
-          const SizedBox(),
-          const Signup(),
-          Profile(user: widget.user),
-        ],
-        listOfBottomNavigationItem: buildBottomNavigationItemList());
+          resizeToAvoidBottomInset: true,
+          primary: true,
+          listOfChild: [
+            HomePage(user: widget.user),
+            const Login(),
+            const SizedBox(),
+            const Signup(),
+            Profile(user: widget.user),
+          ],
+          listOfBottomNavigationItem: buildBottomNavigationItemList()),
+    );
   }
 
   List<BottomNavigationItem> buildBottomNavigationItemList() => [
