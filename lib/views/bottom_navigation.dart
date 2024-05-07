@@ -34,9 +34,9 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Container(
-            padding: const EdgeInsets.only(top: 8),
-            width: 54.w,
-            height: 54.h,
+            padding: const EdgeInsets.only(top: 16),
+            width: 54,
+            height: 70,
             child: FloatingActionButton(
               backgroundColor: focusColor,
               elevation: 0,
@@ -44,9 +44,9 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
                 log("floating action button pressed");
               },
               shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                      width: 5.w,
-                      color: const Color(0xFF060F12),
+                  side: const BorderSide(
+                      width: 5,
+                      color: Color(0xFF060F12),
                       strokeAlign: 1),
                   borderRadius: BorderRadius.circular(58.r)),
               child: const Icon(
@@ -57,7 +57,7 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
               // child: Icon(Icons.add, size: 36.h),
             ),
           ),
-          resizeToAvoidBottomInset: true,
+          resizeToAvoidBottomInset: false,
           primary: true,
           listOfChild: [
             HomePage(user: widget.user),

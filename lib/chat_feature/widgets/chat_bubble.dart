@@ -33,8 +33,8 @@ class _ChatBubbleState extends State<ChatBubble> {
           ),
           Container(
             margin: widget.isSender
-                ? EdgeInsets.only(right: 4.w, left: 16.w)
-                : EdgeInsets.only(right: 16.w, left: 4.w),
+                ? EdgeInsets.only(right: 4, left: 16)
+                : EdgeInsets.only(right: 16, left: 4),
             padding: EdgeInsets.all(12.h),
             decoration: BoxDecoration(
               borderRadius: widget.isSender
@@ -59,8 +59,8 @@ class _ChatBubbleState extends State<ChatBubble> {
           ),
           Padding(
             padding: widget.isSender
-                ? EdgeInsets.only(right: 8.w)
-                : EdgeInsets.only(left: 8.w),
+                ? EdgeInsets.only(right: 8)
+                : EdgeInsets.only(left: 8),
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisAlignment: widget.isSender

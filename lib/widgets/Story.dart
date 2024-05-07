@@ -20,7 +20,7 @@ class _StoryCircleState extends State<StoryCircle> {
         //push story page
       },
       child: Padding(
-        padding: EdgeInsets.only(left: 20.w),
+        padding: EdgeInsets.only(left: 20),
         child: Column(
           children: [
             Stack(children: [
@@ -40,7 +40,7 @@ class _StoryCircleState extends State<StoryCircle> {
               widget.myStatus
                   ? Positioned(
                       bottom: 0,
-                      right: 8.w,
+                      right: 8,
                       child: SizedBox(
                         height: 16,
                         width: 16,

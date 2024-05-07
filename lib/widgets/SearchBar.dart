@@ -16,32 +16,32 @@ class _SearchBarForState extends State<SearchBarFor> {
   Widget build(BuildContext context) {
     return Container(
       height: 45,
-      margin: EdgeInsets.only(left: 16.w, right: 16.w),
-      decoration: BoxDecoration(
-          color: searchBarColor,
+      margin: const EdgeInsets.only(left: 16, right: 16),
+      decoration: const BoxDecoration(
+          color: buttonColor,
           borderRadius: BorderRadius.all(Radius.circular(12))),
       child: TextField(
         decoration: InputDecoration(
           prefixIcon: const Icon(
             Icons.search,
-            color: SearchBarTextFieldColor,
+            color: Colors.grey,
             size: 32,
           ),
           hintText: "Search your chat",
           hintStyle: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                   height: 1,
                   color: SearchBarTextFieldColor,
                   fontWeight: FontWeight.w400)),
           enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: searchBarColor),
-              borderRadius: BorderRadius.circular(32)),
+              borderRadius: BorderRadius.circular(12)),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: searchBarColor),
-            borderRadius: BorderRadius.circular(32),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
-        cursorColor: const Color(0xff130F26),
+        cursorColor: Colors.grey,
         onChanged: (value) {
           //todo: implement seacrch algo for keyword entrance
         },

@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(left: 8.w, right: 8.w),
+          padding: EdgeInsets.only(left: 8, right: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const SearchBarFor(),
               Padding(
-                padding: EdgeInsets.only(left: 20.w, top: 16.h),
+                padding: EdgeInsets.only(left: 20, top: 16.h),
                 child: Text(
                   "RECENTS UPDATES",
                   style: TextStyle(
@@ -76,8 +76,8 @@ class _HomePageState extends State<HomePage> {
               //   height: 8.h,
               // ),
               Divider(
-                indent: 24.w,
-                endIndent: 24.w,
+                indent: 24,
+                endIndent: 24,
               ),
               //chats
               Expanded(
@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
               size: 16.r,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 0.w),
+              padding: EdgeInsets.only(left: 0),
               child: CustomText(
                 text: "last message bla ith max length then dots",
                 trim: true,

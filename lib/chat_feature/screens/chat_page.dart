@@ -152,8 +152,8 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMessageInput() {
     return Container(
       //height: 120.h,
-      margin: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 20.h),
-      padding: EdgeInsets.only(left: 16.w, bottom: 4.h),
+      margin: EdgeInsets.only(left: 20, right: 20, bottom: 20.h),
+      padding: EdgeInsets.only(left: 16, bottom: 4.h),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24.r), color: chatTextFieldColor),
       child: Row(

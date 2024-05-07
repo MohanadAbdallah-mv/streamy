@@ -138,7 +138,7 @@ class _IntroState extends State<Intro> {
                 top: 17,
                 child: SizedBox(
                   height: 208,
-                  width: 265.74.w,
+                  width: 265.74,
                   child: SvgPicture.asset("assets/svg/chat-svgrepo-com.svg"),
                 ),
               ),

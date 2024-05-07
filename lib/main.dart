@@ -95,8 +95,8 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
                 brightness: Brightness.dark,
-                scaffoldBackgroundColor: appBackGroundColor,
-                primaryColor: appBackGroundColor,
+                scaffoldBackgroundColor: primaryColor,
+                primaryColor: primaryColor,
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 hoverColor: Colors.transparent,
