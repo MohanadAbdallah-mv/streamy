@@ -30,7 +30,7 @@ class _ChatBubbleState extends State<ChatBubble> {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 5.h, bottom: 5.h,left: widget.isSender?0:20),
-            child: Text(message.name ?? message.senderEmail),
+            //child: Text(message.name ?? message.senderEmail),
           ),
           widget.isSender
               ? Container(
@@ -63,7 +63,9 @@ class _ChatBubbleState extends State<ChatBubble> {
                 children: [
                   CircleAvatar(
                     radius: 10,
-                    child: Text(widget.message.recieverID.characters.first
+                    child: Text(message.name == null
+                        ? message.senderEmail.characters.first.toUpperCase()
+                        : message.name!.characters.first
                         .toUpperCase()),
                   ),
                   Container(

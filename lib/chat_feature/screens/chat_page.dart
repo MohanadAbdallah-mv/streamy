@@ -21,13 +21,15 @@ class ChatPage extends StatefulWidget {
   final String receiverId;
   final String receiverEmail;
   final String chatRoomId;
+  String? receiverName;
 
-  const ChatPage(
+   ChatPage(
       {super.key,
       required this.user,
       required this.receiverId,
       required this.receiverEmail,
-      required this.chatRoomId});
+      required this.chatRoomId,
+      this.receiverName});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -89,8 +91,11 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         CircleAvatar(
                           maxRadius: 24,
-                          child: Text(widget.receiverEmail.characters.first
-                              .toUpperCase()),
+                          child: Text(widget.receiverName == null
+                              ? widget.receiverEmail.characters.first
+                                  .toUpperCase()
+                              : widget.receiverName!.characters.first
+                                  .toUpperCase()),
                         ),
                         const SizedBox(
                           width: 8,
@@ -103,7 +108,9 @@ class _ChatPageState extends State<ChatPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                '${widget.receiverEmail} ',
+                                '${widget.receiverName == null
+                                    ? widget.receiverEmail
+                                    : widget.receiverName!} ',
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(

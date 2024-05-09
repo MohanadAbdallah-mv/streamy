@@ -113,13 +113,14 @@ class _HomePageState extends State<HomePage> {
     MyUser data = MyUser.fromJson(doc.data() as Map<String, dynamic>);
     if (data.id != widget.user.id) {
       return ListTile(
-        leading: const CircleAvatar(
+        leading: CircleAvatar(
           maxRadius: 24,
+          child: Text(data.name!.characters.first.toUpperCase()),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomText(text: data.email),
+            CustomText(text: data.name!),
             const CustomText(
               text: "4:25PM",
               size: 10,
@@ -154,6 +155,7 @@ class _HomePageState extends State<HomePage> {
                     user: widget.user,
                     receiverId: data.id,
                     receiverEmail: data.email,
+                    receiverName:data.name,
                     chatRoomId: chatRoomID,
                   )));
         },

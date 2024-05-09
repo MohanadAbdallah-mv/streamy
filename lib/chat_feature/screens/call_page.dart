@@ -135,19 +135,19 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
                     children: [
                       IconButton(
                         onPressed: () {
-                          signaling.muteAudio();
+                          signaling.enableVideo();
                         },
-                        icon: Icon(Icons.camera, size: 48),
+                        icon: const Icon(Icons.camera, size: 48),
                       ),
                       IconButton(
                         onPressed: () {
                           signaling.muteAudio();
                         },
-                        icon: Icon(Icons.mic, size: 48),
+                        icon: const Icon(Icons.mic, size: 48),
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.chat,
                           size: 48,
                         ),
@@ -156,7 +156,7 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
                         onPressed: () async{
                           await signaling.hangUp(_localRenderer, roomId).then((value) => Navigator.pop(context));
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.phone_missed_sharp,
                           size: 48,
                         ),
@@ -170,18 +170,4 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
     );
   }
 }
-//mute button
-//IconButton(
-//                   onPressed: () {
-//                     signaling.muteAudio();
-//                   },
-//                   icon: const Icon(Icons.volume_mute_outlined),
-//                   color: Colors.red,
-//                 )
 
-//hang up button
-//ElevatedButton(
-//                     onPressed: () {
-//                     },
-//                     child: const Text("Hangup"),
-//                   )
