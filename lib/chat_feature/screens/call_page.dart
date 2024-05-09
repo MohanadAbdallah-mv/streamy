@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:streamy/constants.dart';
 
@@ -9,6 +11,7 @@ class CallPage extends StatefulWidget {
   String chatRoomID;
   bool? answer;
   String channelKey;
+
   CallPage(
       {super.key,
       required this.chatRoomID,
@@ -19,12 +22,17 @@ class CallPage extends StatefulWidget {
   State<CallPage> createState() => _CallPageState();
 }
 
-class _CallPageState extends State<CallPage> {
+class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
   Signaling signaling = Signaling();
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   final RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
   late String roomId;
   TextEditingController textEditingController = TextEditingController(text: '');
+  bool isSwapped = false;
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(seconds: 2),
+    vsync: this,
+  )..repeat(reverse: true);
 
   @override
   void initState() {
@@ -71,98 +79,109 @@ class _CallPageState extends State<CallPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("CallRoom - WebRTC"),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 8),
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     signaling.openUserMedia(_localRenderer, _remoteRenderer);
-                  //   },
-                  //   child: const Text("Open camera & microphone"),
-                  // ),
-                  const SizedBox(
-                    width: 8,
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
+          alignment: Alignment.center,
+          //mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Positioned(
+                top: 0,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.height,
+                  child: GestureDetector(
+                    child: isSwapped
+                        ? RTCVideoView(
+                            _localRenderer,
+                            mirror: true,
+                            objectFit: RTCVideoViewObjectFit
+                                .RTCVideoViewObjectFitCover,
+                          )
+                        : RTCVideoView(_remoteRenderer),
+                    onTap: () {},
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      roomId = await signaling.createRoom(
-                          _remoteRenderer, widget.chatRoomID);
-                      textEditingController.text = roomId;
-                      setState(() {});
+                )),
+            Positioned(
+                top: 50,
+                right: 10,
+                child: SizedBox(
+                  height: 100,
+                  width: 150,
+                  child: GestureDetector(
+                    child: isSwapped
+                        ? RTCVideoView(_remoteRenderer)
+                        : RTCVideoView(
+                            _localRenderer,
+                            mirror: true,
+                          ),
+                    onTap: () {
+                      setState(() {
+                        isSwapped = !isSwapped;
+                      });
                     },
-                    child: const Text("Create room"),
                   ),
-                  const SizedBox(
-                    width: 8,
+                )),
+            Positioned(
+                bottom: 64,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(48),
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add roomId
-                      signaling.joinRoom(
-                        roomId,
-                        widget.chatRoomID,
-                        _remoteRenderer,
-                      );
-                    },
-                    child: const Text("Join room"),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          signaling.muteAudio();
+                        },
+                        icon: Icon(Icons.camera, size: 48),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          signaling.muteAudio();
+                        },
+                        icon: Icon(Icons.mic, size: 48),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.chat,
+                          size: 48,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () async{
+                          await signaling.hangUp(_localRenderer, roomId).then((value) => Navigator.pop(context));
+                        },
+                        icon: Icon(
+                          Icons.phone_missed_sharp,
+                          size: 48,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      signaling.hangUp(_localRenderer, roomId);
-                    },
-                    child: const Text("Hangup"),
-                  )
-                ],
-              )
-            ],
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(child: RTCVideoView(_localRenderer, mirror: true)),
-                  Expanded(child: RTCVideoView(_remoteRenderer)),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("press to mute"),
-                IconButton(
-                  onPressed: () {
-                    signaling.muteAudio();
-                  },
-                  icon: const Icon(Icons.volume_mute_outlined),
-                  color: Colors.red,
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 8)
-        ],
+                ))
+          ],
+        ),
       ),
     );
   }
 }
+//mute button
+//IconButton(
+//                   onPressed: () {
+//                     signaling.muteAudio();
+//                   },
+//                   icon: const Icon(Icons.volume_mute_outlined),
+//                   color: Colors.red,
+//                 )
+
+//hang up button
+//ElevatedButton(
+//                     onPressed: () {
+//                     },
+//                     child: const Text("Hangup"),
+//                   )

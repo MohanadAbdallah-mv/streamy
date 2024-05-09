@@ -194,7 +194,6 @@ class Signaling {
       roomRef.collection('callerCandidates').snapshots().listen((snapshot) {
         snapshot.docChanges.forEach((document) {
           var data = document.doc.data() as Map<String, dynamic>;
-          log(data.toString());
           log('Got new remote ICE candidate: $data');
           peerConnection!.addCandidate(
             RTCIceCandidate(
@@ -319,28 +318,28 @@ class Signaling {
 
     peerConnection?.onConnectionState = (RTCPeerConnectionState state) {
       if (lastPeerConnectionState != state) {
-        log('Connection state change: $state');
+        log('Connection state change: $state',name: "onConnectionState");
         lastPeerConnectionState = state;
       }
-      log(state.name);
+      log(state.name,name: "state.name");
     };
 
     peerConnection?.onSignalingState = (RTCSignalingState state) {
       if (lastSignalingState != state) {
-        log('on signaling state changed: $state');
+        log('on signaling state changed: $state',name: "onSignalingState");
         lastSignalingState = state;
       }
     };
 
     peerConnection?.onIceGatheringState = (RTCIceGatheringState state) {
       if (lastIceGatheringState != state) {
-        log('ICE gathering state changed: $state');
+        log('ICE gathering state changed: $state',name: "onIceGatheringState");
         lastIceGatheringState = state;
       }
     };
 
     peerConnection?.onAddStream = (MediaStream stream) {
-      log("Add remote stream");
+      log("Add remote stream",name: "onAddStream");
       onAddRemoteStream?.call(stream);
       remoteStream = stream;
     };
