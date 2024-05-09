@@ -95,6 +95,7 @@ class _ChatPageState extends State<ChatPage> {
                           const SizedBox(
                             width: 8,
                           ),
+                          ///////////
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
