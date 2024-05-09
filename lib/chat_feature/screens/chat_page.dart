@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -69,121 +70,123 @@ class _ChatPageState extends State<ChatPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //appbar
-              SizedBox(
-                height: 64,
-                //width: 690,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(
-                              Icons.arrow_back_ios,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          const CircleAvatar(
-                            maxRadius: 24,
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          /////////
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '${widget.receiverEmail} dsvadmskvdnvkjansdkjnvkjdsanavkknj',
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const Text(
-                                  "online",
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Row(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Row(
                       children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.video_call,
-                            size: 32,
-                          ),
-                          onPressed: () async {
-                            String token = await FirebaseFirestore.instance
-                                .collection("UserToken")
-                                .doc(widget.receiverId)
-                                .get()
-                                .then((value) => value.data()!["token"]);
-                            NotificationHandler.instance.sendPushMessage(
-                                token,
-                                "user ${widget.user.name} is video calling you",
-                                "${widget.user.name}",
-                                videoCallChannel,
-                                videoCallChannelKey,
-                                widget.chatRoomId,
-                                widget.user,
-                                widget.receiverId,
-                                widget.receiverEmail);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CallPage(
-                                          chatRoomID: widget.chatRoomId,
-                                          channelKey: videoCallChannelKey,
-                                        )));
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
                           },
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        CircleAvatar(
+                          maxRadius: 24,
+                          child: Text(widget.receiverEmail.characters.first
+                              .toUpperCase()),
                         ),
                         const SizedBox(
                           width: 8,
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.call,
-                            size: 32,
+                        /////////
+                        Expanded(
+                          child: Column(
+                            //mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${widget.receiverEmail} ',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                "online",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                ),
+                              )
+                            ],
                           ),
-                          onPressed: () async {
-                            String token = await FirebaseFirestore.instance
-                                .collection("UserToken")
-                                .doc(widget.receiverId)
-                                .get()
-                                .then((value) => value.data()!["token"]);
-                            NotificationHandler.instance.sendPushMessage(
-                                token,
-                                "user ${widget.user.name} is calling you",
-                                "${widget.user.name}",
-                                audioCallChannel,
-                                audioCallChannelKey,
-                                widget.chatRoomId,
-                                widget.user,
-                                widget.receiverId,
-                                widget.receiverEmail);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CallPage(
-                                          chatRoomID: widget.chatRoomId,
-                                          channelKey: videoCallChannelKey,
-                                        )));
-                            // Handle button press action (e.g., navigate to settings)
-                          },
                         )
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.video_call,
+                          size: 32,
+                        ),
+                        onPressed: () async {
+                          String token = await FirebaseFirestore.instance
+                              .collection("UserToken")
+                              .doc(widget.receiverId)
+                              .get()
+                              .then((value) => value.data()!["token"]);
+                          NotificationHandler.instance.sendPushMessage(
+                              token,
+                              "user ${widget.user.name} is video calling you",
+                              "${widget.user.name}",
+                              videoCallChannel,
+                              videoCallChannelKey,
+                              widget.chatRoomId,
+                              widget.user,
+                              widget.receiverId,
+                              widget.receiverEmail);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CallPage(
+                                        chatRoomID: widget.chatRoomId,
+                                        channelKey: videoCallChannelKey,
+                                      )));
+                        },
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.call,
+                          size: 32,
+                        ),
+                        onPressed: () async {
+                          String token = await FirebaseFirestore.instance
+                              .collection("UserToken")
+                              .doc(widget.receiverId)
+                              .get()
+                              .then((value) => value.data()!["token"]);
+                          NotificationHandler.instance.sendPushMessage(
+                              token,
+                              "user ${widget.user.name} is calling you",
+                              "${widget.user.name}",
+                              audioCallChannel,
+                              audioCallChannelKey,
+                              widget.chatRoomId,
+                              widget.user,
+                              widget.receiverId,
+                              widget.receiverEmail);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CallPage(
+                                        chatRoomID: widget.chatRoomId,
+                                        channelKey: videoCallChannelKey,
+                                      )));
+                          // Handle button press action (e.g., navigate to settings)
+                        },
+                      )
+                    ],
+                  )
+                ],
               ),
               // Divider
               const Divider(
@@ -208,54 +211,69 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildMessageInput() {
     return Container(
-      height: 80,
-      margin: const EdgeInsets.only(bottom: 20),
+      height: 62,
+      margin: const EdgeInsets.only(bottom: 30),
       padding: const EdgeInsets.only(left: 0, top: 0),
       alignment: Alignment.topLeft,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24), color: Colors.red),
+        borderRadius: BorderRadius.circular(48),
+        color: chatTextFieldColor,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           // Expanded(flex: 1, child: Container()),
+          const Expanded(
+              flex: 1,
+              child: Icon(
+                Icons.emoji_emotions_outlined,
+                color: SearchBarTextFieldColor,
+              )),
           Expanded(
-              flex: 8,
+              flex: 5,
               child: TextFormField(
                 style: const TextStyle(color: Colors.white),
+                minLines: 1,
                 maxLines: 6,
-                decoration: InputDecoration(
-                    hintText: "Type something...",
-                    filled: true,
-                    fillColor: chatTextFieldColor,
-                    hintStyle: const TextStyle(color: Colors.white),
-                    prefixIcon: const Icon(Icons.mic),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(48),
-                      borderSide: const BorderSide(
-                          // color: widget.isError ? null : buttonBorderColor,
-                          ),
-                    )),
+                decoration: const InputDecoration(
+                  hintText: "Type something...",
+                  alignLabelWithHint: true,
+                  filled: true,
+                  fillColor: chatTextFieldColor,
+                  hintStyle: TextStyle(color: SearchBarTextFieldColor),
+                border: InputBorder.none
+                ),
                 controller: _messageController,
                 keyboardType: TextInputType.text,
               )),
-          SizedBox(
-            width: 48,
-            height: 48,
-            child: FloatingActionButton(
-                heroTag: "chatTag",
-                backgroundColor: focusColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(58)),
-                onPressed: () {
-                  sendMessage();
-                  Provider.of<ChatController>(context, listen: false)
-                      .jumpToBottom();
-                },
-                child: const Icon(
-                  Icons.arrow_upward,
-                  size: 48,
-                )),
+          const Expanded(
+            child: Icon(
+              Icons.mic,
+              color: SearchBarTextFieldColor,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top:4,right: 8),
+            child: SizedBox(
+              width: 48,
+              height: 48,
+              child: FloatingActionButton(
+                  heroTag: "chatTag",
+                  backgroundColor: focusColor,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(58)),
+                  onPressed: () {
+                    sendMessage();
+                    Provider.of<ChatController>(context, listen: false)
+                        .jumpToBottom();
+                  },
+                  child: const Icon(
+                    Icons.send,
+                    size: 24,
+                  )),
+            ),
           )
         ],
       ),
