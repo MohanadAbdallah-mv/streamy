@@ -28,7 +28,7 @@ class CustomTextField extends StatefulWidget {
   CustomTextField(
       {super.key,
       this.isPassword = false,
-      required this.headerText,
+      this.headerText = "",
       required this.hint,
       this.onEditComplete,
       this.focusNode,
@@ -89,7 +89,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(
-                       // color: widget.isError ? null : buttonBorderColor,
+                      // color: widget.isError ? null : buttonBorderColor,
                       ),
                 ),
                 suffixIcon: widget.isPassword
