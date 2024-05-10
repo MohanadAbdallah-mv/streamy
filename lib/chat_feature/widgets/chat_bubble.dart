@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:streamy/constants.dart';
@@ -30,32 +32,32 @@ class _ChatBubbleState extends State<ChatBubble> {
         children: [
           Padding(
             padding: EdgeInsets.only(
-                top: 5.h, bottom: 5.h, left: widget.isSender ? 0 : 20),
+                top: 5, bottom: 5, left: widget.isSender ? 0 : 20),
             //child: Text(message.name ?? message.senderEmail),
           ),
           widget.isSender
               ? Container(
                   margin: widget.isSender
-                      ? EdgeInsets.only(right: 4, left: 16)
-                      : EdgeInsets.only(right: 16, left: 4),
-                  padding: EdgeInsets.all(12.h),
+                      ? const EdgeInsets.only(right: 4, left: 16)
+                      : const EdgeInsets.only(right: 16, left: 4),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     borderRadius: widget.isSender
-                        ? BorderRadius.only(
-                            bottomLeft: Radius.circular(16.r),
-                            topLeft: Radius.circular(16.r),
-                            topRight: Radius.circular(16.r))
-                        : BorderRadius.only(
-                            bottomRight: Radius.circular(16.r),
-                            topLeft: Radius.circular(16.r),
-                            topRight: Radius.circular(16.r)),
+                        ? const BorderRadius.only(
+                            bottomLeft: Radius.circular(16),
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16))
+                        : const BorderRadius.only(
+                            bottomRight: Radius.circular(16),
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16)),
                     color:
                         widget.isSender ? mainBlueColor : messageReceiverColor,
                   ),
                   child: Text(
                     message.message,
-                    style: TextStyle(
-                      fontSize: 16.sp,
+                    style: const TextStyle(
+                      fontSize: 16,
                       color: Colors.white,
                     ),
                   ),
@@ -69,31 +71,34 @@ class _ChatBubbleState extends State<ChatBubble> {
                           ? message.senderEmail.characters.first.toUpperCase()
                           : message.name!.characters.first.toUpperCase()),
                     ),
-                    Container(
-                      margin: widget.isSender
-                          ? EdgeInsets.only(right: 4, left: 16)
-                          : EdgeInsets.only(right: 16, left: 4),
-                      padding: EdgeInsets.all(12.h),
-                      decoration: BoxDecoration(
-                        borderRadius: widget.isSender
-                            ? BorderRadius.only(
-                                bottomLeft: Radius.circular(16.r),
-                                topLeft: Radius.circular(16.r),
-                                topRight: Radius.circular(16.r))
-                            : BorderRadius.only(
-                                bottomRight: Radius.circular(16.r),
-                                topLeft: Radius.circular(16.r),
-                                topRight: Radius.circular(16.r)),
-                        color: widget.isSender
-                            ? mainBlueColor
-                            : messageReceiverColor,
-                      ),
-                      child: Text(
-                        //todo implement multiline handling here
-                        message.message,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: Colors.white,
+                    Flexible(
+                      child: Container(
+                        margin: widget.isSender
+                            ? const EdgeInsets.only(right: 4, left: 16)
+                            : const EdgeInsets.only(right: 16, left: 4),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          borderRadius: widget.isSender
+                              ? const BorderRadius.only(
+                                  bottomLeft: Radius.circular(16),
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16))
+                              : const BorderRadius.only(
+                                  bottomRight: Radius.circular(16),
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16)),
+                          color: widget.isSender
+                              ? mainBlueColor
+                              : messageReceiverColor,
+                        ),
+                        child: Text(
+                          message.message,
+                         // softWrap: true,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                        
+                          ),
                         ),
                       ),
                     ),
@@ -101,8 +106,8 @@ class _ChatBubbleState extends State<ChatBubble> {
                 ),
           Padding(
             padding: widget.isSender
-                ? EdgeInsets.only(right: 8)
-                : EdgeInsets.only(left: 20),
+                ? const EdgeInsets.only(right: 8)
+                : const EdgeInsets.only(left: 20),
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisAlignment: widget.isSender
