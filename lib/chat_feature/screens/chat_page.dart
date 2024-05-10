@@ -252,7 +252,7 @@ class _ChatPageState extends State<ChatPage> {
                 border: InputBorder.none
                 ),
                 controller: _messageController,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.multiline,
               )),
           const Expanded(
             child: Icon(
