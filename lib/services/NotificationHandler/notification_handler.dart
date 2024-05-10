@@ -38,6 +38,7 @@ class NotificationHandler {
 
   void getToken(String role) async {
     String? myToken;
+    await FirebaseMessaging.instance.getAPNSToken();
     await FirebaseMessaging.instance.getToken().then((token) {
       if (token != null) {
         myToken = token;

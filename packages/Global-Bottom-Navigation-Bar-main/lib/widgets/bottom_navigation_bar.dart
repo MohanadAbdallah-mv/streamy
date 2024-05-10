@@ -51,26 +51,23 @@ class _GlobalBottomNavigationBarState extends State<GlobalBottomNavigationBar> {
   Widget build(BuildContext context) {
     if (widget.currentTab.index != _currentIndex)
       _currentIndex = widget.currentTab.index;
-    return SizedBox(
-      height: 64,
-      child: BottomNavigationBar(
-          type: widget.type,
-          currentIndex: _currentIndex,
-          items: widget.navigationViews
-              .map<BottomNavigationBarItem>(
-                  (BottomNavigationItem navigationView) => navigationView.item)
-              .toList(),
-          showUnselectedLabels: true,
-          unselectedItemColor: const Color(0xFF4D5B60),
-          selectedItemColor: focusColor,
-          backgroundColor: const Color(0xFF060F12),
-          onTap: (index) {
-            changeIndex(index);
-            widget.onSelectTab(
-              BottomNavigationTabNumber.values[index],
-            );
-          }),
-    );
+    return BottomNavigationBar(
+        type: widget.type,
+        currentIndex: _currentIndex,
+        items: widget.navigationViews
+            .map<BottomNavigationBarItem>(
+                (BottomNavigationItem navigationView) => navigationView.item)
+            .toList(),
+        showUnselectedLabels: true,
+        unselectedItemColor: const Color(0xFF4D5B60),
+        selectedItemColor: focusColor,
+        backgroundColor: const Color(0xFF060F12),
+        onTap: (index) {
+          changeIndex(index);
+          widget.onSelectTab(
+            BottomNavigationTabNumber.values[index],
+          );
+        });
   }
 
   changeIndex(int index) {
