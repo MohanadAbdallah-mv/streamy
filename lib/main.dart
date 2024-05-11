@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:streamy/MainHome.dart';
 import 'package:streamy/chat_feature/controller/chat_controller.dart';
 import 'package:streamy/chat_feature/data_source/chat_data_source.dart';
 import 'package:streamy/chat_feature/repo/chat_logic.dart';
@@ -83,29 +83,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Either<String, MyUser> user =
-        Provider.of<AuthController>(context, listen: false).getCurrentUser();
-    //todo step 1 check if app is opened by a notification using a bool read from a provider
-    return ScreenUtilInit(
-        designSize: const Size(360, 690),
-        builder: (context, child) {
-          log("running material app", name: "materialApp");
-          return MaterialApp(
-            navigatorKey: navigatorKey,
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-                brightness: Brightness.dark,
-                scaffoldBackgroundColor: primaryColor,
-                primaryColor: primaryColor,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                floatingActionButtonTheme: const FloatingActionButtonThemeData(
-                    backgroundColor: mainBlueColor,
-                    foregroundColor: Colors.white)),
-            home:
-                user.isRight ? AdminCheckPage(user: user.right) : const Intro(),
-          );
-        });
+    return MaterialApp(
+      navigatorKey: navigatorKey,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: primaryColor,
+          primaryColor: primaryColor,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: mainBlueColor, foregroundColor: Colors.white)),
+      home: const MainHome(),
+    );
   }
 }

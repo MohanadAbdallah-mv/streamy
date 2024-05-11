@@ -92,9 +92,10 @@ class AuthHandlerImplement extends AuthHandler {
   @override
   Future<Either<String, String>> signOut(MyUser user) async {
     try {
-      CacheData.deleteItem(key: "user");
-      return await authImplement.signOut(user).then(
-          (value) => value.isRight ? const Right("done") : Left(value.left));
+      return await authImplement.signOut(user).then((value) {
+        CacheData.deleteItem(key: "user");
+        return value.isRight ? const Right("done") : Left(value.left);
+      });
     } catch (e) {
       return Left(e.toString());
     }

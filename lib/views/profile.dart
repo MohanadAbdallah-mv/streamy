@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:streamy/views/onBoarding.dart';
 
 import '../constants.dart';
 import '../controller/auth_controller.dart';
@@ -43,7 +44,7 @@ class _ProfileState extends State<Profile> {
                           .logout(widget.user);
                       Navigator.of(context, rootNavigator: true)
                           .pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => new MyApp()),
+                        MaterialPageRoute(builder: (context) => const Intro()),
                         (route) => false,
                       );
                     },

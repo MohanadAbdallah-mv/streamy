@@ -45,13 +45,10 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
               },
               shape: RoundedRectangleBorder(
                   side: const BorderSide(
-                      width: 5,
-                      color: Color(0xFF060F12),
-                      strokeAlign: 1),
+                      width: 5, color: Color(0xFF060F12), strokeAlign: 1),
                   borderRadius: BorderRadius.circular(58)),
               child: const Icon(
                 Icons.add,
-                // size: 8.h,
                 weight: 900,
               ),
               // child: Icon(Icons.add, size: 36.h),

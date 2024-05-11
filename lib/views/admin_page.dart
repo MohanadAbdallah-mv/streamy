@@ -20,7 +20,6 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +31,7 @@ class _AdminPageState extends State<AdminPage> {
                 textStyle: TextStyle(
                     color: AppTitleColor,
                     fontWeight: FontWeight.w400,
-                    fontSize: 34.sp)),
+                    fontSize: 34)),
           ),
         ),
         elevation: 0.0,

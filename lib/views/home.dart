@@ -72,9 +72,7 @@ class _HomePageState extends State<HomePage> {
                       return StoryCircle();
                     }),
               ),
-              // SizedBox(
-              //   height: 8.h,
-              // ),
+
               const Divider(
                 indent: 24,
                 endIndent: 24,
@@ -155,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                     user: widget.user,
                     receiverId: data.id,
                     receiverEmail: data.email,
-                    receiverName:data.name,
+                    receiverName: data.name,
                     chatRoomId: chatRoomID,
                   )));
         },
