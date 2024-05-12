@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:streamy/chat_feature/controller/chat_controller.dart';
 import 'package:streamy/chat_feature/screens/call_page.dart';
 import 'package:streamy/main.dart';
 import 'package:streamy/services/Navigation_Service.dart';
@@ -34,6 +36,8 @@ class NotificationHandler {
     await awesomeNotifications.requestPermissionToSendNotifications();
     initFirebaseNotifications();
     initLocalNotifications();
+    awesomeNotifications.setListeners(
+        onActionReceivedMethod: onActionReceivedMethod);
   }
 
   void getToken(String role) async {
@@ -120,13 +124,9 @@ class NotificationHandler {
         provisional: false,
         sound: true);
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print("user granted permission");
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print("user granted provisional permission");
-    } else {
-      print("user declined or didn't accept permissions");
-    }
+    } else {}
   }
 
   Future initLocalNotifications() async {
@@ -173,17 +173,13 @@ class NotificationHandler {
           )
         ],
         debug: true);
-    awesomeNotifications.setListeners(
-        onActionReceivedMethod: onActionReceivedMethod);
   }
 
   void initFirebaseNotifications() async {
     await requestPermission();
     FirebaseMessaging.onMessage.listen(_fcmForegroundHandler);
     FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      log("in onMessageOpenedApp: ${message.contentAvailable}");
-    });
+    FirebaseMessaging.onMessageOpenedApp.listen(_fcmBackgroundHandler);
   }
 
   static Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
@@ -195,7 +191,7 @@ class NotificationHandler {
   }
 
   static Future<void> _fcmForegroundHandler(RemoteMessage message) async {
-    log("onMessage: ${message.data}");
+    log("onMessage: ${message.data}", name: "fcmForegroundHandler");
     message.notification!.title;
     handleNotifications(
         title: message.notification!.title!,
@@ -219,7 +215,7 @@ class NotificationHandler {
       String title, String body, Map<String, String> payload) {
     log("should show notification now",
         name: "Show Notification at notification handler");
-    log(payload.toString());
+    log(payload.toString(), name: "payload");
     switch (payload["channelkey"]) {
       case "message":
         awesomeNotifications.createNotification(
@@ -263,7 +259,7 @@ class NotificationHandler {
             content: NotificationContent(
                 id: int.parse(payload["channel"]!),
                 channelKey: payload["channelkey"]!,
-                duration: Duration(seconds: 15),
+                duration: const Duration(seconds: 15),
                 title: title,
                 body: body,
                 payload: payload,
@@ -293,7 +289,23 @@ class NotificationHandler {
     try {
       Map<String, dynamic> payload = receivedAction.payload!;
       if (receivedAction.category == NotificationCategory.Call) {
-        navigatorKey.currentState!.push(
+        Provider.of<ChatController>(navigatorKey.currentContext!, listen: false)
+            .isCall = true;
+        Provider.of<ChatController>(navigatorKey.currentContext!, listen: false)
+            .chatRoomId = payload['chatRoomId'];
+        Provider.of<ChatController>(navigatorKey.currentContext!, listen: false)
+            .channelKey = receivedAction.channelKey!;
+        Provider.of<ChatController>(navigatorKey.currentContext!, listen: false)
+                .answer =
+            receivedAction.buttonKeyPressed == "Accept" ? true : false;
+        log(
+            Provider.of<ChatController>(navigatorKey.currentContext!,
+                    listen: false)
+                .isCall
+                .toString(),
+            name:
+                "Provider.of<ChatController>(navigatorKey.currentContext!, listen: false).isCall");
+        navigatorKey.currentState!.pushReplacement(
           MaterialPageRoute(
             builder: (context) => CallPage(
               chatRoomID: payload['chatRoomId'],

@@ -1,31 +1,26 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:streamy/MainHome.dart';
 import 'package:streamy/chat_feature/controller/chat_controller.dart';
 import 'package:streamy/chat_feature/data_source/chat_data_source.dart';
 import 'package:streamy/chat_feature/repo/chat_logic.dart';
+import 'package:streamy/chat_feature/screens/call_page.dart';
 import 'package:streamy/constants.dart';
 import 'package:streamy/repo/auth_logic.dart';
 import 'package:streamy/repo/firestore_logic.dart';
 import 'package:streamy/services/Cache_Helper.dart';
 import 'package:streamy/services/Navigation_Service.dart';
 import 'package:streamy/services/NotificationHandler/notification_handler.dart';
-import 'package:streamy/views/admin_loadingCheck.dart';
-import 'package:streamy/views/onBoarding.dart';
-
 import 'controller/auth_controller.dart';
 import 'controller/firestore_controller.dart';
 import 'datasource/auth_data.dart';
 import 'datasource/firestore_data.dart';
 import 'firebase_options.dart';
-import 'models/user_model.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -36,7 +31,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  NotificationHandler.instance.init(navigator).then((_) {
+  NotificationHandler.instance.init(navigator).then((_) async {
     runApp(
       MultiProvider(
         providers: [
@@ -75,14 +70,27 @@ Future<void> main() async {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({
     super.key,
   });
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final chatController = Provider.of<ChatController>(context, listen: false);
+    bool isCall = Provider.of<ChatController>(context).isCall;
+    log(isCall.toString());
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
@@ -95,7 +103,14 @@ class MyApp extends StatelessWidget {
           hoverColor: Colors.transparent,
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
               backgroundColor: mainBlueColor, foregroundColor: Colors.white)),
-      home: const MainHome(),
+      home: (chatController.chatRoomId != null &&
+              chatController.channelKey != null)
+          ? CallPage(
+              chatRoomID: chatController.chatRoomId!,
+              channelKey: chatController.channelKey!)
+          : MainHome(
+              isCall: isCall,
+            ),
     );
   }
 }

@@ -15,6 +15,10 @@ class ChatController extends ChangeNotifier {
   bool getOld = false;
   int paginationCounter = 1;
   DocumentSnapshot? loadAfterSnapShot;
+  bool isCall = false;
+  String? chatRoomId;
+  String? channelKey;
+  bool? answer;
 
   ScrollController? chatRoomScrollController;
 
