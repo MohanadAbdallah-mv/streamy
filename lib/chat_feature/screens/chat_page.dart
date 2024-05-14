@@ -23,7 +23,7 @@ class ChatPage extends StatefulWidget {
   final String chatRoomId;
   String? receiverName;
 
-   ChatPage(
+  ChatPage(
       {super.key,
       required this.user,
       required this.receiverId,
@@ -108,9 +108,7 @@ class _ChatPageState extends State<ChatPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                '${widget.receiverName == null
-                                    ? widget.receiverEmail
-                                    : widget.receiverName!} ',
+                                '${widget.receiverName == null ? widget.receiverEmail : widget.receiverName!} ',
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
@@ -186,7 +184,7 @@ class _ChatPageState extends State<ChatPage> {
                               MaterialPageRoute(
                                   builder: (context) => CallPage(
                                         chatRoomID: widget.chatRoomId,
-                                        channelKey: videoCallChannelKey,
+                                        channelKey: audioCallChannelKey,
                                       )));
                           // Handle button press action (e.g., navigate to settings)
                         },
@@ -244,13 +242,12 @@ class _ChatPageState extends State<ChatPage> {
                 minLines: 1,
                 maxLines: 6,
                 decoration: const InputDecoration(
-                  hintText: "Type something...",
-                  alignLabelWithHint: true,
-                  filled: true,
-                  fillColor: chatTextFieldColor,
-                  hintStyle: TextStyle(color: SearchBarTextFieldColor),
-                border: InputBorder.none
-                ),
+                    hintText: "Type something...",
+                    alignLabelWithHint: true,
+                    filled: true,
+                    fillColor: chatTextFieldColor,
+                    hintStyle: TextStyle(color: SearchBarTextFieldColor),
+                    border: InputBorder.none),
                 controller: _messageController,
                 keyboardType: TextInputType.multiline,
               )),
@@ -261,7 +258,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top:4,right: 8),
+            padding: const EdgeInsets.only(top: 4, right: 8),
             child: SizedBox(
               width: 48,
               height: 48,

@@ -305,16 +305,18 @@ class NotificationHandler {
                 .toString(),
             name:
                 "Provider.of<ChatController>(navigatorKey.currentContext!, listen: false).isCall");
-        navigatorKey.currentState!.pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => CallPage(
-              chatRoomID: payload['chatRoomId'],
-              answer:
-                  receivedAction.buttonKeyPressed == "Accept" ? true : false,
-              channelKey: receivedAction.channelKey!,
+        if (receivedAction.buttonKeyPressed == "Accept") {
+          navigatorKey.currentState!.push(
+            MaterialPageRoute(
+              builder: (context) => CallPage(
+                chatRoomID: payload['chatRoomId'],
+                answer:
+                    receivedAction.buttonKeyPressed == "Accept" ? true : false,
+                channelKey: receivedAction.channelKey!,
+              ),
             ),
-          ),
-        );
+          );
+        }
         //_navigationService.pushChat(arguments)
       }
     } catch (e) {

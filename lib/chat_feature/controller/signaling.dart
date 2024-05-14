@@ -28,6 +28,8 @@ class Signaling {
   String? currentRoomText;
   StreamStateCallback? onAddRemoteStream;
   MediaStream? stream;
+  bool isVideo = false;
+  bool muted = false;
   Future<String> createRoom(
       RTCVideoRenderer remoteRenderer, String chatRoomID) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -237,6 +239,7 @@ class Signaling {
   }
 
   void muteAudio() {
+    muted = !muted;
     if (localStream != null && localStream!.getAudioTracks().isNotEmpty) {
       localStream!.getAudioTracks().forEach((element) {
         element.enabled = !element.enabled; // Toggle mute state
@@ -248,14 +251,16 @@ class Signaling {
     // Update UI (mute button icon) based on muted state
   }
 
-  void enableVideo() {
+  void enableVideo(bool video) async {
+    isVideo = video;
     if (localStream != null && localStream!.getVideoTracks().isNotEmpty) {
       localStream!.getVideoTracks().forEach((element) {
-        element.enabled = !element.enabled; // Toggle mute state
+        log("updating video track", name: "video track");
+        element.enabled = video; // Toggle mute state
+        // peerConnection?.addTrack(element);
       });
     } else {
       // Handle no audio track scenario (e.g., permission not granted)
-      log("No audio track found in local stream", name: "MuteAudio");
     }
     // Update UI (mute button icon) based on muted state
   }
@@ -318,28 +323,28 @@ class Signaling {
 
     peerConnection?.onConnectionState = (RTCPeerConnectionState state) {
       if (lastPeerConnectionState != state) {
-        log('Connection state change: $state',name: "onConnectionState");
+        log('Connection state change: $state', name: "onConnectionState");
         lastPeerConnectionState = state;
       }
-      log(state.name,name: "state.name");
+      log(state.name, name: "state.name");
     };
 
     peerConnection?.onSignalingState = (RTCSignalingState state) {
       if (lastSignalingState != state) {
-        log('on signaling state changed: $state',name: "onSignalingState");
+        log('on signaling state changed: $state', name: "onSignalingState");
         lastSignalingState = state;
       }
     };
 
     peerConnection?.onIceGatheringState = (RTCIceGatheringState state) {
       if (lastIceGatheringState != state) {
-        log('ICE gathering state changed: $state',name: "onIceGatheringState");
+        log('ICE gathering state changed: $state', name: "onIceGatheringState");
         lastIceGatheringState = state;
       }
     };
 
     peerConnection?.onAddStream = (MediaStream stream) {
-      log("Add remote stream",name: "onAddStream");
+      log("Add remote stream", name: "onAddStream");
       onAddRemoteStream?.call(stream);
       remoteStream = stream;
     };

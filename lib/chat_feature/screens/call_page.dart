@@ -29,10 +29,7 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
   late String roomId;
   TextEditingController textEditingController = TextEditingController(text: '');
   bool isSwapped = false;
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 2),
-    vsync: this,
-  )..repeat(reverse: true);
+  bool video = false;
 
   @override
   void initState() {
@@ -48,11 +45,13 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
   }
 
   Future<void> call() async {
-    bool video = false;
     video = widget.channelKey == videoCallChannelKey ? true : false;
     signaling
-        .openUserMedia(_localRenderer, _remoteRenderer, video)
+        .openUserMedia(_localRenderer, _remoteRenderer, true)
         .then((value) {
+      widget.channelKey == videoCallChannelKey
+          ? true
+          : signaling.enableVideo(video);
       if (widget.answer != null && widget.answer == true) {
         log("answering call", name: "answer");
         signaling.joinRoom(
@@ -73,6 +72,7 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
     }
     _localRenderer.dispose();
     _remoteRenderer.dispose();
+    textEditingController.dispose();
     super.dispose();
   }
 
@@ -86,9 +86,11 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
           alignment: Alignment.center,
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            //camera 1
             Positioned(
                 top: 0,
-                child: SizedBox(
+                child: Container(
+                  color: buttonBorderColor,
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.height,
                   child: GestureDetector(
@@ -99,10 +101,13 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
                             objectFit: RTCVideoViewObjectFit
                                 .RTCVideoViewObjectFitCover,
                           )
-                        : RTCVideoView(_remoteRenderer),
+                        : RTCVideoView(
+                            _remoteRenderer,
+                          ),
                     onTap: () {},
                   ),
                 )),
+            //camera 2
             Positioned(
                 top: 50,
                 right: 10,
@@ -135,15 +140,22 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
                     children: [
                       IconButton(
                         onPressed: () {
-                          signaling.enableVideo();
+                          video = !video;
+                          signaling.enableVideo(video);
+                          setState(() {});
                         },
-                        icon: const Icon(Icons.camera, size: 48),
+                        icon: signaling.isVideo
+                            ? const Icon(Icons.videocam, size: 48)
+                            : const Icon(Icons.videocam_off, size: 48),
                       ),
                       IconButton(
                         onPressed: () {
                           signaling.muteAudio();
+                          setState(() {});
                         },
-                        icon: const Icon(Icons.mic, size: 48),
+                        icon: signaling.muted
+                            ? const Icon(Icons.mic_off, size: 48)
+                            : const Icon(Icons.mic, size: 48),
                       ),
                       IconButton(
                         onPressed: () {},
@@ -153,8 +165,10 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
                         ),
                       ),
                       IconButton(
-                        onPressed: () async{
-                          await signaling.hangUp(_localRenderer, roomId).then((value) => Navigator.pop(context));
+                        onPressed: () async {
+                          await signaling
+                              .hangUp(_localRenderer, roomId)
+                              .then((value) => Navigator.pop(context));
                         },
                         icon: const Icon(
                           Icons.phone_missed_sharp,
@@ -170,4 +184,3 @@ class _CallPageState extends State<CallPage> with TickerProviderStateMixin {
     );
   }
 }
-
