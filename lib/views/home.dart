@@ -90,8 +90,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _builduserList() {
+    log(widget.user.id);
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection("users").snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection("chat_rooms")
+            .where("users", arrayContains: widget.user.id)
+            .where("users", isNull: false)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text("error");
@@ -108,59 +113,81 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _builduserListItem(DocumentSnapshot doc) {
-    MyUser data = MyUser.fromJson(doc.data() as Map<String, dynamic>);
-    if (data.id != widget.user.id) {
-      return ListTile(
-        leading: CircleAvatar(
-          maxRadius: 24,
-          child: Text(data.name!.characters.first.toUpperCase()),
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomText(text: data.name!),
-            const CustomText(
-              text: "4:25PM",
-              size: 10,
-              fontWeight: FontWeight.w100,
-              color: SearchBarTextFieldColor,
-            )
-          ],
-        ),
-        subtitle: const Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.check,
-              size: 16,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 0),
-              child: CustomText(
-                text: "last message bla ith max length then dots",
-                trim: true,
-                size: 10,
+    log(doc.data().toString());
+    //MyUser data = MyUser.fromJson(doc.data() as Map<String, dynamic>);
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    final otherUserID =
+        data["users"].firstWhere((id) => id != widget.user.id); //other user id
+    Map<String, dynamic> otherUserData;
+
+    return FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection("users")
+            .doc(otherUserID)
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text("Error");
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+          if (snapshot.hasData) {
+            otherUserData = snapshot.data!.data()!;
+            return ListTile(
+              leading: CircleAvatar(
+                maxRadius: 24,
+                child: Text((otherUserData["name"] as String)
+                    .characters
+                    .first
+                    .toUpperCase()),
               ),
-            ),
-          ],
-        ),
-        onTap: () {
-          List<String> ids = [widget.user.id, data.id];
-          ids.sort();
-          String chatRoomID = ids.join("_");
-          Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
-              builder: (context) => ChatPage(
-                    user: widget.user,
-                    receiverId: data.id,
-                    receiverEmail: data.email,
-                    receiverName: data.name,
-                    chatRoomId: chatRoomID,
-                  )));
-        },
-      );
-    } else {
-      return Container();
-    }
-    ;
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(text: otherUserData["name"]),
+                  const CustomText(
+                    text: "4:25PM",
+                    size: 10,
+                    fontWeight: FontWeight.w100,
+                    color: SearchBarTextFieldColor,
+                  )
+                ],
+              ),
+              subtitle: const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.check,
+                    size: 16,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0),
+                    child: CustomText(
+                      text: "last message bla ith max length then dots",
+                      trim: true,
+                      size: 10,
+                    ),
+                  ),
+                ],
+              ),
+              onTap: () {
+                List<String> ids = [widget.user.id, otherUserData["id"]];
+                ids.sort();
+                String chatRoomID = ids.join("_");
+                Navigator.of(context, rootNavigator: true)
+                    .push(MaterialPageRoute(
+                        builder: (context) => ChatPage(
+                              user: widget.user,
+                              receiverId: otherUserData["id"],
+                              receiverEmail: otherUserData["email"],
+                              receiverName: otherUserData["name"],
+                              chatRoomId: chatRoomID,
+                            )));
+              },
+            );
+          }
+          return const CircularProgressIndicator();
+        });
   }
 }

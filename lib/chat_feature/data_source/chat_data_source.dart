@@ -35,12 +35,14 @@ class ChatImplement extends Chat {
             documentSnapshot.data() as Map<String, dynamic>;
         if (docRefData[message.recieverID] != null) {
           log("field found", name: "field found and will add ");
-          log(docRefData[message.recieverID].toString());
+          log(docRefData[message.recieverID].toString(), name: "sendMessage");
           currentUnreadCount = docRefData[message.recieverID] + 1;
         }
       }
       log("updated");
       transaction.set(chatRef, {
+        "users": chatRoomID.split('_'),
+
         "last_msg": message.message,
         "last_time": message.timeStamp,
         "from_user_id": message.senderID,

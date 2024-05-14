@@ -48,7 +48,7 @@ class ChatHandlerImplement extends ChatHandler {
         senderEmail: user.email,
         message: message,
         timeStamp: timeStamp,
-        name: user.name);
+        senderName: user.name);
     List<String> ids = [user.id, receiverID];
     ids.sort();
     String chatRoomID = ids.join("_");

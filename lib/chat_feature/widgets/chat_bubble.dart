@@ -67,9 +67,9 @@ class _ChatBubbleState extends State<ChatBubble> {
                   children: [
                     CircleAvatar(
                       radius: 10,
-                      child: Text(message.name == null
+                      child: Text(message.senderName == null
                           ? message.senderEmail.characters.first.toUpperCase()
-                          : message.name!.characters.first.toUpperCase()),
+                          : message.senderName!.characters.first.toUpperCase()),
                     ),
                     Flexible(
                       child: Container(
@@ -93,11 +93,10 @@ class _ChatBubbleState extends State<ChatBubble> {
                         ),
                         child: Text(
                           message.message,
-                         // softWrap: true,
+                          // softWrap: true,
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.white,
-                        
                           ),
                         ),
                       ),
