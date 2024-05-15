@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +27,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   var pickedImage;
+  String? url;
   // Future<String?> getDownloadUrl() async {
   //   final storageRef =
   //       FirebaseStorage.instance.ref().child("${widget.user.id}.jpg");
@@ -38,6 +40,17 @@ class _ProfileState extends State<Profile> {
   //     return null;
   //   }
   // }
+  Future<void>getImageUrl()async{
+    final imageRef = FirebaseStorage.instance.ref()
+        .child("images/${widget.user.id}.jpg");
+    url=await imageRef.getDownloadURL();
+    log(url.toString(),name: "url at init");
+  }
+  @override
+  void initState() {
+getImageUrl();
+  super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +71,6 @@ class _ProfileState extends State<Profile> {
                       GestureDetector(
                         onTap: () async {
                           try {
-                            Toast();
                             final ImagePicker picker = ImagePicker();
                             final XFile? image = await picker.pickImage(
                                 source: ImageSource.gallery);
@@ -75,6 +87,8 @@ class _ProfileState extends State<Profile> {
                             await imageRef.putData(imageBytes);
                             setState(() {
                               pickedImage = imageBytes;
+                              this.url=url;
+                              log(url.toString(),name: "imageUrl");
                             });
                             BotToast.showText(
                                 text: "Image Changed Successfully",
@@ -89,14 +103,7 @@ class _ProfileState extends State<Profile> {
                             log(e.toString());
                           }
                         },
-                        child: CircleAvatar(
-                          radius: 50.0, // Adjust radius as needed
-                          backgroundColor:
-                              Colors.grey, // Background color for no image
-                          backgroundImage: pickedImage != null
-                              ? MemoryImage(pickedImage)
-                              : null,
-                        ),
+                        child: url!=null?CircleAvatar(radius:64,backgroundImage:CachedNetworkImageProvider(url!)):Container(),
                       ),
                       const SizedBox(
                         height: 32,
