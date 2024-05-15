@@ -85,7 +85,7 @@ class _ProfileState extends State<Profile> {
                             final imageRef = storageRef
                                 .child("images/${widget.user.id}.jpg");
                             final imageBytes = await image.readAsBytes();
-                            final finalRef=imageRef.getDownloadURL();
+                            final finalRef=await imageRef.getDownloadURL();
                             await FirebaseFirestore.instance
                                 .collection("users")
                                 .doc(widget.user.id)
