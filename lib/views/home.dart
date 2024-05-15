@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:streamy/chat_feature/screens/chat_page.dart';
 import 'package:streamy/widgets/CustomText.dart';
 import 'package:streamy/widgets/SearchBar.dart';
@@ -96,6 +97,7 @@ class _HomePageState extends State<HomePage> {
             .collection("chat_rooms")
             .where("users", arrayContains: widget.user.id)
             .where("users", isNull: false)
+            .orderBy("last_time", descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -146,27 +148,29 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomText(text: otherUserData["name"]),
-                  const CustomText(
-                    text: "4:25PM",
+                  CustomText(
+                    text: DateFormat('hh:mm-aa')
+                        .format((data["last_time"] as Timestamp).toDate())
+                        .toString(),
                     size: 10,
                     fontWeight: FontWeight.w100,
                     color: SearchBarTextFieldColor,
+                    overflow: TextOverflow.ellipsis,
                   )
                 ],
               ),
-              subtitle: const Row(
+              subtitle: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.check,
                     size: 16,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 0),
+                    padding: const EdgeInsets.only(left: 0),
                     child: CustomText(
-                      text: "last message bla ith max length then dots",
-                      trim: true,
-                      size: 10,
+                      text: data["last_msg"].toString(),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

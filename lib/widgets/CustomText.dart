@@ -11,6 +11,7 @@ class CustomText extends StatelessWidget {
   final bool trim;
   final bool linethrough;
   final bool underline;
+  final TextOverflow? overflow;
   final double? height;
   final double? width;
   final int trimTo;
@@ -25,9 +26,10 @@ class CustomText extends StatelessWidget {
       this.fontfamily = "ReadxPro",
       this.trim = false,
       this.linethrough = false,
+      this.overflow,
       this.height,
       this.width,
-        this.trimTo=38,
+      this.trimTo = 38,
       this.underline = false});
 
   @override
@@ -43,6 +45,7 @@ class CustomText extends StatelessWidget {
           color: color,
           fontWeight: fontWeight,
           fontFamily: "ReadexPro",
+          overflow: overflow,
           decoration: linethrough
               ? TextDecoration.lineThrough
               : underline
