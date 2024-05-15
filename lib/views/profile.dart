@@ -93,7 +93,7 @@ class _ProfileState extends State<Profile> {
                             await imageRef.putData(imageBytes);
                             setState(() {
                               pickedImage = imageBytes;
-                              this.url = url;
+                              url = finalRef;
                               log(url.toString(), name: "imageUrl");
                             });
                             BotToast.showText(
