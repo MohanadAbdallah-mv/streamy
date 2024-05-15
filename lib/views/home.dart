@@ -131,9 +131,7 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.hasError) {
             return const Text("Error");
           }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
+          if (snapshot.connectionState == ConnectionState.waiting) {}
           if (snapshot.hasData) {
             otherUserData = snapshot.data!.data()!;
             return ListTile(
@@ -148,24 +146,45 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomText(text: otherUserData["name"]),
-                  CustomText(
-                    text: DateFormat('hh:mm-aa')
-                        .format((data["last_time"] as Timestamp).toDate())
-                        .toString(),
-                    size: 10,
-                    fontWeight: FontWeight.w100,
-                    color: SearchBarTextFieldColor,
-                    overflow: TextOverflow.ellipsis,
+                  Column(
+                    children: [
+                      CustomText(
+                        text: DateFormat('hh:mm-aa')
+                            .format((data["last_time"] as Timestamp).toDate())
+                            .toString(),
+                        size: 10,
+                        fontWeight: FontWeight.w100,
+                        color: SearchBarTextFieldColor,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      //todo show only if the last message sender is the other user
+                      data["to_user_id"] == widget.user.id &&
+                              data[widget.user.id] > 0
+                          ? CircleAvatar(
+                              radius: 8,
+                              backgroundColor: Colors.green,
+                              child: Text(
+                                data[widget.user.id].toString(),
+                                style: const TextStyle(fontSize: 8),
+                              ),
+                            )
+                          : Container()
+                    ],
                   )
                 ],
               ),
               subtitle: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.check,
-                    size: 16,
-                  ),
+                  //todo  mark as read/unread if the last message is send by the same user
+                  data["from_user_id"] == widget.user.id
+                      ? Icon(
+                          data[data["to_user_id"]] > 0
+                              ? Icons.check_circle_outline
+                              : Icons.check_circle,
+                          size: 16,
+                        )
+                      : Container(),
                   Padding(
                     padding: const EdgeInsets.only(left: 0),
                     child: CustomText(

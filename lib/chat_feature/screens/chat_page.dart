@@ -51,13 +51,23 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  Future<void> clearMessage() async {
+    // log(message)
+    await FirebaseFirestore.instance
+        .collection("chat_rooms")
+        .doc(widget.chatRoomId)
+        .update({widget.user.id: 0});
+  }
+
   @override
   void initState() {
+    clearMessage();
     super.initState();
   }
 
   @override
   void dispose() {
+    clearMessage();
     _messageController.dispose();
     super.dispose();
   }
