@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -94,6 +95,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [BotToastNavigatorObserver()],
+      builder: BotToastInit(),
       theme: ThemeData(
           brightness: Brightness.dark,
           scaffoldBackgroundColor: primaryColor,

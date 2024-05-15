@@ -48,14 +48,13 @@ class FirestoreImplement extends Firestore {
           .withConverter<MyUser>(
               fromFirestore: (snapshot, _) => MyUser.fromJson(snapshot.data()!),
               toFirestore: (myuser, _) => myuser.toJson());
-      log("${user.id}");
-      //log("${usersRef.doc(user.id).get().}");
+      log(user.id);
+      log(user.profilePicture.toString());
       MyUser userUpdates = await usersRef
           .doc(user.id)
           .get()
           .then((value) => value.data()!)
           .catchError((error) => log("failed to get user${error}"));
-      //log("user updates is back from data source at getuser  ${userUpdates.name} +${userUpdates.role}+${userUpdates.cart.items} +${userUpdates.cart.totalPrice} + ${userUpdates.wishList}}");
       return Right(userUpdates);
     } on FirebaseException catch (e) {
       log("error  getuser at firestore data ${e.message}");
@@ -72,10 +71,8 @@ class FirestoreImplement extends Firestore {
           .withConverter<MyUser>(
               fromFirestore: (snapshot, _) => MyUser.fromJson(snapshot.data()!),
               toFirestore: (myuser, _) => myuser.toJson());
-      //final docref=firebaseFirestore.doc(documentPath).
-      log("entering");
+      log("entering", name: "updateUser");
       await usersref.doc(user.id).update(user.toJson());
-      log("user updates is done");
       return "updated";
     } on FirebaseException catch (e) {
       log(e.message.toString() + "firestore data");

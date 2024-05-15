@@ -118,6 +118,7 @@ class _HomePageState extends State<HomePage> {
     log(doc.data().toString());
     //MyUser data = MyUser.fromJson(doc.data() as Map<String, dynamic>);
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    log(widget.user.profilePicture.toString());
     final otherUserID =
         data["users"].firstWhere((id) => id != widget.user.id); //other user id
     Map<String, dynamic> otherUserData;

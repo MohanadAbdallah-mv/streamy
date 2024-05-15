@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) Camera Usage!</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Streamy profile picture!</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) Microphone Usage!</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

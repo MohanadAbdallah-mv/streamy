@@ -4,6 +4,7 @@ class MyUser {
   late String email;
   late String? phonenumber;
   late bool isLogged;
+  late String? profilePicture;
   String role = "user";
 
   MyUser(
@@ -12,6 +13,7 @@ class MyUser {
       required this.email,
       required this.phonenumber,
       required this.isLogged,
+      this.profilePicture,
       required this.role});
 
   MyUser.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class MyUser {
     name = json["name"];
     email = json["email"];
     isLogged = json["isLogged"];
+    profilePicture = json["Profile_Picture"];
     role = json["role"];
   }
 
@@ -29,6 +32,7 @@ class MyUser {
       "name": name,
       "email": email,
       "phonenumber": phonenumber,
+      "Profile_Picture": profilePicture,
       "isLogged": isLogged,
       "role": role
     };

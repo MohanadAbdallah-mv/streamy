@@ -42,7 +42,6 @@ class ChatImplement extends Chat {
       log("updated");
       transaction.set(chatRef, {
         "users": chatRoomID.split('_'),
-
         "last_msg": message.message,
         "last_time": message.timeStamp,
         "from_user_id": message.senderID,

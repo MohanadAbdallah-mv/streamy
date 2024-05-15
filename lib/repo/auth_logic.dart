@@ -37,13 +37,13 @@ class AuthHandlerImplement extends AuthHandler {
           await authImplement.login(userForm);
       if (potentialUser.isRight) {
         MyUser user = MyUser(
-          id: potentialUser.right.user!.uid,
-          name: potentialUser.right.user!.displayName,
-          email: potentialUser.right.user!.email!,
-          role: "user",
-          phonenumber: potentialUser.right.user!.phoneNumber,
-          isLogged: true,
-        );
+            id: potentialUser.right.user!.uid,
+            name: potentialUser.right.user!.displayName,
+            email: potentialUser.right.user!.email!,
+            role: "user",
+            phonenumber: potentialUser.right.user!.phoneNumber,
+            isLogged: true,
+            profilePicture: potentialUser.right.user!.photoURL);
         CacheData.setData(key: "user", value: jsonEncode(user.toJson()));
 
         log("'we got user and saved in cache' auth_repo ");
