@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -138,10 +139,17 @@ class _HomePageState extends State<HomePage> {
             return ListTile(
               leading: CircleAvatar(
                 maxRadius: 24,
-                child: Text((otherUserData["name"] as String)
-                    .characters
-                    .first
-                    .toUpperCase()),
+                backgroundImage: data["Profile_Picture"] != null
+                    ? CachedNetworkImageProvider(
+                        data["Profile_Picture"],
+                      )
+                    : null,
+                child: data["Profile_Picture"] != null
+                    ? Container()
+                    : Text((otherUserData["name"] as String)
+                        .characters
+                        .first
+                        .toUpperCase()),
               ),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,7 +166,6 @@ class _HomePageState extends State<HomePage> {
                         color: SearchBarTextFieldColor,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      //todo show only if the last message sender is the other user
                       data["to_user_id"] == widget.user.id &&
                               data[widget.user.id] > 0
                           ? CircleAvatar(
@@ -177,7 +184,6 @@ class _HomePageState extends State<HomePage> {
               subtitle: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  //todo  mark as read/unread if the last message is send by the same user
                   data["from_user_id"] == widget.user.id
                       ? Icon(
                           data[data["to_user_id"]] > 0

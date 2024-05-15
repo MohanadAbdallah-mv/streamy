@@ -19,6 +19,7 @@ import '../widgets/CustomText.dart';
 
 class Profile extends StatefulWidget {
   MyUser user;
+
   Profile({super.key, required this.user});
 
   @override
@@ -28,6 +29,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   var pickedImage;
   String? url;
+
   // Future<String?> getDownloadUrl() async {
   //   final storageRef =
   //       FirebaseStorage.instance.ref().child("${widget.user.id}.jpg");
@@ -40,16 +42,19 @@ class _ProfileState extends State<Profile> {
   //     return null;
   //   }
   // }
-  Future<void>getImageUrl()async{
-    final imageRef = FirebaseStorage.instance.ref()
-        .child("images/${widget.user.id}.jpg");
-    url=await imageRef.getDownloadURL();
-    log(url.toString(),name: "url at init");
+  Future<void> getImageUrl() async {
+    final imageRef =
+        FirebaseStorage.instance.ref().child("images/${widget.user.id}.jpg");
+    url = await imageRef.getDownloadURL();
+    setState(() {
+    });
+    log(url.toString(), name: "url at init");
   }
+
   @override
   void initState() {
-getImageUrl();
-  super.initState();
+    getImageUrl();
+    super.initState();
   }
 
   @override
@@ -83,12 +88,12 @@ getImageUrl();
                             await FirebaseFirestore.instance
                                 .collection("users")
                                 .doc(widget.user.id)
-                                .update({"Profile_Picture": imageRef.fullPath});
+                                .update({"Profile_Picture": imageRef.getDownloadURL()});
                             await imageRef.putData(imageBytes);
                             setState(() {
                               pickedImage = imageBytes;
-                              this.url=url;
-                              log(url.toString(),name: "imageUrl");
+                              this.url = url;
+                              log(url.toString(), name: "imageUrl");
                             });
                             BotToast.showText(
                                 text: "Image Changed Successfully",
@@ -103,7 +108,14 @@ getImageUrl();
                             log(e.toString());
                           }
                         },
-                        child: url!=null?CircleAvatar(radius:64,backgroundImage:CachedNetworkImageProvider(url!)):Container(),
+                        child: url != null
+                            ? CircleAvatar(
+                                radius: 64,
+                                backgroundImage:
+                                    CachedNetworkImageProvider(url!))
+                            : CircleAvatar(
+                            radius: 64,
+                            child: Container(),),
                       ),
                       const SizedBox(
                         height: 32,
