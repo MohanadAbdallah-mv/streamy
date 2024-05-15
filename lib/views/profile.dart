@@ -30,30 +30,17 @@ class _ProfileState extends State<Profile> {
   var pickedImage;
   String? url;
 
-  // Future<String?> getDownloadUrl() async {
-  //   final storageRef =
-  //       FirebaseStorage.instance.ref().child("${widget.user.id}.jpg");
-  //   try {
-  //     final reference = await storageRef;
-  //
-  //     return await storageRef.getDownloadURL();
-  //   } catch (e) {
-  //     print("Error checking image existence: $e");
-  //     return null;
-  //   }
-  // }
   Future<void> getImageUrl() async {
     final imageRef =
         FirebaseStorage.instance.ref().child("images/${widget.user.id}.jpg");
     url = await imageRef.getDownloadURL();
-    setState(() {
-    });
+    setState(() {});
     log(url.toString(), name: "url at init");
   }
 
   @override
   void initState() {
-    getImageUrl();
+    //getImageUrl();
     super.initState();
   }
 
@@ -85,12 +72,13 @@ class _ProfileState extends State<Profile> {
                             final imageRef = storageRef
                                 .child("images/${widget.user.id}.jpg");
                             final imageBytes = await image.readAsBytes();
-                            final finalRef=await imageRef.getDownloadURL();
+                            await imageRef.putData(imageBytes);
+                            final finalRef = await imageRef.getDownloadURL();
                             await FirebaseFirestore.instance
                                 .collection("users")
                                 .doc(widget.user.id)
                                 .update({"Profile_Picture": finalRef});
-                            await imageRef.putData(imageBytes);
+                            await getImageUrl();
                             setState(() {
                               pickedImage = imageBytes;
                               url = finalRef;
@@ -115,8 +103,9 @@ class _ProfileState extends State<Profile> {
                                 backgroundImage:
                                     CachedNetworkImageProvider(url!))
                             : CircleAvatar(
-                            radius: 64,
-                            child: Container(),),
+                                radius: 64,
+                                child: Container(),
+                              ),
                       ),
                       const SizedBox(
                         height: 32,
