@@ -136,16 +136,17 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {}
           if (snapshot.hasData) {
             otherUserData = snapshot.data!.data()!;
+            log(otherUserData["Profile_Picture"].toString(),name: "image");
             return ListTile(
               leading: CircleAvatar(
                 maxRadius: 24,
-                backgroundImage: data["Profile_Picture"] != null
+                backgroundImage: otherUserData["Profile_Picture"] != null
                     ? CachedNetworkImageProvider(
-                        data["Profile_Picture"],
+                  otherUserData["Profile_Picture"],
                       )
                     : null,
-                child: data["Profile_Picture"] != null
-                    ? Container()
+                child: otherUserData["Profile_Picture"] != null
+                    ? null
                     : Text((otherUserData["name"] as String)
                         .characters
                         .first
