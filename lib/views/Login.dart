@@ -102,7 +102,7 @@ class _LoginState extends State<Login> {
                     children: [
                       //google sign in button
                       Expanded(
-                        child: CustomButton(
+                        child: CustomElevatedButton(
                             borderColor: buttonBorderColor,
                             height: 60,
                             borderRadius: 16,
@@ -110,6 +110,7 @@ class _LoginState extends State<Login> {
                             child: const Icon(
                               Icons.g_mobiledata,
                               size: 48,
+                              color: Colors.white,
                             )),
                       ),
                       const SizedBox(
@@ -117,7 +118,7 @@ class _LoginState extends State<Login> {
                       ),
                       //apple sign in button
                       Expanded(
-                        child: CustomButton(
+                        child: CustomElevatedButton(
                             borderColor: buttonBorderColor,
                             height: 60,
                             borderRadius: 16,
@@ -125,6 +126,7 @@ class _LoginState extends State<Login> {
                             child: const Icon(
                               Icons.apple,
                               size: 32,
+                              color: Colors.white,
                             )),
                       )
                     ],
@@ -186,7 +188,7 @@ class _LoginState extends State<Login> {
                   const SizedBox(
                     height: 32,
                   ),
-                  CustomButton(
+                  CustomElevatedButton(
                       onpress: () async {
                         String email = _email.text;
                         String password = _password.text;

@@ -121,7 +121,7 @@ class _ProfileState extends State<Profile> {
                       const SizedBox(
                         height: 32,
                       ),
-                      CustomButton(
+                      CustomElevatedButton(
                         height: 45,
                         gradient: gradientButton,
                         borderColor: buttonBorderColor,

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:streamy/chat_feature/screens/chat_page.dart';
 import 'package:streamy/widgets/CustomText.dart';
@@ -220,7 +221,10 @@ class _HomePageState extends State<HomePage> {
               },
             );
           }
-          return const CircularProgressIndicator();
+          return SpinKitThreeBounce(
+            color: Colors.white,
+            size: 50,
+          );
         });
   }
 }

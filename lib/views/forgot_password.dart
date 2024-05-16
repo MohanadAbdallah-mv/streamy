@@ -60,7 +60,7 @@ class _Forgot_PasswordState extends State<Forgot_Password> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 50),
                   child: Column(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //Svg pic
@@ -102,7 +102,7 @@ class _Forgot_PasswordState extends State<Forgot_Password> {
                           padding: const EdgeInsets.only(top: 20),
                           child: CustomText(
                             text:
-                            "we will send verification code if you did not recieve any, please click ",
+                                "we will send verification code if you did not recieve any, please click ",
                             color: Colors.black,
                             textalign: TextAlign.left,
                             fontfamily: "ReadexPro",
@@ -115,7 +115,7 @@ class _Forgot_PasswordState extends State<Forgot_Password> {
                 Padding(
                   //todo: add forget password with it functions/edit error for password field
                   padding: const EdgeInsets.only(top: 220, left: 16, right: 16),
-                  child: CustomButton(
+                  child: CustomElevatedButton(
                     width: double.maxFinite,
                     child: CustomText(
                       text: "Next",
@@ -126,9 +126,13 @@ class _Forgot_PasswordState extends State<Forgot_Password> {
                     onpress: () async {
                       String email = _email.text;
                       String response = await auth.resetPassword(email);
-                      showDialog(context: context, builder: (context) {
-                        return AlertDialog(content: Text(response),);
-                      });
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Text(response),
+                            );
+                          });
                       print(response);
                       //Navigator.push(context,MaterialPageRoute(builder: (context)=>OTP_screen(email:email,)));
                       // Either<String, dynamic> user =

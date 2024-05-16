@@ -104,7 +104,7 @@ class _SignupState extends State<Signup> {
                   Row(
                     children: [
                       Expanded(
-                        child: CustomButton(
+                        child: CustomElevatedButton(
                             borderColor: buttonBorderColor,
                             height: 60,
                             borderRadius: 16,
@@ -112,13 +112,14 @@ class _SignupState extends State<Signup> {
                             child: const Icon(
                               Icons.g_mobiledata,
                               size: 48,
+                              color: Colors.white,
                             )),
                       ),
                       const SizedBox(
                         width: 20,
                       ),
                       Expanded(
-                        child: CustomButton(
+                        child: CustomElevatedButton(
                             borderColor: buttonBorderColor,
                             height: 60,
                             borderRadius: 16,
@@ -126,6 +127,7 @@ class _SignupState extends State<Signup> {
                             child: const Icon(
                               Icons.apple,
                               size: 32,
+                              color: Colors.white,
                             )),
                       )
                     ],
@@ -178,7 +180,7 @@ class _SignupState extends State<Signup> {
                   const SizedBox(
                     height: 32,
                   ),
-                  CustomButton(
+                  CustomElevatedButton(
                     onpress: () async {
                       String email = _email.text;
                       String password = _password.text;
@@ -220,6 +222,7 @@ class _SignupState extends State<Signup> {
                     },
                     gradient: gradientButton,
                     height: 45,
+                    width: double.maxFinite,
                     borderColor: buttonBorderColor,
                     borderRadius: 10,
                     child: const CustomText(

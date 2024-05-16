@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:streamy/constants.dart';
 import '../models/user_model.dart';
 import '../services/NotificationHandler/notification_handler.dart';
 import 'admin_page.dart';
@@ -55,6 +57,11 @@ class _AdminCheckPageState extends State<AdminCheckPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return const Scaffold(
+        body: Center(
+            child: SpinKitThreeBounce(
+      color: focusColor,
+      size: 50,
+    )));
   }
 }

@@ -72,7 +72,7 @@ class _IntroState extends State<Intro> {
                       Padding(
                         padding:
                             const EdgeInsets.only(top: 82, left: 16, right: 16),
-                        child: CustomButton(
+                        child: CustomElevatedButton(
                           onpress: () {
                             Navigator.push(
                                 context,
@@ -80,8 +80,10 @@ class _IntroState extends State<Intro> {
                                     builder: (context) => const Login()));
                           },
                           gradient: gradientButton,
-                          borderColor: buttonBorderColor,
                           height: 45,
+                          width: double.maxFinite,
+                          //buttonBackgroundColor: Colors.blue,
+                          borderColor: buttonBorderColor,
                           borderRadius: 10,
                           child: const CustomText(
                             text: "Login",
@@ -92,6 +94,7 @@ class _IntroState extends State<Intro> {
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 8),
                       const CustomText(
                         text: "or",
@@ -102,8 +105,8 @@ class _IntroState extends State<Intro> {
                       const SizedBox(height: 8),
                       Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16),
-                        child: CustomButton(
-                          onpress: () {
+                        child: CustomOutlinedButton(
+                          onPress: () {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
