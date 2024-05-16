@@ -136,13 +136,13 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {}
           if (snapshot.hasData) {
             otherUserData = snapshot.data!.data()!;
-            log(otherUserData["Profile_Picture"].toString(),name: "image");
+            log(otherUserData["Profile_Picture"].toString(), name: "image");
             return ListTile(
               leading: CircleAvatar(
                 maxRadius: 24,
                 backgroundImage: otherUserData["Profile_Picture"] != null
                     ? CachedNetworkImageProvider(
-                  otherUserData["Profile_Picture"],
+                        otherUserData["Profile_Picture"],
                       )
                     : null,
                 child: otherUserData["Profile_Picture"] != null
@@ -206,15 +206,17 @@ class _HomePageState extends State<HomePage> {
                 List<String> ids = [widget.user.id, otherUserData["id"]];
                 ids.sort();
                 String chatRoomID = ids.join("_");
-                Navigator.of(context, rootNavigator: true)
-                    .push(MaterialPageRoute(
-                        builder: (context) => ChatPage(
-                              user: widget.user,
-                              receiverId: otherUserData["id"],
-                              receiverEmail: otherUserData["email"],
-                              receiverName: otherUserData["name"],
-                              chatRoomId: chatRoomID,
-                            )));
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(
+                    builder: (context) => ChatPage(
+                      user: widget.user,
+                      receiverId: otherUserData["id"],
+                      receiverEmail: otherUserData["email"],
+                      receiverName: otherUserData["name"],
+                      chatRoomId: chatRoomID,
+                    ),
+                  ),
+                );
               },
             );
           }

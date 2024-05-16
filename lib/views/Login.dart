@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:either_dart/either.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -217,7 +218,8 @@ class _LoginState extends State<Login> {
                           if (res.isRight) {
                             Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute<dynamic>(
+                                CupertinoPageRoute<dynamic>(
+                                    fullscreenDialog: true,
                                     builder: (context) =>
                                         AdminCheckPage(user: res.right)),
                                 (route) => false);
@@ -225,7 +227,8 @@ class _LoginState extends State<Login> {
                             log("entering here because get user didn't work as expected"); //todo : shouldn't return user.right here cuz that's mean we didn't get the user from firestore
                             Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute<dynamic>(
+                                CupertinoPageRoute<dynamic>(
+                                    fullscreenDialog: true,
                                     builder: (context) =>
                                         AdminCheckPage(user: user.right)),
                                 (route) => false);

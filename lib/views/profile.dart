@@ -33,14 +33,18 @@ class _ProfileState extends State<Profile> {
   Future<void> getImageUrl() async {
     final imageRef =
         FirebaseStorage.instance.ref().child("images/${widget.user.id}.jpg");
-    url = await imageRef.getDownloadURL();
-    setState(() {});
-    log(url.toString(), name: "url at init");
+    if (imageRef.parent != null) {
+      url = await imageRef.getDownloadURL().then((value) {
+        setState(() {});
+        return value;
+      });
+      log(url.toString(), name: "url at init");
+    }
   }
 
   @override
   void initState() {
-    //getImageUrl();
+    getImageUrl();
     super.initState();
   }
 
@@ -104,7 +108,11 @@ class _ProfileState extends State<Profile> {
                                     CachedNetworkImageProvider(url!))
                             : CircleAvatar(
                                 radius: 64,
-                                child: Container(),
+                                child: Text(
+                                  widget.user.name!.characters.first
+                                      .toUpperCase(),
+                                  style: const TextStyle(fontSize: 32),
+                                ),
                               ),
                       ),
                       const SizedBox(

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -75,7 +76,7 @@ class _IntroState extends State<Intro> {
                           onpress: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                     builder: (context) => const Login()));
                           },
                           gradient: gradientButton,
@@ -105,7 +106,7 @@ class _IntroState extends State<Intro> {
                           onpress: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                     builder: (context) => const Signup()));
                           },
                           gradientBorder: gradientButton,

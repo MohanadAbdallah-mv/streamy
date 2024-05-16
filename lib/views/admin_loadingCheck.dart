@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import '../services/NotificationHandler/notification_handler.dart';
@@ -29,14 +30,16 @@ class _AdminCheckPageState extends State<AdminCheckPage> {
           NotificationHandler.instance.getToken(widget.user.role);
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute<dynamic>(
+              CupertinoPageRoute<dynamic>(
+                  fullscreenDialog: true,
                   builder: (context) => AdminPage(user: widget.user)),
               (route) => false);
         } else {
           NotificationHandler.instance.getToken(widget.user.id);
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(
+              CupertinoPageRoute(
+                  fullscreenDialog: true,
                   builder: (context) => MainHome(user: widget.user)),
               (route) => false);
         }
