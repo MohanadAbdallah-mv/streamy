@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:streamy/chat_feature/screens/chat_page.dart';
 import 'package:streamy/widgets/CustomText.dart';
 import 'package:streamy/widgets/SearchBar.dart';
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //search bar
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               const SearchBarFor(),
@@ -56,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                   textAlign: TextAlign.start,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
 
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
               //chats
               Expanded(
                 flex: 10,
-                child: _builduserList(),
+                child: _buildUserList(),
               ),
             ],
           ),
@@ -92,7 +93,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _builduserList() {
+  Widget _buildUserList() {
     log(widget.user.id);
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -106,17 +107,21 @@ class _HomePageState extends State<HomePage> {
             return const Text("error");
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            //return const CircularProgressIndicator();
+            return const LoadingSkeleton();
           }
-          return ListView(
-            children: snapshot.data!.docs
-                .map<Widget>((doc) => _builduserListItem(doc))
-                .toList(),
-          );
+          if (snapshot.hasData) {
+            return ListView(
+              children: snapshot.data!.docs
+                  .map<Widget>((doc) => _buildUserListItem(doc))
+                  .toList(),
+            );
+          }
+          return const LoadingSkeleton();
         });
   }
 
-  Widget _builduserListItem(DocumentSnapshot doc) {
+  Widget _buildUserListItem(DocumentSnapshot doc) {
     log(doc.data().toString());
     //MyUser data = MyUser.fromJson(doc.data() as Map<String, dynamic>);
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -221,10 +226,81 @@ class _HomePageState extends State<HomePage> {
               },
             );
           }
-          return SpinKitThreeBounce(
-            color: Colors.white,
-            size: 50,
-          );
+          return const LoadingSkeleton();
+          ;
         });
+  }
+}
+
+class LoadingSkeleton extends StatelessWidget {
+  const LoadingSkeleton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.withOpacity(0.5),
+      highlightColor: Colors.grey,
+      child: ListTile(
+        leading: CircleAvatar(
+          maxRadius: 24,
+          backgroundColor: Colors.black.withOpacity(0.04),
+          child: const Skeleton(
+            height: 1,
+            width: 1,
+          ),
+        ),
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Skeleton(
+              height: 10,
+              width: 54,
+            ),
+            Column(
+              children: [
+                Skeleton(
+                  height: 10,
+                  width: 32,
+                ),
+              ],
+            )
+          ],
+        ),
+        subtitle: const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 0),
+              child: Skeleton(
+                width: 128,
+                height: 10,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Skeleton extends StatelessWidget {
+  const Skeleton({
+    this.height,
+    this.width,
+    super.key,
+  });
+  final double? height, width;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.04),
+          borderRadius: const BorderRadius.all(Radius.circular(16))),
+    );
   }
 }
