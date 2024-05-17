@@ -3,7 +3,7 @@ class MyUser {
   late String? name;
   late String email;
   late String? phonenumber;
-  late bool isLogged;
+  late bool isLogged; //online status
   late String? profilePicture;
   String role = "user";
 

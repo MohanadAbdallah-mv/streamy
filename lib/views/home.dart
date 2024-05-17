@@ -27,11 +27,30 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  @override
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  String? changes;
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this); // <--
     super.initState();
+  }
+
+//todo check the output of this
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    final isBg = state == AppLifecycleState.paused;
+    final isClosed = state == AppLifecycleState.detached;
+    final isScreen = state == AppLifecycleState.resumed;
+
+    isBg || isScreen == true || isClosed == false
+        ? setState(() {
+            changes = "User is online";
+          })
+        : setState(() {
+            changes = "User is offline";
+          });
+    log(changes.toString(), name: "user status");
   }
 
   @override
