@@ -7,7 +7,8 @@ import 'package:streamy/chat_feature/controller/chat_controller.dart';
 import '../constants.dart';
 
 class SearchBarFor extends StatefulWidget {
-  const SearchBarFor({super.key,required Search search});
+  final Search search;
+  const SearchBarFor({super.key,required this.search});
 
   @override
   State<SearchBarFor> createState() => _SearchBarForState();
@@ -30,7 +31,7 @@ class _SearchBarForState extends State<SearchBarFor> {
             color: Colors.grey,
             size: 32,
           ),
-          hintText: "Search your chat",
+          hintText: widget.search==Search.addFriend?"Add Friends":"Search your chat",
           hintStyle: GoogleFonts.inter(
               textStyle: const TextStyle(
                   height: 1,
@@ -49,6 +50,10 @@ class _SearchBarForState extends State<SearchBarFor> {
           //todo: implement seacrch algo for keyword entrance
           //chat provider add friend search
           //widget.search
+
+        },
+        onSubmitted: (searchText){
+          chatProvider.searchFriend(Search.addFriend, searchText);
         },
       ),
     );

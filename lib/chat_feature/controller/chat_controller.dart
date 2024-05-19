@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:streamy/chat_feature/model/Message.dart';
 import 'package:streamy/chat_feature/repo/chat_logic.dart';
 import 'package:streamy/models/user_model.dart';
+
+import 'chat_controller.dart';
 enum Search{
  addFriend,
  myFriends
@@ -22,6 +26,7 @@ class ChatController extends ChangeNotifier {
   String? chatRoomId;
   String? channelKey;
   bool? answer;
+  List<MyUser> usersList=[] ;
 
   ScrollController? chatRoomScrollController;
 
@@ -123,5 +128,26 @@ class ChatController extends ChangeNotifier {
     log("marking loacl message read", name: "markReadLocal");
     messages.first.read = true;
     notifyListeners();
+  }
+
+  Future<void> searchFriend(Search search,String email){
+    usersList.clear();
+   switch (search){
+     case Search.addFriend:
+       FirebaseFirestore.instance.collection("users").where("email",isEqualTo: email).get().then((value) {
+         if(value.docs.isNotEmpty){
+           usersList.add(MyUser.fromJson(value.docs.first.data()));
+           notifyListeners();
+           BotToast.showText(text: "Sent Friend Request",contentColor: Colors.green);
+         }else{
+           BotToast.showText(text: "Couldn't find User",contentColor: Colors.redAccent);
+         }
+       });
+       break;
+     case Search.myFriends:
+
+       break;
+   }
+    return Future(() => null);
   }
 }

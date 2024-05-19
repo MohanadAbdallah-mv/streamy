@@ -43,11 +43,17 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
               backgroundColor: focusColor,
               elevation: 0,
               onPressed: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                    builder: (context) => AddFriendPage(user: widget.user,),
+                ModalBottomSheetRoute(
+                  builder: (context) => AddFriendPage(
+                    user: widget.user,
                   ),
+                  isScrollControlled: false,
                 );
+                // Navigator.of(context, rootNavigator: true).push(
+                //   CupertinoPageRoute(
+                //     builder: (context) => ,
+                //   ),
+                // );
               },
               shape: RoundedRectangleBorder(
                   side: const BorderSide(
