@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -12,6 +13,7 @@ import 'package:streamy/chat_feature/screens/chat_page.dart';
 import 'package:streamy/widgets/CustomText.dart';
 import 'package:streamy/widgets/SearchBar.dart';
 import 'package:streamy/widgets/Story.dart';
+import '../chat_feature/controller/chat_controller.dart';
 import '../constants.dart';
 import '../models/user_model.dart';
 
@@ -66,7 +68,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               const SizedBox(
                 height: 12,
               ),
-              const SearchBarFor(),
+              const SearchBarFor(search: Search.myFriends,),
               const Padding(
                 padding: EdgeInsets.only(left: 20, top: 16),
                 child: Text(
@@ -218,11 +220,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           size: 16,
                         )
                       : Container(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 0),
-                    child: CustomText(
-                      text: data["last_msg"].toString(),
-                      overflow: TextOverflow.ellipsis,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: CustomText(
+                        text: data["last_msg"].toString(),
+                        overflow: TextOverflow.ellipsis,
+                        size: 16,
+                        
+                      ),
                     ),
                   ),
                 ],

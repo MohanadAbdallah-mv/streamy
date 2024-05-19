@@ -226,7 +226,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildMessageInput() {
     return Container(
-      height: 62,
+      height: 58,
       margin: const EdgeInsets.only(bottom: 30),
       padding: const EdgeInsets.only(left: 0, top: 0),
       alignment: Alignment.topLeft,

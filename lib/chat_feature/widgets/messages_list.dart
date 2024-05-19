@@ -3,9 +3,11 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:streamy/chat_feature/widgets/chat_bubble.dart';
 
+import '../../constants.dart';
 import '../../models/user_model.dart';
 import '../controller/chat_controller.dart';
 import '../model/Message.dart';
@@ -119,6 +121,14 @@ class _MessagesListState extends State<MessagesList> {
       child: FutureBuilder(
           future: _myFuture,
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting){
+            return const Center(
+                child: SpinKitThreeBounce(
+                  color: focusColor,
+                  size: 50,
+                ));
+            }
+
             if (snapshot.connectionState == ConnectionState.done) {
               return ListView.builder(
                 itemCount: chatController.messages.length,

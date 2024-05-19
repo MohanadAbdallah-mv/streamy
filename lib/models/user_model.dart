@@ -5,6 +5,7 @@ class MyUser {
   late String? phonenumber;
   late bool isLogged; //online status
   late String? profilePicture;
+  late List<String>? friends;
   String role = "user";
 
   MyUser(
@@ -14,6 +15,7 @@ class MyUser {
       required this.phonenumber,
       required this.isLogged,
       this.profilePicture,
+        this.friends,
       required this.role});
 
   MyUser.fromJson(Map<String, dynamic> json) {
@@ -23,10 +25,10 @@ class MyUser {
     isLogged = json["isLogged"];
     profilePicture = json["Profile_Picture"];
     role = json["role"];
+    friends=json["friends"];
   }
 
   Map<String, dynamic> toJson() {
-    //var ordersMap=orders!.map((e)=>e.toJson()).toList();
     return {
       "id": id,
       "name": name,
@@ -34,7 +36,8 @@ class MyUser {
       "phonenumber": phonenumber,
       "Profile_Picture": profilePicture,
       "isLogged": isLogged,
-      "role": role
+      "role": role,
+      "friends":friends,
     };
   }
 }

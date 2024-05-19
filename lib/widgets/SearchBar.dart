@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:streamy/chat_feature/controller/chat_controller.dart';
 
 import '../constants.dart';
 
 class SearchBarFor extends StatefulWidget {
-  const SearchBarFor({super.key});
+  const SearchBarFor({super.key,required Search search});
 
   @override
   State<SearchBarFor> createState() => _SearchBarForState();
@@ -14,6 +16,7 @@ class SearchBarFor extends StatefulWidget {
 class _SearchBarForState extends State<SearchBarFor> {
   @override
   Widget build(BuildContext context) {
+    final chatProvider=Provider.of<ChatController>(context,listen: false);
     return Container(
       height: 45,
       margin: const EdgeInsets.only(left: 16, right: 16),
@@ -44,6 +47,8 @@ class _SearchBarForState extends State<SearchBarFor> {
         cursorColor: Colors.grey,
         onChanged: (value) {
           //todo: implement seacrch algo for keyword entrance
+          //chat provider add friend search
+          //widget.search
         },
       ),
     );

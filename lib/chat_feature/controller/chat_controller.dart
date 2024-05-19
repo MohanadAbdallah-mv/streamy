@@ -6,7 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:streamy/chat_feature/model/Message.dart';
 import 'package:streamy/chat_feature/repo/chat_logic.dart';
 import 'package:streamy/models/user_model.dart';
-
+enum Search{
+ addFriend,
+ myFriends
+}
 class ChatController extends ChangeNotifier {
   final ChatHandlerImplement chatRepo;
   Map<String, List<MyMessage>> chatRooms = {};

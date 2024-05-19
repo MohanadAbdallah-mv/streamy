@@ -1,10 +1,12 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:global_bottom_navigation_bar/global_bottom_navigation_bar.dart';
 import 'package:streamy/constants.dart';
 import 'package:streamy/views/Login.dart';
+import 'package:streamy/views/add_Friends.dart';
 import 'package:streamy/views/profile.dart';
 import '../models/user_model.dart';
 import 'Signup.dart';
@@ -41,7 +43,11 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
               backgroundColor: focusColor,
               elevation: 0,
               onPressed: () {
-                log("floating action button pressed");
+                Navigator.of(context, rootNavigator: true).push(
+                  CupertinoPageRoute(
+                    builder: (context) => AddFriendPage(user: widget.user,),
+                  ),
+                );
               },
               shape: RoundedRectangleBorder(
                   side: const BorderSide(
