@@ -8,7 +8,7 @@ import '../constants.dart';
 
 class SearchBarFor extends StatefulWidget {
   final Search search;
-  const SearchBarFor({super.key,required this.search});
+  const SearchBarFor({super.key, required this.search});
 
   @override
   State<SearchBarFor> createState() => _SearchBarForState();
@@ -17,10 +17,12 @@ class SearchBarFor extends StatefulWidget {
 class _SearchBarForState extends State<SearchBarFor> {
   @override
   Widget build(BuildContext context) {
-    final chatProvider=Provider.of<ChatController>(context,listen: false);
+    final chatProvider = Provider.of<ChatController>(context, listen: false);
     return Container(
       height: 45,
-      margin: const EdgeInsets.only(left: 16, right: 16),
+      margin: widget.search == Search.addFriend
+          ? const EdgeInsets.only(left: 0, right: 0)
+          : const EdgeInsets.only(left: 16, right: 16),
       decoration: const BoxDecoration(
           color: buttonColor,
           borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -31,7 +33,9 @@ class _SearchBarForState extends State<SearchBarFor> {
             color: Colors.grey,
             size: 32,
           ),
-          hintText: widget.search==Search.addFriend?"Add Friends":"Search your chat",
+          hintText: widget.search == Search.addFriend
+              ? "Add Friends"
+              : "Search your chat",
           hintStyle: GoogleFonts.inter(
               textStyle: const TextStyle(
                   height: 1,
@@ -50,9 +54,8 @@ class _SearchBarForState extends State<SearchBarFor> {
           //todo: implement seacrch algo for keyword entrance
           //chat provider add friend search
           //widget.search
-
         },
-        onSubmitted: (searchText){
+        onSubmitted: (searchText) {
           chatProvider.searchFriend(Search.addFriend, searchText);
         },
       ),

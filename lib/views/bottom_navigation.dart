@@ -2,13 +2,17 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:global_bottom_navigation_bar/global_bottom_navigation_bar.dart';
 import 'package:streamy/constants.dart';
 import 'package:streamy/views/Login.dart';
 import 'package:streamy/views/add_Friends.dart';
 import 'package:streamy/views/profile.dart';
+import 'package:streamy/widgets/CustomButton.dart';
+import '../chat_feature/controller/chat_controller.dart';
 import '../models/user_model.dart';
+import '../widgets/SearchBar.dart';
 import 'Signup.dart';
 import 'home.dart';
 
@@ -43,12 +47,44 @@ class _MainHomeState extends State<MainHome> with TickerProviderStateMixin {
               backgroundColor: focusColor,
               elevation: 0,
               onPressed: () {
-                ModalBottomSheetRoute(
-                  builder: (context) => AddFriendPage(
-                    user: widget.user,
-                  ),
-                  isScrollControlled: false,
-                );
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                          //contentPadding: EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0))),
+                          backgroundColor: primaryColor,
+                          shadowColor: Colors.transparent,
+                          surfaceTintColor: Colors.transparent,
+                          child: SizedBox(
+                            width: 200,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Add User E-mail",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                SearchBarFor(
+                                  search: Search.addFriend,
+                                ),
+                                CustomElevatedButton(
+                                    child: Text(
+                                      "Send Friend Request",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onpress: () {})
+                              ],
+                            ),
+                          ));
+                    });
+
                 // Navigator.of(context, rootNavigator: true).push(
                 //   CupertinoPageRoute(
                 //     builder: (context) => ,
