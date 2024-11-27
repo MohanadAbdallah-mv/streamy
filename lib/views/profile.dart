@@ -16,9 +16,9 @@ import '../widgets/CustomButton.dart';
 import '../widgets/CustomText.dart';
 
 class Profile extends StatefulWidget {
-  MyUser user;
+  final MyUser user;
 
-  Profile({super.key, required this.user});
+  const Profile({super.key, required this.user});
 
   @override
   State<Profile> createState() => _ProfileState();

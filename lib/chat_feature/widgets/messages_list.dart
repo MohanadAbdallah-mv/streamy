@@ -30,7 +30,6 @@ class MessagesList extends StatefulWidget {
 
 class _MessagesListState extends State<MessagesList> {
   late ScrollController _myController;
-  final bool _initMessagesLoaded = false;
   late final StreamSubscription<List<MyMessage>> _myStream;
 
   Stream<List<MyMessage>> _chatStream(MyUser user, String receiverID) {

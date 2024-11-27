@@ -9,8 +9,6 @@ import 'package:streamy/chat_feature/model/Message.dart';
 import 'package:streamy/chat_feature/repo/chat_logic.dart';
 import 'package:streamy/models/user_model.dart';
 
-import 'chat_controller.dart';
-
 enum Search { addFriend, myFriends }
 
 class ChatController extends ChangeNotifier {

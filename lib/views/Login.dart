@@ -3,9 +3,6 @@ import 'dart:developer';
 import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:streamy/views/Signup.dart';
 
@@ -17,7 +14,6 @@ import '../widgets/CustomButton.dart';
 import '../widgets/CustomText.dart';
 import '../widgets/CustomTextField.dart';
 import 'admin_loadingCheck.dart';
-import 'forgot_password.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
