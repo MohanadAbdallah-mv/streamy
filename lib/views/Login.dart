@@ -180,11 +180,6 @@ class _LoginState extends State<Login> {
                   const SizedBox(
                     height: 8,
                   ),
-                  const CustomText(
-                    text: "Must be at least 8 characters",
-                    color: smallTextColor,
-                    size: 16,
-                  ),
                   const SizedBox(
                     height: 32,
                   ),
