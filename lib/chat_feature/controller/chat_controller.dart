@@ -10,10 +10,9 @@ import 'package:streamy/chat_feature/repo/chat_logic.dart';
 import 'package:streamy/models/user_model.dart';
 
 import 'chat_controller.dart';
-enum Search{
- addFriend,
- myFriends
-}
+
+enum Search { addFriend, myFriends }
+
 class ChatController extends ChangeNotifier {
   final ChatHandlerImplement chatRepo;
   Map<String, List<MyMessage>> chatRooms = {};
@@ -26,7 +25,7 @@ class ChatController extends ChangeNotifier {
   String? chatRoomId;
   String? channelKey;
   bool? answer;
-  List<MyUser> usersList=[] ;
+  List<MyUser> usersList = [];
 
   ScrollController? chatRoomScrollController;
 
@@ -71,21 +70,27 @@ class ChatController extends ChangeNotifier {
       limit,
       lastVisibleSnapShot,
     );
-    lastVisibleSnapShot =
-        olderMessagesSnapshots[olderMessagesSnapshots.length - 1];
-    loadAfterSnapShot = olderMessagesSnapshots[0];
+    log(olderMessagesSnapshots.isNotEmpty.toString(), name: "test");
+    if (olderMessagesSnapshots.isNotEmpty) {
+      lastVisibleSnapShot =
+          olderMessagesSnapshots[olderMessagesSnapshots.length - 1];
+      log(lastVisibleSnapShot?.data().toString() ?? "",
+          name: "lastVisibleSnapShot");
+      loadAfterSnapShot = olderMessagesSnapshots[0];
 
-    List<MyMessage> olderMessages = olderMessagesSnapshots
-        .map((e) => MyMessage.fromJson(e.data() as Map<String, dynamic>))
-        .toList();
+      List<MyMessage> olderMessages = olderMessagesSnapshots
+          .map((e) => MyMessage.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
 
-    if (chatRooms.containsKey(chatRoomID)) {
-      messages = chatRooms[chatRoomID]!;
-      messages.addAll(olderMessages);
-    } else {
-      messages = [];
-      chatRooms[chatRoomID] = messages;
+      if (chatRooms.containsKey(chatRoomID)) {
+        messages = chatRooms[chatRoomID]!;
+        messages.addAll(olderMessages);
+      } else {
+        messages = [];
+        chatRooms[chatRoomID] = messages;
+      }
     }
+
     getOld = false;
 
     notifyListeners();
@@ -130,24 +135,29 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> searchFriend(Search search,String email){
+  Future<void> searchFriend(Search search, String email) {
     usersList.clear();
-   switch (search){
-     case Search.addFriend:
-       FirebaseFirestore.instance.collection("users").where("email",isEqualTo: email).get().then((value) {
-         if(value.docs.isNotEmpty){
-           usersList.add(MyUser.fromJson(value.docs.first.data()));
-           notifyListeners();
-           BotToast.showText(text: "Sent Friend Request",contentColor: Colors.green);
-         }else{
-           BotToast.showText(text: "Couldn't find User",contentColor: Colors.redAccent);
-         }
-       });
-       break;
-     case Search.myFriends:
-
-       break;
-   }
+    switch (search) {
+      case Search.addFriend:
+        FirebaseFirestore.instance
+            .collection("users")
+            .where("email", isEqualTo: email)
+            .get()
+            .then((value) {
+          if (value.docs.isNotEmpty) {
+            usersList.add(MyUser.fromJson(value.docs.first.data()));
+            notifyListeners();
+            BotToast.showText(
+                text: "Sent Friend Request", contentColor: Colors.green);
+          } else {
+            BotToast.showText(
+                text: "Couldn't find User", contentColor: Colors.redAccent);
+          }
+        });
+        break;
+      case Search.myFriends:
+        break;
+    }
     return Future(() => null);
   }
 }
