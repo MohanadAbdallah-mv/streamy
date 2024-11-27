@@ -68,7 +68,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               const SizedBox(
                 height: 12,
               ),
-              const SearchBarFor(search: Search.myFriends,),
+              const SearchBarFor(
+                search: Search.myFriends,
+              ),
               const Padding(
                 padding: EdgeInsets.only(left: 20, top: 16),
                 child: Text(
@@ -116,6 +118,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   Widget _buildUserList() {
     log(widget.user.id);
+
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("chat_rooms")
@@ -227,7 +230,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         text: data["last_msg"].toString(),
                         overflow: TextOverflow.ellipsis,
                         size: 16,
-                        
                       ),
                     ),
                   ),
