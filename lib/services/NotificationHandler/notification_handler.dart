@@ -7,12 +7,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:streamy/.access_token_firebase.dart';
 import 'package:streamy/chat_feature/controller/chat_controller.dart';
 import 'package:streamy/chat_feature/screens/call_page.dart';
 import 'package:streamy/main.dart';
 import 'package:streamy/services/Navigation_Service.dart';
 
-import '../../.access_token_firebase.dart';
 import '../../firebase_options.dart';
 import '../../models/user_model.dart';
 

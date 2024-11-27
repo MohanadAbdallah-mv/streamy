@@ -121,12 +121,12 @@ class _MessagesListState extends State<MessagesList> {
       child: FutureBuilder(
           future: _myFuture,
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting){
-            return const Center(
-                child: SpinKitThreeBounce(
-                  color: focusColor,
-                  size: 50,
-                ));
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                  child: SpinKitThreeBounce(
+                color: focusColor,
+                size: 50,
+              ));
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
