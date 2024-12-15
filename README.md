@@ -1,10 +1,16 @@
 # streamy
 
-A new Flutter project.
+A communication based app where you can either chat with friends or do a live call either Audio/Video ,    
+I will try to demonstrate how the app works and the thought process along.  
+
+> [!NOTE]
+> **This project is considered as my playground project where i can learn how these features work and test implementation process** 
+
+Before we start let's see a demo on how the app works.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This application was made using Flutter framework and Firebase "Backend-as-a-Service" .
 
 A few resources to get you started if this is your first Flutter project:
 
