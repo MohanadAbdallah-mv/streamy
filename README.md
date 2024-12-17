@@ -8,6 +8,7 @@ I will try to demonstrate how the app works and the thought process along.
 
 Before we start let's see a demo on how the app works.
 
+
 ## Getting Started
 
 This application was made using Flutter framework and Firebase "Backend-as-a-Service" .
@@ -151,6 +152,7 @@ but instead  you send a String message and if you want to send Image/Video messa
 I consider those as raw approaches , I won't consider any of those to be the best solution for a chat flow.  
 Chats usually doesn't work with only one of these but with a mix between them .  
 
-Also depending on the project you are working on and the limitations you have , desiging your own flow  will serve you the best  
+Also depending on the project you are working on and the limitations you have , desiging your own flow  will serve you the best .  
+
 
 
