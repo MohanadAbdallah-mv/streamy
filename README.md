@@ -101,11 +101,56 @@ For **Whatsapp** and **Telegram** i tried the same experiment, disconnect intern
 and thats how i found about
 
 
-## 3. Cache approach
-As i mentioned in the previous section i 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 3. Cache approach  
+So loading the same old messages each time doesn't seem like a solid plan, maybe just read the changes if necessary like delete/edit message.  
+As i mentioned in the previous section unlike Messenger not other apps like **Whatsapp**/**Telegram** paginate older messages from the backend side, but from the Cache storage.  
+it seems like once you receive a new message you store it then retrieve it from your local storage when needed again.    
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+pretty straight forward ,so now they just store it locally on device's storage and on a backend server as well to check out for new messages ,right?  
+It seemed like that's how it works until i scrolled up on a random chat on **Whatsapp** and found this 
+
+
+![WhatsApp Image 2024-12-17 at 6 34 31 AM](https://github.com/user-attachments/assets/08f51f2a-1619-4d1d-ae82-6a8cf67d4566)  
+
+
+unless you enable backup storage , no one has access on your messages except you and the recipient due to privacy concerns as mentioned in this [Blog](https://messengernews.fb.com/2024/03/28/end-to-end-encryption-what-you-need-to-know/) .   
+
+So how does writing new messages will work? moving on to next approach .    
+
+
+## 4. Notification approach  
+
+Talking about chat without notifications seems weird enough, we don't usually check new messages by opening up the app itself then checking out each chat instead of that we get notified.  
+
+Before we dive into this approach , we need to know first how does Notification works.  
+
+Notifications consists of 2 main parts:
+1. Receiving data "FCM"
+2. Display data  "UI Notifications Packages"
+
+when you send a notification to a device the first thing you receive is data "Payload" which contains the data iteself and decide whether you want to display it or not,  
+then afterwards all you have to do is display that data you received as a Notification UI.
+
+Following the previous approach sending new messages can be done using Notification payload itself then extract that payload to display message and store it locally .
+
+### But what if the notifications is disabled ?  
+Trying to disable notifications will only disable the the display part "UI" but doesn't contradict with Firebase Messaging "FCM" which means that you still receive data but you can't display it as a Notification.    
+
+Didn't test this approach much as in theory it might work well , even when the device itself is in offline state once you reconnect you receive those notifications.
+But depending only on notification payload doesn't seem fine   
+
+![image](https://github.com/user-attachments/assets/983843a2-9e5d-4a2f-ab6a-48bc6c5599b8)  
+[FireBase docs](https://firebase.google.com/docs/cloud-messaging)
+
+Message might not exceed that limit as you won't send huge data like Image/Video data,   
+but instead  you send a String message and if you want to send Image/Video message you just send a refrence where you can download those .  
+
+
+## Conclusion   
+
+I consider those as raw approaches , I won't consider any of those to be the best solution for a chat flow.  
+Chats usually doesn't work with only one of these but with a mix between them .  
+
+Also depending on the project you are working on and the limitations you have , desiging your own flow  will serve you the best  
+
+
